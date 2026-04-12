@@ -1,0 +1,9 @@
+{
+  "label": "ROS 2",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "ROS 2",
+    "description": "ROS 2 kurulum ve kullanım"
+  }
+}

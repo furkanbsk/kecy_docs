@@ -1,0 +1,71 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+:root {
+  --ifm-color-primary: #dc2626;
+  --ifm-color-primary-dark: #c52222;
+  --ifm-color-primary-darker: #ba2020;
+  --ifm-color-primary-darkest: #991a1a;
+  --ifm-color-primary-light: #e04343;
+  --ifm-color-primary-lighter: #e34f4f;
+  --ifm-color-primary-lightest: #e87474;
+  --ifm-code-font-size: 95%;
+  --ifm-background-color: #000;
+  --ifm-background-surface-color: #111;
+  --ifm-navbar-background-color: #0a0a0a;
+  --ifm-color-emphasis-100: #1a1a1a;
+  --ifm-color-emphasis-200: #2a2a2a;
+  --ifm-font-color-base: #e5e5e5;
+  --ifm-heading-color: #fff;
+  --ifm-link-color: #dc2626;
+  --docusaurus-highlighted-code-line-bg: rgb(220 38 38 / 15%);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #ef4444;
+  --ifm-color-primary-dark: #ed2b2b;
+  --ifm-color-primary-darker: #ec1f1f;
+  --ifm-color-primary-darkest: #cb0c0c;
+  --ifm-color-primary-light: #f15d5d;
+  --ifm-color-primary-lighter: #f26969;
+  --ifm-color-primary-lightest: #f69292;
+  --ifm-background-color: #000;
+  --ifm-background-surface-color: #111;
+  --ifm-navbar-background-color: #0a0a0a;
+  --ifm-color-emphasis-100: #1a1a1a;
+  --ifm-color-emphasis-200: #2a2a2a;
+  --ifm-font-color-base: #e5e5e5;
+  --ifm-heading-color: #fff;
+  --ifm-link-color: #ef4444;
+  --docusaurus-highlighted-code-line-bg: rgb(239 68 68 / 20%);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: #1c1c1c;
+  --ifm-footer-color: #a3a3a3;
+  --ifm-footer-link-color: #d4d4d4;
+}
+
+.navbar {
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.navbar__logo img {
+  height: 1.4rem;
+}
+
+.navbar__title {
+  margin-left: 0.5rem;
+}
+
+.navbar__brand {
+  margin-right: 2rem;
+}
+
+.menu {
+  background-color: #0a0a0a;
+}

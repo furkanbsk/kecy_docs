@@ -41,7 +41,8 @@
     "*.gitignore",
     "versioned_docs",
     "*.min.*",
-    "jest/vendor"
+    "jest/vendor",
+    "website-kecy/**"
   ],
   "ignoreRegExpList": ["Email", "Urls", "#[\\w-]*"],
   "enableFiletypes": ["mdx"]
