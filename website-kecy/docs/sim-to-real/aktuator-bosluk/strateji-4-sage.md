@@ -134,7 +134,9 @@ Aşağıdakiler size tüm boru hattının sezgisel bir genel bakışını sunar;
 
 **Boru hattı kısaca.** SO-101 için biz (1) sim verisi toplarız, (2) gerçek robot verisi toplarız ve (3) bir boşluk-köprüleme modeli (GapONet; ayrıntıları daha sonra ele alınır) eğitiriz. SO-101 kurulumumuz bu tür bir eğitim için 8 saatlik gerçek yörünge verisi topladı.
 
-![Gerçek robot veri toplama sırasında SO-101](/img/sim-to-real/15-strateji-4-sage/so101_data_collection.gif)
+<video controls autoPlay loop muted width="600">
+  <source src="/img/sim-to-real/15-strateji-4-sage/so101_data_collection.mp4" type="video/mp4" />
+</video>
 
 _Gerçek robot veri toplama sırasında SO-101._
 
