@@ -2,7 +2,7 @@
 title: 'Çalışma Alanını Kurma'
 sidebar_position: 1
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Çalışma Alanını Kurma'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,218 +13,218 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-The equipment is listed below - here you will assemble your robot laboratory.
+Ekipman aşağıda listelenmiştir — burada robot laboratuvarınızı kuracaksınız.
 
-This module is about **constructing and standardizing the real-world task area**. This includes a lightbox enclosure, lighting, cameras, mat, vials, and rack—so it matches the Isaac Lab scene used for training and evaluation.
+Bu modül, **gerçek dünyadaki görev alanını inşa etmek ve standartlaştırmakla** ilgilidir. Buna ışık kutusu (lightbox) muhafazası, aydınlatma, kameralar, mat, tüpler ve raf dahildir — böylece eğitim ve değerlendirme için kullanılan Isaac Lab sahnesiyle uyumlu olur.
 
-Building the lightbox this way gives you a consistent environment, so you can use our models and datasets.
+Işık kutusunu bu şekilde kurmak size tutarlı bir ortam sağlar; böylece modellerimizi ve veri setlerimizi kullanabilirsiniz.
 
-You can also keep using it after this learning path, to do more of your own robot experiments!
+Bu öğrenme yolundan sonra da kendi robot deneylerinizi yapmaya devam etmek için kullanmaya devam edebilirsiniz!
 
 :::info
 
-Why are we starting with the physical workspace?
+Neden fiziksel çalışma alanıyla başlıyoruz?
 
-When you do Physical AI work in the real world, you might not have a **physical** workspace available to you when you start out. We often start in sim, for all the reasons we discussed earlier (ease of testing, cost, safety, ease of iteration).
+Gerçek dünyada Fiziksel AI çalışması yaptığınızda, başlangıçta kullanabileceğiniz **fiziksel** bir çalışma alanınız olmayabilir. Daha önce tartıştığımız nedenlerden (test kolaylığı, maliyet, güvenlik, yineleme kolaylığı) dolayı genellikle simülasyonda başlarız.
 
-For this workshop, we will set up the physical space first for three reasons:
+Bu atölyede fiziksel alanı önce kuracağız; bunun üç nedeni var:
 
-1.  We give you this info early on, so you can order parts or build your workspace in prep for finishing the learning path
+1.  Bu bilgiyi size erken veriyoruz; böylece öğrenme yolunu tamamlamaya hazırlık olarak parça siparişi verebilir veya çalışma alanınızı kurabilirsiniz
 
-2.  To give you experience with the physical robot and teleoperation. It's fun!
+2.  Size fiziksel robot ve teleoperasyonla deneyim kazandırmak için. Eğlencelidir!
 
-3.  To give you a sense of how "hard" the task is, when using the same inputs the AI model will have (two cameras, joint positions)
+3.  AI modelinin sahip olacağı aynı girdileri (iki kamera, eklem pozisyonları) kullanırken görevin ne kadar "zor" olduğunu hissettirmek için
 
 :::
 
-## The Lightbox Environment
+## Işık Kutusu Ortamı
 
-Let's start by building a **white lightbox enclosure** that includes:
+Şu bileşenleri içeren bir **beyaz ışık kutusu muhafazası** inşa ederek başlayalım:
 
-1.  **Cameras** — one on the robot (wrist / gripper view), one stationary (external / scene view)
+1.  **Kameralar** — biri robot üzerinde (bilek / kavrayıcı görünümü), biri sabit (harici / sahne görünümü)
 
-2.  **Lights** — diffuse light with controllable brightness
+2.  **Işıklar** — parlaklığı kontrol edilebilir difüz (yumuşatılmış) ışık
 
-3.  **Props** — centrifuge vials, yellow rack, foam mat.
+3.  **Aksesuarlar** — santrifüj tüpleri, sarı raf, köpük (foam) mat.
 
-![Lightbox](/img/sim-to-real/05-calisma-alani/so101_workspace.jpg)
+![Işık kutusu](/img/sim-to-real/05-calisma-alani/so101_workspace.jpg)
 
-![Vial Rack](/img/sim-to-real/05-calisma-alani/vial_rack.jpg)
+![Tüp Rafı](/img/sim-to-real/05-calisma-alani/vial_rack.jpg)
 
-### Why we use a lightbox
+### Neden ışık kutusu kullanıyoruz
 
-**Limits variables for learning and debugging** A plain, bright enclosure reduces visual noise so the policy can focus on the task-relevant features—gripper, vials, and rack.
+**Öğrenme ve hata ayıklama için değişkenleri sınırlar** Düz, parlak bir muhafaza görsel gürültüyü azaltır; böylece politika göreve özgü özelliklere — kavrayıcı, tüpler ve raf — odaklanabilir.
 
-**Matches the digital twin** The Isaac Lab scene replicates this enclosure's dimensions, color, camera placements, and object geometry. Matching the real bench to that design shrinks the visual domain gap—one of the main sources of sim-to-real failure.
+**Dijital ikizle uyumludur** Isaac Lab sahnesi bu muhafazanın boyutlarını, rengini, kamera konumlarını ve nesne geometrisini kopyalar. Gerçek tezgahın bu tasarımla eşleşmesi, görsel alan boşluğunu (domain gap) daraltır — sim-to-real başarısızlığının başlıca kaynaklarından biridir.
 
-**Accommodates low-performance cameras** Consumer webcams have auto-exposure and limited dynamic range. Bright, diffuse lighting inside the box keeps images clean and consistent.
+**Düşük performanslı kameralarla uyumludur** Tüketici webkamları otomatik pozlama (auto-exposure) ve sınırlı dinamik aralığa sahiptir. Kutunun içinde parlak, difüz aydınlatma görüntüleri temiz ve tutarlı tutar.
 
-**Enables transferable models** Controlling the environment makes it easier to prepare models that transfer across robots and setups. Debugging focuses on policy and calibration, not uncontrolled scene drift.
+**Aktarılabilir modelleri mümkün kılar** Ortamı kontrol etmek, robotlar ve kurulumlar arasında aktarılabilir modeller hazırlamayı kolaylaştırır. Hata ayıklama; kontrolsüz sahne kaymasına değil, politika ve kalibrasyona odaklanır.
 
-## Bill of Materials
+## Malzeme Listesi
 
-The complete robot + workspace setup should cost less than $500 USD, estimated based on the options below.
+Tüm robot + çalışma alanı kurulumunun toplam maliyeti aşağıdaki seçeneklere göre tahmin edilerek 500 USD'nin altında olmalıdır.
 
-We recommend getting the SO-101 pre-assembled, as it comes with a teleop arm and is easier to assemble. You can also build it yourself, but it's a bit more work.
+SO-101'i önceden monte edilmiş (pre-assembled) almanızı öneririz; çünkü bir teleop kolla birlikte gelir ve montajı daha kolaydır. Kendiniz de inşa edebilirsiniz ama biraz daha uğraştırıcıdır.
 
 ### Robot
 
-Approximate cost: $300 USD
+Yaklaşık maliyet: 300 USD
 
-| Item | Description | Model/Specs | Quantity | Details |
+| Ürün | Açıklama | Model/Özellikler | Adet | Ayrıntı |
 | --- | --- | --- | --- | --- |
-| **SO-101 Robot Arm and Teleop Arm** | 6-DoF collaborative robot arm (SO-101 or similar) | [SO-101](https://shop.wowrobo.com/products/so-arm101-diy-kit-assembled-version-1?variant=46588641706201) package 3, orange | 1 | Main robot for pick-and-place task; Teleop arm optional for demonstration recording. We recommend this kit because of the included gripper camera, which will match our datasets. Alternatively, you can [print and build your own SO-101](https://github.com/TheRobotStudio/SO-ARM100)! |
+| **SO-101 Robot Kol ve Teleop Kol** | 6-DoF işbirlikçi robot kol (SO-101 veya benzeri) | [SO-101](https://shop.wowrobo.com/products/so-arm101-diy-kit-assembled-version-1?variant=46588641706201) paket 3, turuncu | 1 | Al-bırak görevi için ana robot; Teleop kol gösterim kaydı için opsiyoneldir. Bu kiti öneririz çünkü dahili kavrayıcı kamerası veri setlerimizle eşleşir. Alternatif olarak, [kendi SO-101'inizi yazdırıp inşa edebilirsiniz](https://github.com/TheRobotStudio/SO-ARM100)! |
 
-### Workspace
+### Çalışma Alanı
 
-Approximate cost: $130 USD
+Yaklaşık maliyet: 130 USD
 
-| Item | Description | Model/Specs | Quantity | Details |
+| Ürün | Açıklama | Model/Özellikler | Adet | Ayrıntı |
 | --- | --- | --- | --- | --- |
-| **Camera (External)** | USB webcam, fixed mount, ~78° horizontal FoV | [Logitech C920](https://www.amazon.com/Logitech-C920x-Pro-HD-Webcam/dp/B085TFF7M1) or equivalent | 1 | Fixed perspective to capture overview of workspace; must be stable and aligned as in simulation. |
-| **Lightbox Enclosure Panels** | White foam board box, approx. 30" wide, 20" tall, 20" deep. | Assemble from 5 sheets of [20x30" foam board, 3/16" thick](https://www.michaels.com/product/20-x-30-white-foam-board-10110205) | 5 | Provides consistent, diffuse lighting and neutral background for images. Other white lightboxes can be substituted. Thicker or thinner foam board works. |
-| **Light Source** | LED tube light, diffuse, CRI >90, ~4000K, adjustable | [Neewer Dimmable LED Bar](https://www.amazon.com/NEEWER-Inflatable-2700K-5600K-Photography-GC10B/dp/B0DQ7Y8DWX?th=1) | 1 | Ensures workspace is brightly and uniformly illuminated. |
-| **Black Work Mat** | Foam mat for workspace | [Black EVA foam](https://www.michaels.com/product/12-x-18-thick-foam-sheet-by-creatology-10661709) | 1 | Non-slip surface for vials and rack; color matches simulation environment. |
-| **Centrifuge Vials** | 50ml with screw cap, clear plastic | [Falcon tube or similar](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1) | 1-4 | Props manipulated by robot; clear sides allow for visual consistency with simulation. |
-| **Vial Rack** | Yellow, fits 4+ vials, similar to simulation asset | 3D printed in yellow - models available [here](https://www.printables.com/model/1675961-vial-rack-50ml-centrifuge) | 1 | Holds vials upright, target for pick and place. Yellow color to match digital twin is best, as low as 5% infill can work. |
-| **USB-C Charging Block** | To power the light | [Anker 25W USB-C Charging Block](https://www.amazon.com/gp/product/B0D72DWLZ1/) | as needed | 21W or greater. Sufficient power for all lights and accessories; ensure safety and compliance with device specs. |
-| **USB-C Cable** | To power the light | [USB-C to USB-C cable, 6ft](https://www.amazon.com/Anker-Charging-MacBook-Galaxy-Charger/dp/B088NRLMPV) | 1 | Suggested light above is battery powered, but this will keep it powered |
-| **(optional) Foam board joints** | To assemble lightbox | 3D printed, model [here](https://www.printables.com/model/1652109-foam-board-joints-for-lightbox) | 8 | Allows assembly of lightbox without tearing the foam board during disassembly. Alternatively, you can use tape. |
+| **Kamera (Harici)** | USB webkam, sabit montaj, ~78° yatay görüş açısı (FoV) | [Logitech C920](https://www.amazon.com/Logitech-C920x-Pro-HD-Webcam/dp/B085TFF7M1) veya eşdeğeri | 1 | Çalışma alanının genel görünümünü yakalamak için sabit bakış açısı; simülasyondaki gibi stabil ve hizalı olmalıdır. |
+| **Işık Kutusu Muhafaza Panelleri** | Beyaz köpük panel (foam board) kutu, yaklaşık 30" (76 cm) geniş, 20" (51 cm) yüksek, 20" (51 cm) derin. | 5 adet [20x30" köpük panelden, 3/16" (~5 mm) kalınlık](https://www.michaels.com/product/20-x-30-white-foam-board-10110205) monte edin | 5 | Görüntüler için tutarlı, difüz ışık ve nötr arka plan sağlar. Diğer beyaz ışık kutuları da kullanılabilir. Daha kalın veya ince köpük panel de çalışır. |
+| **Işık Kaynağı** | LED tüp ışık, difüz, CRI >90, ~4000K, ayarlanabilir | [Neewer Dimmable LED Bar](https://www.amazon.com/NEEWER-Inflatable-2700K-5600K-Photography-GC10B/dp/B0DQ7Y8DWX?th=1) | 1 | Çalışma alanının parlak ve tek düze aydınlatılmasını sağlar. |
+| **Siyah Çalışma Matı** | Çalışma alanı için köpük mat | [Siyah EVA köpük](https://www.michaels.com/product/12-x-18-thick-foam-sheet-by-creatology-10661709) | 1 | Tüpler ve raf için kaymaz yüzey; rengi simülasyon ortamıyla uyumludur. |
+| **Santrifüj Tüpleri** | 50 ml, vida kapaklı, şeffaf plastik | [Falcon tüp veya benzeri](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1) | 1-4 | Robot tarafından manipüle edilen aksesuar; şeffaf kenarlar simülasyonla görsel tutarlılık sağlar. |
+| **Tüp Rafı** | Sarı, 4+ tüp alır, simülasyon varlığına (asset) benzer | Sarı 3D yazdırılmış - modeller [burada](https://www.printables.com/model/1675961-vial-rack-50ml-centrifuge) | 1 | Tüpleri dik tutar, al-bırak işleminin hedefidir. Dijital ikizle uyumlu sarı renk en iyisidir; %5 kadar düşük dolgu oranı (infill) bile işe yarayabilir. |
+| **USB-C Şarj Adaptörü** | Işığı beslemek için | [Anker 25W USB-C Şarj Adaptörü](https://www.amazon.com/gp/product/B0D72DWLZ1/) | ihtiyaç kadar | 21W veya üzeri. Tüm ışıklar ve aksesuarlar için yeterli güç; güvenlik ve cihaz spesifikasyonlarına uyum sağlayın. |
+| **USB-C Kablo** | Işığı beslemek için | [USB-C - USB-C kablo, 6ft (~1.8 m)](https://www.amazon.com/Anker-Charging-MacBook-Galaxy-Charger/dp/B088NRLMPV) | 1 | Yukarıda önerilen ışık pille çalışır, ancak bu kablo onu sürekli beslemenizi sağlar. |
+| **(opsiyonel) Köpük panel birleştiricileri** | Işık kutusunu monte etmek için | 3D yazdırılmış, model [burada](https://www.printables.com/model/1652109-foam-board-joints-for-lightbox) | 8 | Işık kutusunun sökülürken köpük paneli yırtmadan monte edilmesini sağlar. Alternatif olarak bant kullanabilirsiniz. |
 
-### Props
+### Aksesuarlar
 
-Approximate cost: $20 USD.
+Yaklaşık maliyet: 20 USD.
 
-| Item | Description | Model/Specs | Quantity | Details |
+| Ürün | Açıklama | Model/Özellikler | Adet | Ayrıntı |
 | --- | --- | --- | --- | --- |
-| **Centrifuge Vials** | 50ml with screw cap, clear plastic | [Falcon tube or similar](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1) | 1-4 | Props manipulated by robot; clear sides allow for visual consistency with simulation. |
-| **Vial Rack** | Yellow, fits 4+ vials, similar to simulation asset | 3D printed | 1 | Holds vials upright; color/shape should closely match digital asset. |
+| **Santrifüj Tüpleri** | 50 ml, vida kapaklı, şeffaf plastik | [Falcon tüp veya benzeri](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1) | 1-4 | Robot tarafından manipüle edilen aksesuar; şeffaf kenarlar simülasyonla görsel tutarlılık sağlar. |
+| **Tüp Rafı** | Sarı, 4+ tüp alır, simülasyon varlığına benzer | 3D yazdırılmış | 1 | Tüpleri dik tutar; renk/şekil dijital varlıkla yakından eşleşmelidir. |
 
-## Build the Workspace
+## Çalışma Alanını İnşa Etme
 
-In short, we'll:
+Kısaca şunları yapacağız:
 
-1.  **Cut** the foam board to size
+1.  Köpük paneli ölçüye göre **kesme**
 
-2.  **Cut** a hole for the external camera
+2.  Harici kamera için bir delik **açma**
 
-3.  **Mount** the light
+3.  Işığı **montajlama**
 
-4.  **Clamp** and **position** the props and robot.
+4.  Aksesuarları ve robotu **sabitleme** ve **konumlandırma**.
 
-### Assemble the Lightbox
+### Işık Kutusunu Monte Etme
 
-1.  **Cut** 2 of the 5 foam board panels down to 20" x 20". These will become the sides.
+1.  5 köpük panelden 2'sini 20" x 20" (51 cm x 51 cm) boyutlarına **kesin**. Bunlar yanlar olacak.
 
-2.  On one of the 20"x20" panels, **cut** a rectangular hole for the external camera. The Logitech webcam arm is approximately 5 cm × 1.5 cm — size the hole to slide it through snugly.
+2.  20"x20" panellerden birinde, harici kamera için dikdörtgen bir delik **açın**. Logitech webkam kolu yaklaşık 5 cm × 1.5 cm'dir — deliği, sıkıca geçecek şekilde boyutlandırın.
 
-3.  Now **assemble** the box - there are two options:
+3.  Şimdi kutuyu **monte edin** — iki seçenek vardır:
 
-Option A — Tape (fast)
+Seçenek A — Bant (hızlı)
 
-White duct tape or gaffer tape along the seams.
+Ek yerleri boyunca beyaz koli bandı (duct tape) veya gaffer bandı kullanın.
 
-- **Pros**: cheap, fast, no tools required
+- **Artıları**: ucuz, hızlı, alet gerektirmez
 
-- **Cons**: removing the tape later will damage the foam board
+- **Eksileri**: bandı sonradan çıkarırken köpük panele zarar verirsiniz
 
-Keep foam board edges flush when taping. Running tape along the full length of each seam produces the strongest bond; small pieces work but are weaker.
+Bantlama sırasında köpük panel kenarlarını hizada tutun. Bandı her ek yerinin tüm uzunluğu boyunca çekmek en güçlü bağı üretir; küçük parçalar işe yarar ama daha zayıftır.
 
-Option B — 3D-printed corners (reusable)
+Seçenek B — 3D yazdırılmış köşeler (tekrar kullanılabilir)
 
-Print the corner assemblies from the BOM link above and snap panels in.
+Yukarıdaki BOM (malzeme listesi) bağlantısındaki köşe parçalarını yazdırın ve panelleri yerine geçirin.
 
-- **Pros**: clean look, easy to disassemble and reassemble
+- **Artıları**: düzgün görünüm, söküp yeniden monte etmesi kolay
 
-- **Cons**: requires access to a 3D printer
+- **Eksileri**: 3D yazıcıya erişim gerekir
 
-### Camera Placement Measurements
+### Kamera Konumlandırma Ölçüleri
 
-| Parameter | Value |
+| Parametre | Değer |
 | --- | --- |
-| **Height** | 40 cm from base of lightbox |
-| **Distance from back wall** | ~27 cm from back of robot to center of camera lens |
-| **Lateral offset from back** | 24 cm from back panel |
-| **Angle** | 45 deg downward, aimed at the workspace. Make sure the camera has a good view of both the robot, the vials, and the rack. |
+| **Yükseklik** | Işık kutusu tabanından 40 cm |
+| **Arka duvardan mesafe** | Robotun arkasından kamera lensinin merkezine ~27 cm |
+| **Arkadan yan uzaklık** | Arka panelden 24 cm |
+| **Açı** | Aşağı doğru 45°, çalışma alanına yönlendirilmiş. Kameranın hem robotu, hem tüpleri hem de rafı iyi gördüğünden emin olun. |
 
 :::tip
 
-Verify the camera view matches the sample images before finalizing the slot position. A few centimeters of error is acceptable; large deviations change what the policy sees and degrade performance.
+Yuva (slot) konumunu kesinleştirmeden önce kamera görünümünün örnek görüntülerle eşleştiğini doğrulayın. Birkaç santimetrelik hata kabul edilebilir; büyük sapmalar politikanın gördüklerini değiştirir ve performansı düşürür.
 
 :::
 
-## Set Up the Light
+## Işığı Kurma
 
-The light should be **bright, diffuse, and daylight-temperature**. If you use the lights listed in the BOM, they are already diffuse.
+Işık **parlak, difüz ve gün ışığı sıcaklığında** olmalıdır. Malzeme listesindeki ışıkları kullanırsanız bunlar zaten difüzdür.
 
 :::warning
 
-These lights can get warm over extended use. Do not leave them on overnight, and monitor temperature during long sessions.
+Bu ışıklar uzun süreli kullanımda ısınabilir. Gece boyunca açık bırakmayın ve uzun oturumlarda sıcaklığı takip edin.
 
 :::
 
-Foam board top — interior mount
+Köpük panel tavan — iç montaj
 
-If you use foam board for the top panel, mount a diffuse panel light inside the lightbox facing down. Zip ties through small holes in the foam board are the most reliable attachment; tape can work but may release from heat.
+Üst panel için köpük panel kullanırsanız, difüz bir panel ışığı kutunun içine aşağı bakacak şekilde monte edin. Köpük paneldeki küçük deliklerden geçirilen plastik bağcıklar (zip tie) en güvenilir yöntemdir; bant işe yarayabilir ama ısıyla yapışması çözülebilir.
 
-Open top — external mount
+Açık tavan — dış montaj
 
-Clamp or position an external diffuse light above the open top, angled to illuminate the workspace evenly.
+Açık tavanın üstüne, çalışma alanını eşit şekilde aydınlatacak açıyla difüz bir harici ışığı mandalla tutturun veya konumlandırın.
 
-![Turning on and adjusting lightbox lighting](/img/sim-to-real/05-calisma-alani/light-operation.gif)
+![Işık kutusu aydınlatmasını açma ve ayarlama](/img/sim-to-real/05-calisma-alani/light-operation.gif)
 
-**Turn on the light and set brightness before teleoperation or policy runs.**
+**Teleoperasyon veya politika koşularından önce ışığı açın ve parlaklığı ayarlayın.**
 
-1.  **Press** the **power button** on the light.
+1.  Işığın **güç düğmesine** **basın**.
 
-2.  **Press and hold** the **power button** again until the travel lock progress bar completes and the light stays on.
+2.  Taşıma kilidi (travel lock) ilerleme çubuğu tamamlanana ve ışık açık kalana kadar **güç düğmesine** tekrar **basılı tutun**.
 
-3.  **Use** the **brightness controls**; for evaluations and data collection, target roughly **50-100 %**.
+3.  **Parlaklık kontrollerini** **kullanın**; değerlendirmeler ve veri toplama için kabaca **%50-100** hedefleyin.
 
-4.  **Plug in** the light if AC power is available; battery-only runs may not last a full session.
+4.  AC güç mevcutsa ışığın kablosunu **takın**; yalnızca pille çalışan koşular tam bir oturumu karşılayamayabilir.
 
-## Mount the Robot
+## Robotu Monte Etme
 
-Clamp the SO-101 to a solid table. Position it so the base sits inside the lightbox at the position shown in the reference photo below.
+SO-101'i sağlam bir masaya mandalla sabitleyin. Aşağıdaki referans fotoğrafta gösterilen konumda taban ışık kutusunun içinde kalacak şekilde konumlandırın.
 
-This gives it good range-of-motion and lets the external camera see the robot well.
+Bu, robota iyi bir hareket açıklığı verir ve harici kameranın robotu iyi görmesini sağlar.
 
-**Verify** the clamps do **not** restrict the robot's range of motion—test by manually moving each joint through its range before powering on.
+Mandalların robotun hareket açıklığını **kısıtlamadığını** **doğrulayın** — güç vermeden önce her eklemi aralığı boyunca manuel olarak hareket ettirerek test edin.
 
-![Lightbox](/img/sim-to-real/05-calisma-alani/so101_workspace.jpg)
+![Işık kutusu](/img/sim-to-real/05-calisma-alani/so101_workspace.jpg)
 
-## Arrange the Mat, Vials, and Rack
+## Mat, Tüpler ve Rafı Düzenleme
 
-Our simulation environment and checkpoint models are overfit to the rack generally being on the **left** side and vials on the **right**. Use the reference photo above for positioning.
+Simülasyon ortamımız ve kontrol noktası modellerimiz genel olarak rafın **solda** ve tüplerin **sağda** olmasına aşırı uyumlanmıştır (overfit). Konumlandırma için yukarıdaki referans fotoğrafı kullanın.
 
-If you customize the Isaac Lab environment we'll use later, you could try out other configurations!
+Sonradan kullanacağımız Isaac Lab ortamını özelleştirirseniz başka yapılandırmaları da deneyebilirsiniz!
 
-### Rack Placement Measurements
+### Raf Yerleşim Ölçüleri
 
-Place the foam mat flat under the vials, and scatter 1-3 vials on the mat in varied poses (same general layout as in simulation).
+Köpük matı tüplerin altına düz serin ve 1-3 tüpü mata çeşitli pozlarda dağıtın (simülasyondaki genel düzenin aynısı).
 
-## Physical Layout Checklist
+## Fiziksel Yerleşim Kontrol Listesi
 
-Before you place the robot in the enclosure or run any real-robot software:
+Robotu muhafazaya yerleştirmeden veya herhangi bir gerçek robot yazılımı çalıştırmadan önce:
 
-1.  **Enclosure** — Lightbox panels assembled; interior clear of stray objects.
+1.  **Muhafaza** — Işık kutusu panelleri monte edilmiş; iç kısım dağınık nesnelerden temizlenmiş.
 
-2.  **Mat and props** — Foam mat flat; **yellow rack** in its designated spot; **1-3 vials** on the mat in varied poses (same general layout as in simulation).
+2.  **Mat ve aksesuarlar** — Köpük mat düz; **sarı raf** belirlenen yerinde; matta **1-3 tüp** çeşitli pozlarda (simülasyondaki genel düzen).
 
-3.  **Cameras** — Wrist and external cameras mounted and aimed so both the mat/rack and gripper workspace are visible; no heavy occlusion or glare.
+3.  **Kameralar** — Bilek ve harici kameralar, hem mat/raf hem de kavrayıcı çalışma alanı görünür olacak şekilde monte edilip yönlendirilmiş; ağır kapanma (occlusion) veya parlama yok.
 
-4.  **Cables** — Route camera and robot cables so they do **not** snag or limit joint motion (cables can create false calibration limits; see [Troubleshooting](/sim-to-real/referans/sorun-giderme), _Calibration Fails_).
+4.  **Kablolar** — Kamera ve robot kablolarını eklem hareketini kısıtlamayacak veya takılmayacak şekilde yerleştirin (kablolar yanlış kalibrasyon sınırları oluşturabilir; bkz. [Sorun Giderme](/sim-to-real/referans/sorun-giderme), _Kalibrasyon Başarısız_).
 
-5.  **Lighting** — Light on and bright enough (previous section).
+5.  **Aydınlatma** — Işık açık ve yeterince parlak (önceki bölüm).
 
-Re-check this checklist **before** [Real Evaluation](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme) and before each [Strategy 2](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining) / [Strategy 3](/sim-to-real/veri-zenginlestirme/strateji-3-cosmos) deployment if anything was moved.
+Herhangi bir şey taşındıysa bu kontrol listesini **[Gerçek Değerlendirme](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme) öncesinde** ve her [Strateji 2](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining) / [Strateji 3](/sim-to-real/veri-zenginlestirme/strateji-3-cosmos) konuşlandırmasından önce **yeniden kontrol edin**.
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- Workspace setup is critical for successful training and deployment.
+- Başarılı eğitim ve konuşlandırma için çalışma alanı kurulumu kritiktir.
 
-## What's Next?
+## Sırada Ne Var?
 
-With the workspace built and staged, continue to [Get the Code](/sim-to-real/robot-laboratuvari/kod-ve-modeller).
+Çalışma alanı inşa edilip hazır hale geldiğine göre, [Kodu Edinme](/sim-to-real/robot-laboratuvari/kod-ve-modeller) bölümüne devam edin.

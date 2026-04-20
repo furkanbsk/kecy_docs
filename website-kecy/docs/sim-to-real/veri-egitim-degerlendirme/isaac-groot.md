@@ -2,7 +2,7 @@
 title: 'Isaac GR00T: Görü-Dil-Eylem Modelleri'
 sidebar_position: 2
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Isaac GR00T: Görü-Dil-Eylem Modelleri'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,222 +13,222 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Mostly theory with code examples. No additional hardware is required beyond a computer with the `real-robot` container built.
+Çoğunlukla teori, kod örnekleriyle. `real-robot` kapsayıcısı derlenmiş bir bilgisayar dışında ek donanım gerekmez.
 
-In this session, we'll explore the VLA model called NVIDIA Isaac GR00T, how it works, and see examples of it in action.
+Bu oturumda NVIDIA Isaac GR00T adlı VLA modelini, nasıl çalıştığını ve iş başında örneklerini inceleyeceğiz.
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Explain** what vision-language-action models are and why they're powerful
+- Görü-dil-eylem modellerinin ne olduğunu ve neden güçlü olduklarını **açıklama**
 
-- **Describe** the GR00T architecture and its components
+- GR00T mimarisini ve bileşenlerini **tanımlama**
 
-- **Understand** how VLAs differ from traditional robot learning approaches
+- VLA'ların geleneksel robot öğrenme yaklaşımlarından nasıl farklılaştığını **anlama**
 
-## What Is GR00T?
+## GR00T Nedir?
 
-NVIDIA Isaac GR00T is a research initiative and development platform for developing general-purpose robot foundation models and data pipelines to accelerate humanoid robotics research and development.
+NVIDIA Isaac GR00T, insansı robot araştırma ve geliştirmesini hızlandırmak için genel amaçlı robot temel modelleri (foundation models) ve veri iş hatları geliştirmeye yönelik bir araştırma girişimi ve geliştirme platformudur.
 
-It provides:
+Şunları sağlar:
 
-- **Pre-trained visual understanding** from large-scale data
+- Büyük ölçekli veriden **önceden eğitilmiş görsel anlama**
 
-- **Language-conditioned behavior** for flexible task specification
+- Esnek görev tanımı için **dile koşullu davranış**
 
-- **Action generation** suitable for real-time robot control
+- Gerçek zamanlı robot kontrolüne uygun **eylem üretimi**
 
-In this course, we'll use GR00T N1.6 models post-trained for the SO-101 robot.
+Bu kursta, SO-101 robotu için post-train edilmiş GR00T N1.6 modellerini kullanacağız.
 
 :::note
 
-**Training time in this course**
+**Bu kursta eğitim süresi**
 
-GR00T post-training requires several hours on GPU hardware—longer than this course allows in a single sitting. We have pre-trained a set of policies on various datasets that you will use throughout the day. This lets you focus on understanding the workflow, evaluating results, and iterating on strategies rather than waiting for training jobs to complete.
+GR00T post-training'i GPU donanımda birkaç saat gerektirir — bu kursun tek seferde izin verdiğinden daha uzundur. Gün boyu kullanacağınız, çeşitli veri setlerinde önceden eğitilmiş bir politika kümesi hazırladık. Bu, eğitim işlerinin tamamlanmasını beklemek yerine iş akışını anlamaya, sonuçları değerlendirmeye ve stratejiler üzerinde yineleme yapmaya odaklanmanızı sağlar.
 
-The commands and scripts shown here are the same ones used to produce those policies, so you can replicate the process on your own hardware after you finish this learning path.
+Burada gösterilen komutlar ve betikler o politikaları üretmek için kullanılan aynılarıdır; böylece öğrenme yolunu tamamladıktan sonra kendi donanımınızda süreci yeniden üretebilirsiniz.
 
 :::
 
-### What's New in GR00T N1.6
+### GR00T N1.6'da Yeni Olan Ne?
 
-GR00T N1.6 represents a significant upgrade over N1.5, with improvements in both model architecture and data.
+GR00T N1.6, hem model mimarisi hem de veride iyileştirmelerle N1.5'e göre belirgin bir yükseltmedir.
 
-**Architectural Changes:**
+**Mimari Değişiklikler:**
 
-| Component | N1.5 | N1.6 |
+| Bileşen | N1.5 | N1.6 |
 | --- | --- | --- |
-| Base VLM | Standard | Cosmos-Reason-2B variant with flexible resolution |
-| DiT layers | 16 | 32 (2x larger) |
-| Post-VLM adapter | 4-layer transformer | Removed; unfreezes top 4 VLM layers |
-| Action format | Absolute joint angles/EEF | State-relative action chunks |
+| Temel VLM | Standart | Esnek çözünürlüklü Cosmos-Reason-2B varyantı |
+| DiT katmanları | 16 | 32 (2 kat büyük) |
+| VLM sonrası adaptör | 4 katmanlı transformer | Kaldırıldı; VLM'in üst 4 katmanını serbest bırakır (unfreeze) |
+| Eylem formatı | Mutlak eklem açıları/EEF | Duruma göreli (state-relative) eylem parçaları |
 
-### Case Study: Zero-Shot Transfer Improvement
+### Vaka Çalışması: Zero-Shot Aktarım İyileştirmesi
 
-GR00T has already released several iterations, each with significant improvements. Let's look at an SO-101 case study as an example of how N1.6 translates to measurable real-world gains.
+GR00T, her biri önemli iyileştirmeler içeren birkaç yineleme yayınladı. N1.6'nın ölçülebilir gerçek dünya kazanımlarına nasıl dönüştüğüne bir örnek olarak SO-101 vaka çalışmasına bakalım.
 
-**Task**: Pick vials from a mat and place them on a rack (sim-only training data)
+**Görev**: Tüpleri mattan alıp rafa yerleştirme (yalnızca simülasyon eğitim verisi)
 
-_\[Placeholder: Side-by-side comparison of N1.5 and N1.6 attempting the mat-to-rack task\]_
+_\[Yer tutucu: Mat-tan-rafa görevi denemesinde N1.5 ve N1.6'nın yan yana karşılaştırması\]_
 
-This demonstrates how foundation model improvements can reduce the sim-to-real gap even without task-specific real data.
+Bu, temel model iyileştirmelerinin göreve özgü gerçek veri olmasa bile sim-to-real boşluğunu nasıl azaltabildiğini gösterir.
 
-## What Is a Vision-Language-Action Model?
+## Görü-Dil-Eylem Modeli Nedir?
 
-**Vision-Language-Action (VLA) models** are foundation models that take visual input and language instructions and output low-level or mid-level actions for an embodied agent, such as a robot.
-
-```
-Input: Camera image (1 or more) + "Pick up the red vial and place it in the rack"
-Output: Sequence of joint positions/velocities to execute the task
-```
-
-### Training Stages
-
-VLAs are typically trained in stages:
-
-1.  **Large-scale pretraining**: Internet-scale multimodal data (images, text, video) builds general visual and language understanding
-
-2.  **Supervised imitation/behavior cloning**: Robot demonstrations teach the model to map observations to actions
-
-3.  **Optional reinforcement learning**: Fine-tunes behavior through real-world interaction and feedback
-
-### Architecture Overview
-
-![VLA Model Architecture](/img/sim-to-real/10-isaac-groot/gr00t-architecture.png)
-
-### Key Components
-
-**Vision Encoder**: Processes camera images into rich feature representations
-
-- Pre-trained on large image datasets (ImageNet, etc.)
-
-- Understands objects, spatial relationships, affordances
-
-**Language Encoder**: Processes task instructions
-
-- Maps natural language to task embeddings
-
-- Enables zero-shot generalization to new task descriptions
-
-**Cross-Modal Fusion**: Combines vision and language
-
-- Attention mechanisms to relate visual features to language
-
-- Grounds language concepts in visual observations
-
-**Action Decoder**: Generates robot actions
-
-- Conditioned on fused visual-language features
-
-- Outputs appropriate action representation (joint positions, velocities, etc.)
-
-## Why VLAs Are Powerful
-
-### 1\. Natural Task Specification
-
-Instead of programming specific behaviors, describe tasks in plain language:
+**Görü-Dil-Eylem (VLA) modelleri**, görsel girdi ve dil talimatlarını alıp robot gibi bedenlenmiş (embodied) bir etmen için düşük veya orta seviye eylemler üreten temel modellerdir.
 
 ```
-"Pick up the blue vial closest to the robot"
-"Place the vial in the empty slot on the left"
-"Move the vial from the table to the rack"
+Girdi: Kamera görüntüsü (1 veya daha fazla) + "Kırmızı tüpü al ve rafa yerleştir"
+Çıktı: Görevi yürütmek için eklem konumları/hızlarından oluşan sıra
 ```
 
-### 2\. Visual Generalization
+### Eğitim Aşamaları
 
-Pre-trained vision encoders provide:
+VLA'lar tipik olarak aşamalar halinde eğitilir:
 
-- Robustness to lighting changes
+1.  **Büyük ölçekli ön eğitim (pretraining)**: İnternet ölçeğinde çok modlu veri (görüntüler, metin, video) genel görsel ve dilsel anlayışı inşa eder
 
-- Recognition of object categories
+2.  **Denetimli taklit/davranış kopyalama (imitation/behavior cloning)**: Robot gösterimleri, modele gözlemleri eylemlere eşlemeyi öğretir
 
-- Understanding of spatial relationships
+3.  **İsteğe bağlı pekiştirmeli öğrenme (reinforcement learning)**: Gerçek dünya etkileşimi ve geri bildirimi yoluyla davranışı ince ayar eder
 
-- Transfer across visual domains
+### Mimari Genel Bakışı
 
-### 3\. Transfer Learning
+![VLA Model Mimarisi](/img/sim-to-real/10-isaac-groot/gr00t-architecture.png)
 
-Pre-trained components accelerate learning:
+### Temel Bileşenler
 
-- Don't need to learn vision from scratch
+**Görü Kodlayıcı (Vision Encoder)**: Kamera görüntülerini zengin öznitelik temsillerine dönüştürür
 
-- Language understanding comes "for free"
+- Büyük görüntü veri setlerinde (ImageNet vb.) önceden eğitilmiştir
 
-- Focus training on action generation
+- Nesneleri, uzamsal ilişkileri, olası eylemleri (affordance) anlar
 
-### 4\. Multimodal Reasoning
+**Dil Kodlayıcı (Language Encoder)**: Görev talimatlarını işler
 
-Combine visual and semantic understanding:
+- Doğal dili görev gömmelerine (embedding) eşler
 
-- "The red one" → Find red objects in image
+- Yeni görev tanımlarına zero-shot genelleme sağlar
 
-- "The closest vial" → Spatial reasoning
+**Modlar Arası Füzyon (Cross-Modal Fusion)**: Görü ve dili birleştirir
 
-- "Place it carefully" → Adjust motion dynamics
+- Görsel öznitelikleri dile ilişkilendiren dikkat mekanizmaları
 
-## Action Space and Control
+- Dil kavramlarını görsel gözlemlere temellendirir
 
-### Action Representations
+**Eylem Çözücüsü (Action Decoder)**: Robot eylemlerini üretir
 
-GR00T supports several action representations:
+- Birleştirilmiş görsel-dilsel özniteliklere koşullanmıştır
 
-**Joint Position Actions**
+- Uygun eylem temsilini (eklem konumları, hızları vb.) üretir
 
-- Direct control over robot configuration
+## VLA'lar Neden Güçlü
 
-- Requires learning full arm coordination
+### 1\. Doğal Görev Tanımı
 
-**End-Effector Actions**
+Belirli davranışları programlamak yerine görevleri düz dille tanımlayın:
 
-- Inverse kinematics computes joint commands
+```
+"Robota en yakın mavi tüpü al"
+"Tüpü soldaki boş yuvaya yerleştir"
+"Tüpü masadan rafa taşı"
+```
 
-- Abstracts away arm configuration
+### 2\. Görsel Genelleme
 
-**Action Chunking**
+Önceden eğitilmiş görü kodlayıcılar şunları sağlar:
 
-- Predict multiple future actions at once
+- Aydınlatma değişikliklerine dayanıklılık
 
-- Smoother execution, temporal consistency
+- Nesne kategorilerinin tanınması
 
-In this course, we use **joint position actions with action chunking**.
+- Uzamsal ilişkilerin anlaşılması
 
-### Action Horizon Parameter
+- Görsel alanlar arası aktarım
 
-The `action_horizon` parameter controls how many future actions the model predicts at once. This is a critical hyperparameter that affects both training and deployment.
+### 3\. Aktarım Öğrenmesi (Transfer Learning)
 
-**What it controls:**
+Önceden eğitilmiş bileşenler öğrenmeyi hızlandırır:
 
-- **Training**: The model learns to predict `action_horizon` timesteps into the future
+- Görüyü sıfırdan öğrenmek gerekmez
 
-- **Inference**: The model outputs a chunk of `action_horizon` actions per forward pass
+- Dil anlayışı "bedava" gelir
 
-**Trade-offs:**
+- Eğitim, eylem üretimine odaklanır
 
-| Horizon | Pros | Cons |
+### 4\. Çok Modlu Akıl Yürütme
+
+Görsel ve anlamsal anlayışı birleştirin:
+
+- "Kırmızı olan" → Görüntüde kırmızı nesneleri bul
+
+- "En yakın tüp" → Uzamsal akıl yürütme
+
+- "Dikkatli yerleştir" → Hareket dinamiklerini ayarla
+
+## Eylem Uzayı ve Kontrol
+
+### Eylem Temsilleri
+
+GR00T birkaç eylem temsilini destekler:
+
+**Eklem Konumu Eylemleri**
+
+- Robot konfigürasyonu üzerinde doğrudan kontrol
+
+- Tüm kol koordinasyonunu öğrenmeyi gerektirir
+
+**Uç İşlevleyici (End-Effector) Eylemleri**
+
+- Ters kinematik (inverse kinematics) eklem komutlarını hesaplar
+
+- Kol konfigürasyonunu soyutlar
+
+**Eylem Parçalama (Action Chunking)**
+
+- Aynı anda birden fazla gelecekteki eylemi tahmin etme
+
+- Daha pürüzsüz yürütme, zamansal tutarlılık
+
+Bu kursta **eylem parçalamalı eklem konumu eylemlerini** kullanıyoruz.
+
+### Action Horizon Parametresi
+
+`action_horizon` parametresi, modelin aynı anda kaç gelecekteki eylemi tahmin edeceğini kontrol eder. Hem eğitimi hem de konuşlandırmayı etkileyen kritik bir hiperparametredir.
+
+**Neyi kontrol eder:**
+
+- **Eğitim**: Model, geleceğe `action_horizon` zaman adımı için tahmin yapmayı öğrenir
+
+- **Çıkarım (Inference)**: Model, her ileri geçişte `action_horizon` eylemden oluşan bir parça üretir
+
+**Ödünleşimler:**
+
+| Ufuk | Artıları | Eksileri |
 | --- | --- | --- |
-| Short (4-8) | More reactive, corrects quickly | Choppy motion, frequent replanning |
-| Medium (16) | Balanced smoothness and reactivity | Good default for most tasks |
-| Long (32+) | Very smooth trajectories | Slow to correct errors, may overshoot |
+| Kısa (4-8) | Daha tepkisel, hızlı düzeltir | Kesik kesik hareket, sık yeniden planlama |
+| Orta (16) | Pürüzsüzlük ve tepkisellik dengeli | Çoğu görev için iyi varsayılan |
+| Uzun (32+) | Çok pürüzsüz yörüngeler | Hataları yavaş düzeltir, aşmaya (overshoot) meyilli |
 
 :::tip
 
-Start with the default `action_horizon=16`. Only adjust if you observe specific issues: reduce if the robot overshoots targets, increase if motion is too jerky.
+Varsayılan `action_horizon=16` ile başlayın. Yalnızca belirli sorunlar gözlemlerseniz ayarlayın: robot hedefleri aşarsa azaltın, hareket çok sarsıntılıysa artırın.
 
 :::
 
-## Example: GR00T in Action
+## Örnek: İş Başında GR00T
 
-### Post-Training GR00T
+### GR00T Post-Training
 
 ```bash
 set -x -e
 
 export NUM_GPUS=1
 
-DATASET_PATH= #set path to your model
+DATASET_PATH= #modelinizin yolunu belirleyin
 
 # torchrun --nproc_per_node=$NUM_GPUS --master_port=29500 \
 CUDA_VISIBLE_DEVICES=0 python \
@@ -251,52 +251,52 @@ gr00t/experiment/launch_finetune.py \
 --dataloader_num_workers 4
 ```
 
-## Practical Considerations
+## Pratik Düşünceler
 
-### Data Requirements
+### Veri Gereksinimleri
 
-VLA training typically requires:
+VLA eğitimi tipik olarak şunları gerektirir:
 
-- **50-200 demonstrations** per task for basic competence
+- Temel yetkinlik için görev başına **50-200 gösterim**
 
-- **Language annotations** describing each demonstration
+- Her gösterimi tanımlayan **dil etiketlemeleri**
 
-- **Diverse conditions** to enable generalization
+- Genellemeyi etkinleştirmek için **çeşitli koşullar**
 
 :::tip
 
-Quality matters more than quantity. 50 high-quality, diverse demonstrations often outperform 500 redundant ones.
+Kalite, miktardan daha önemlidir. 50 kaliteli, çeşitli gösterim çoğu zaman 500 tekrarlı olandan daha iyi performans gösterir.
 
 :::
 
-### Compute Requirements
+### Hesaplama Gereksinimleri
 
-GR00T training benefits from:
+GR00T eğitimi şunlardan yararlanır:
 
-- **GPU memory**: 24GB+ for full model training
+- **GPU belleği**: Tam model eğitimi için 24GB+
 
-- **Training time**: 2-8 hours depending on dataset size
+- **Eğitim süresi**: Veri seti boyutuna bağlı olarak 2-8 saat
 
-- **Inference**: Real-time on modern GPUs (RTX 3080+)
+- **Çıkarım**: Modern GPU'larda (RTX 3080+) gerçek zamanlı
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- VLA models combine vision, language, and action in a unified architecture
+- VLA modelleri görü, dil ve eylemi birleşik bir mimaride birleştirir
 
-- GR00T provides pre-trained components for accelerated learning
+- GR00T, öğrenmeyi hızlandırmak için önceden eğitilmiş bileşenler sunar
 
-- Language conditioning enables flexible task specification
+- Dile koşullanma esnek görev tanımını mümkün kılar
 
-- Action chunking provides smooth, temporally consistent control
+- Eylem parçalama pürüzsüz, zamansal olarak tutarlı kontrol sağlar
 
-- Pre-trained vision encoders enable visual generalization
+- Önceden eğitilmiş görü kodlayıcılar görsel genellemeyi mümkün kılar
 
-## Resources
+## Kaynaklar
 
-- [NVIDIA Isaac GR00T GitHub](https://github.com/NVIDIA/Isaac-GR00T) — Source code, model weights, and documentation
+- [NVIDIA Isaac GR00T GitHub](https://github.com/NVIDIA/Isaac-GR00T) — Kaynak kod, model ağırlıkları ve dokümantasyon
 
-- [Cosmos Cookbook](https://nvidia-cosmos.github.io/cosmos-cookbook/) — Recipes and examples for Cosmos world foundation models
+- [Cosmos Cookbook](https://nvidia-cosmos.github.io/cosmos-cookbook/) — Cosmos dünya temel modelleri için tarifler ve örnekler
 
-## What's Next?
+## Sırada Ne Var?
 
-Now that you understand VLAs conceptually, run policy evaluation in simulation. In the next session, [Sim Evaluation](/sim-to-real/veri-egitim-degerlendirme/sim-degerlendirme), you'll compare policies in sim using open-loop and closed-loop evaluation.
+VLA'ları kavramsal olarak anladığınıza göre, simülasyonda politika değerlendirmesi çalıştırın. Sonraki oturum [Simülasyon Değerlendirmesi](/sim-to-real/veri-egitim-degerlendirme/sim-degerlendirme) bölümünde, açık döngü ve kapalı döngü değerlendirmeyi kullanarak politikaları simülasyonda karşılaştıracaksınız.

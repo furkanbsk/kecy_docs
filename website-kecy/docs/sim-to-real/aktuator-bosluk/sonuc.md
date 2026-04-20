@@ -2,7 +2,7 @@
 title: 'Sonuç'
 sidebar_position: 2
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Sonuç'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,89 +13,89 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-This session provides time for remaining questions, continued experimentation, and a conclusion for this learning path.
+Bu oturum, geriye kalan sorular, devam eden deneyler ve bu öğrenme yolunun sonucu için zaman sağlar.
 
-## Learning Path Summary
+## Öğrenme Yolu Özeti
 
-### What You Accomplished
+### Neyi Başardınız
 
-- Learned why simulation matters and what the sim-to-real gap is
+- Simülasyonun neden önemli olduğunu ve sim-to-real boşluğunun ne olduğunu öğrendiniz
 
-- Built and standardized the physical lightbox workspace to match the sim task
+- Simülasyon görevine eşleşecek şekilde fiziksel ışık kutusu çalışma alanını kurdunuz ve standartlaştırdınız
 
-- Got hands-on time with the SO-101 robot and LeRobot tools
+- SO-101 robotu ve LeRobot araçlarıyla uygulamalı zaman geçirdiniz
 
-- Applied Strategy 1: Domain randomization with teleoperation
+- Strateji 1'i uyguladınız: Teleoperasyonlu domain randomization
 
-- Explored NVIDIA GR00T, vision-language-action models
+- NVIDIA GR00T, görü-dil-eylem (vision-language-action) modellerini keşfettiniz
 
-- Evaluated policies in simulation and on the real robot (sim-to-real gap)
+- Simülasyonda ve gerçek robotta politikaları değerlendirdiniz (sim-to-real boşluğu)
 
-- Applied Strategy 2: Co-training with real data, deployed to robot
+- Strateji 2'yi uyguladınız: Gerçek veriyle ortak eğitim, robota konuşlandırma
 
-- Applied Strategy 3: Cosmos synthetic data augmentation
+- Strateji 3'ü uyguladınız: Cosmos sentetik veri zenginleştirmesi
 
-- Explored Strategy 4: SAGE + GapONet (actuator gap estimation)
+- Strateji 4'ü keşfettiniz: SAGE + GapONet (aktüatör boşluğu tahmini)
 
-### The Four Strategies We Covered
+### Ele Aldığımız Dört Strateji
 
-| Strategy | Approach | Key Benefit |
+| Strateji | Yaklaşım | Ana Fayda |
 | --- | --- | --- |
-| **1\. Domain Randomization** | Vary simulation parameters | Robust to physics variations |
-| **2\. Co-training** | Mix sim and real data | Better real-world distribution |
-| **3\. Cosmos Augmentation** | Synthetic visual diversity | Robust to visual variations |
-| **4\. SAGE + GapONet** | Measure and model the gap | Targeted actuation fixes |
+| **1\. Domain Randomization** | Simülasyon parametrelerini çeşitlendirme | Fizik varyasyonlarına karşı dayanıklı |
+| **2\. Ortak Eğitim (Co-training)** | Sim ve gerçek veriyi karıştırma | Daha iyi gerçek dünya dağılımı |
+| **3\. Cosmos Zenginleştirmesi** | Sentetik görsel çeşitlilik | Görsel varyasyonlara karşı dayanıklı |
+| **4\. SAGE + GapONet** | Boşluğu ölç ve modelle | Hedefli aktüasyon düzeltmeleri |
 
-### Key Lessons
+### Önemli Dersler
 
-1.  **The gap is real** — simulation success doesn't guarantee real-world success
+1.  **Boşluk gerçek** — simülasyon başarısı, gerçek dünya başarısını garanti etmez
 
-2.  **Multiple strategies combine** — no single approach solves everything
+2.  **Çoklu stratejiler birleşir** — hiçbir tek yaklaşım her şeyi çözmez
 
-3.  **Measurement enables improvement** — SAGE shows you where to focus
+3.  **Ölçüm iyileştirmeyi mümkün kılar** — SAGE size nereye odaklanacağınızı gösterir
 
-4.  **Iteration is essential** — systematic improvement beats one-shot attempts
+4.  **Yineleme (iteration) esastır** — sistematik iyileştirme tek seferlik denemeleri yener
 
-5.  **Documentation matters** — recorded observations guide decisions
+5.  **Dokümantasyon önemlidir** — kaydedilen gözlemler kararlara rehberlik eder
 
-## Resources
+## Kaynaklar
 
-### Courses
+### Kurslar
 
 - [Getting Started with Isaac Lab - Transferring Robot Learning Policies from Simulation to Reality](https://docs.nvidia.com/learning/physical-ai/getting-started-with-isaac-lab/latest/transferring-robot-learning-policies-from-simulation-to-reality/index.html)
 
-### Documentation
+### Dokümantasyon
 
-- [LeRobot Documentation](https://huggingface.co/docs/lerobot)
+- [LeRobot Dokümantasyonu](https://huggingface.co/docs/lerobot)
 
-- [Isaac Sim Documentation](https://docs.omniverse.nvidia.com/isaacsim/latest/)
+- [Isaac Sim Dokümantasyonu](https://docs.omniverse.nvidia.com/isaacsim/latest/)
 
-- [Isaac Lab Documentation](https://isaac-sim.github.io/IsaacLab/main/index.html)
+- [Isaac Lab Dokümantasyonu](https://isaac-sim.github.io/IsaacLab/main/index.html)
 
-- [GR00T Developer Guide](https://developer.nvidia.com/isaac/gr00t)
+- [GR00T Geliştirici Rehberi](https://developer.nvidia.com/isaac/gr00t)
 
-- [SAGE Repository](https://github.com/isaac-sim2real/sage)
+- [SAGE Deposu](https://github.com/isaac-sim2real/sage)
 
-### Community
+### Topluluk
 
 - [Hugging Face Discord](https://discord.gg/huggingface)
 
-- [NVIDIA Developer Forums](https://forums.developer.nvidia.com/)
+- [NVIDIA Developer Forumları](https://forums.developer.nvidia.com/)
 
 - [LeRobot GitHub](https://github.com/huggingface/lerobot)
 
-### Papers
+### Makaleler
 
 - [The Reality Gap in Robotics: Challenges, Solutions, and Best Practices](https://arxiv.org/pdf/2510.20808)
 
-## Conclusion
+## Sonuç
 
-Congratulations on finishing this course **"Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac."**
+**"Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac"** kursunu tamamladığınız için tebrikler.
 
-We hope this will enable and inspire you to keep learning and practicing your skills in Physical AI!
+Bu kursun, Fiziksel AI (Physical AI) alanındaki becerilerinizi öğrenmeye ve uygulamaya devam etmeniz için size güç vermesini ve ilham olmasını diliyoruz!
 
-## Feedback
+## Geri Bildirim
 
-Taking a few minutes to fill out our survey gives us valuable feedback to improve the course for future participants.
+Anketi doldurmak için birkaç dakikanızı ayırmak, gelecekteki katılımcılar için kursu iyileştirmek üzere bize değerli geri bildirim sağlar.
 
-If you have any feedback, suggestions, or ran into issues, please visit this [survey](https://surveys.hotjar.com/98510484-7ad7-4ddc-bfc4-1b7663827216?utm_source=%5BSim-to-Real-SO-101-Workshop%5D).
+Herhangi bir geri bildiriminiz, öneriniz varsa veya sorunlarla karşılaştıysanız lütfen bu [ankete](https://surveys.hotjar.com/98510484-7ad7-4ddc-bfc4-1b7663827216?utm_source=%5BSim-to-Real-SO-101-Workshop%5D) göz atın.

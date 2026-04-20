@@ -2,7 +2,7 @@
 title: 'Gerçek Robotta Değerlendirme'
 sidebar_position: 4
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Gerçek Robotta Değerlendirme'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,45 +13,45 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Hands-on. You'll need the calibrated SO-101 robot, both cameras, the assembled workspace, and the `real-robot` container.
+Uygulamalı. Kalibre edilmiş SO-101 robota, her iki kameraya, monte edilmiş çalışma alanına ve `real-robot` kapsayıcısına ihtiyacınız olacak.
 
-In this session, you'll run policy evaluation on the physical SO-101 robot using the same GR00T-based setup you used in simulation.
+Bu oturumda, simülasyonda kullandığınız aynı GR00T tabanlı kurulumu kullanarak fiziksel SO-101 robot üzerinde politika değerlendirmesi çalıştıracaksınız.
 
-The client is now the real robot instead of the simulator!
+İstemci (client) artık simülatör yerine gerçek robot!
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Run** policy evaluation on the real robot using the GR00T server + client (Docker) setup
+- GR00T sunucu + istemci (Docker) kurulumunu kullanarak gerçek robotta politika değerlendirmesi **çalıştırma**
 
-- **Observe** the sim-to-real gap firsthand
+- Sim-to-real boşluğunu ilk elden **gözlemleme**
 
-- **Stop and restart** the evaluation safely
+- Değerlendirmeyi güvenli şekilde **durdurma ve yeniden başlatma**
 
-## What Policy Are We Running?
+## Hangi Politikayı Çalıştırıyoruz?
 
-We use the same policy you evaluated in simulation. The exact `MODEL` (checkpoint path) is set in the commands below.
+Simülasyonda değerlendirdiğiniz aynı politikayı kullanıyoruz. Kesin `MODEL` (kontrol noktası yolu) aşağıdaki komutlarda ayarlanmıştır.
 
-## Running Policy Evaluation on the Real Robot
+## Gerçek Robotta Politika Değerlendirmesi Çalıştırma
 
-Throughout this course, when we run evaluations there will be two terminals involved:
+Bu kurs boyunca değerlendirme çalıştırdığımızda iki terminal söz konusu olacaktır:
 
-1.  The host terminal, where we start the GR00T container and policy server
+1.  Host terminali; burada GR00T kapsayıcısını ve politika sunucusunu başlatırız
 
-2.  The client terminal, where we run the evaluation rollout and actually control the robot
+2.  İstemci (client) terminali; burada değerlendirme koşusunu (rollout) çalıştırır ve robotu fiilen kontrol ederiz
 
-For sim, the client is our simulator. For the real robot, our client is the robot itself.
+Simülasyonda istemcimiz simülatörümüzdür. Gerçek robotta ise istemcimiz robotun kendisidir.
 
-### Terminal 1 (real-robot container) — Start the GR00T policy server
+### Terminal 1 (real-robot kapsayıcısı) — GR00T politika sunucusunu başlatma
 
-1.  **Locate** the terminal already running the `real-robot` container.
+1.  `real-robot` kapsayıcısını zaten çalıştıran terminali **bulun**.
 
-### If you can't find it, click here to see the command to run the container.
+### Bulamıyorsanız kapsayıcıyı çalıştırma komutunu görmek için tıklayın.
 
-If you don't have the `real-robot` container terminal open, **open** a new terminal window (**CTRL+ALT+T**), and run the docker `real-robot` container using:
+`real-robot` kapsayıcısının terminali açık değilse yeni bir terminal penceresi **açın** (**CTRL+ALT+T**) ve docker `real-robot` kapsayıcısını şu komutla çalıştırın:
 
 ```bash
 xhost +
@@ -69,30 +69,30 @@ real-robot \
 /bin/bash
 ```
 
-2.  Inside this container, **run** the following. This is where we choose which model to evaluate.
+2.  Bu kapsayıcının içinde şunu **çalıştırın**. Burada hangi modelin değerlendirileceğini seçeriz.
 
 ```bash
 export MODEL=aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left/checkpoint-10000
 ```
 
-3.  **Run** the policy server with that model.
+3.  Politika sunucusunu bu modelle **çalıştırın**.
 
 ```bash
 python Isaac-GR00T/gr00t/eval/run_gr00t_server.py \
 --model-path /workspace/models/$MODEL
 ```
 
-### Terminal 2 (real-robot container) — Evaluation rollout
+### Terminal 2 (real-robot kapsayıcısı) — Değerlendirme koşusu
 
-Open a second terminal. You will attach to the same `real-robot` container and run the robot client. This step assumes your robot has been calibrated already (likely you already did this).
+İkinci bir terminal açın. Aynı `real-robot` kapsayıcısına bağlanacak ve robot istemcisini çalıştıracaksınız. Bu adım, robotunuzun zaten kalibre edilmiş olduğunu varsayar (muhtemelen bunu daha önce yaptınız).
 
-1.  Attach a second terminal to the `real-robot` container.
+1.  `real-robot` kapsayıcısına ikinci bir terminal bağlayın.
 
 ```bash
 docker exec -it real-robot /bin/bash
 ```
 
-2.  Once inside the container, **run** the evaluation script:
+2.  Kapsayıcının içinde değerlendirme betiğini **çalıştırın**:
 
 ```bash
 python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
@@ -111,54 +111,54 @@ python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
 
 :::note
 
-The `--rerun` flag is optional.
+`--rerun` bayrağı opsiyoneldir.
 
-It adds Rerun into the loop for debugging, so you can see joint actions and the camera feeds while the policy is running. This lets you confirm the camera views are reasonable and the assignments are correct.
+Hata ayıklama için döngüye Rerun'u dahil eder; böylece politika çalışırken eklem eylemlerini ve kamera akışlarını görebilirsiniz. Bu, kamera görünümlerinin makul ve atamaların doğru olduğunu onaylamanıza olanak tanır.
 
 :::
 
-### Watching the Evaluation
+### Değerlendirmeyi İzleme
 
-Watch the robot and the terminal during execution. The policy will run until you stop it or it completes the evaluation. Watch closely but stay clear; note any unexpected behavior and be ready to intervene.
+Yürütme sırasında robotu ve terminali izleyin. Politika, siz durdurana ya da değerlendirmeyi tamamlayana kadar çalışır. Yakından izleyin ama mesafenizi koruyun; beklenmedik davranışları not edin ve müdahale etmeye hazır olun.
 
-**To stop the robot:** Press **CTRL+C** in Terminal 2 (robot client). The policy server in Terminal 1 keeps running.
+**Robotu durdurmak için:** Terminal 2'de (robot istemcisi) **CTRL+C'ye basın**. Terminal 1'deki politika sunucusu çalışmaya devam eder.
 
-**To run again:** Simply run the command again `python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py ...` in Terminal 2
+**Tekrar çalıştırmak için:** Terminal 2'de `python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py ...` komutunu tekrar çalıştırmanız yeterlidir.
 
-**To switch model or fully restart:**
+**Modeli değiştirmek veya tamamen yeniden başlatmak için:**
 
-1.  **Stop** both terminals' commands (**CTRL+C**)
+1.  Her iki terminaldeki komutları **durdurun** (**CTRL+C**)
 
-2.  **Set** `MODEL` environment variable to the model you want to evaluate
+2.  Değerlendirmek istediğiniz modeli yansıtacak şekilde `MODEL` ortam değişkenini **ayarlayın**
 
-3.  **Restart** the commands for each terminal (model server, robot client)
+3.  Her terminaldeki komutları (model sunucusu, robot istemcisi) **yeniden başlatın**
 
 :::note
 
-- At evaluation start, the robot will slowly rise to its initial pose, then enter into inference mode.
+- Değerlendirme başladığında robot yavaşça başlangıç pozuna yükselir, ardından çıkarım (inference) moduna geçer.
 
-- At robot stop (CTRL+C), it will slowly drive itself back to its home pose.
+- Robot durdurulduğunda (CTRL+C), yavaşça kendi başlangıç (home) pozuna geri gider.
 
 :::
 
 :::tip
 
-Keep the policy server running between evaluation attempts. Only restart it if you want to load a different model checkpoint.
+Değerlendirme denemeleri arasında politika sunucusunu çalışır durumda tutun. Yalnızca farklı bir model kontrol noktası yüklemek istediğinizde yeniden başlatın.
 
 :::
 
-## Common Failure Modes
+## Yaygın Hata Modları
 
-When observing real evaluation runs, notice how perception and actuation differ from simulation. The same policy may miss grasps, overshoot, or behave differently under real lighting and dynamics. These differences are the sim-to-real gap you'll address with the strategies in the modules that follow.
+Gerçek değerlendirme koşularını gözlemlerken algı ve aktüasyonun simülasyondan nasıl farklılaştığına dikkat edin. Aynı politika, gerçek aydınlatma ve dinamiklerde kavramaları kaçırabilir, aşırıya gidebilir (overshoot) ya da farklı davranabilir. Bu farklılıklar, takip eden modüllerdeki stratejilerle ele alacağınız sim-to-real boşluğudur.
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- Real robot evaluation uses the same GR00T server + client architecture as sim evaluation; only the client (robot vs. simulator) changes
+- Gerçek robot değerlendirmesi, simülasyon değerlendirmesiyle aynı GR00T sunucu + istemci mimarisini kullanır; yalnızca istemci (robot vs. simülatör) değişir
 
-- The gap between sim and real performance is often visible immediately—perception and actuation both matter
+- Simülasyon ve gerçek performans arasındaki boşluk çoğu zaman hemen görünür — algı ve aktüasyonun ikisi de önemlidir
 
-- Safe shutdown is CTRL+C in the robot client terminal first
+- Güvenli kapatma, önce robot istemci terminalinde CTRL+C ile yapılır
 
-## What's Next?
+## Sırada Ne Var?
 
-Continue with [Strategy 2: Co-Training With Real Data](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining), where you'll deploy policies trained on mixed simulation and real data to the physical robot.
+[Strateji 2: Gerçek Veriyle Co-Training](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining) bölümüne devam edin; burada karma simülasyon ve gerçek veriyle eğitilmiş politikaları fiziksel robota konuşlandıracaksınız.

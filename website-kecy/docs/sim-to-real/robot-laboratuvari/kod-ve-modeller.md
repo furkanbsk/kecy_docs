@@ -2,7 +2,7 @@
 title: 'Kod ve Modelleri İndirme'
 sidebar_position: 2
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Kod ve Modelleri İndirme'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,13 +13,13 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Hands-on. You'll need a computer with Docker and an NVIDIA GPU (Ada or Blackwell architecture).
+Uygulamalı. Docker yüklü bir bilgisayara ve bir NVIDIA GPU'ya (Ada veya Blackwell mimarisi) ihtiyacınız var.
 
-In this module, you'll clone the workshop repository and build the Docker containers used throughout the rest of the course.
+Bu modülde atölye (workshop) deposunu klonlayacak ve kursun geri kalanında kullanılan Docker kapsayıcılarını (container) derleyeceksiniz.
 
-The current version of this content uses:
+Bu içeriğin geçerli sürümü şunları kullanır:
 
 - Isaac Sim 5.1.0
 
@@ -29,44 +29,44 @@ The current version of this content uses:
 
 - GR00T N1.6
 
-## Clone the Repository
+## Depoyu Klonlama
 
 ```bash
 git clone https://github.com/isaac-sim/Sim-to-Real-SO-101-Workshop.git
 cd Sim-to-Real-SO-101-Workshop
 ```
 
-## Build the Teleop and Simulation Container
+## Teleop ve Simülasyon Kapsayıcısını Derleme
 
 ```bash
 docker build -t teleop-docker -f docker/sim/Dockerfile .
 ```
 
-## Build the Real Robot and Inference Server
+## Gerçek Robot ve Çıkarım (Inference) Sunucusunu Derleme
 
-This build takes significantly longer than the teleop container.
+Bu derleme, teleop kapsayıcısından belirgin şekilde daha uzun sürer.
 
-Blackwell GPUs
+Blackwell GPU'lar
 
-For NVIDIA GPUs based on the Blackwell architecture (e.g. RTX PRO 6000):
+Blackwell mimarisine dayalı NVIDIA GPU'lar için (ör. RTX PRO 6000):
 
 ```bash
 ./docker/real/build.sh blackwell
 ```
 
-Ada GPUs
+Ada GPU'lar
 
-For NVIDIA GPUs based on the Ada architecture (e.g. RTX 4090):
+Ada mimarisine dayalı NVIDIA GPU'lar için (ör. RTX 4090):
 
 ```bash
 ./docker/real/build.sh ada
 ```
 
-## Get the Models
+## Modelleri Edinme
 
-You can either download these now, or as you go.
+Bunları şimdi ya da ilerledikçe indirebilirsiniz.
 
-From the root of the course repository:
+Kurs deposunun kök dizininden:
 
 ```bash
 mkdir -p models
@@ -86,8 +86,8 @@ hf download aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70 \
 --local-dir ./models/aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70
 ```
 
-## What's Next?
+## Sırada Ne Var?
 
-Next we'll calibrate and start running our robot!
+Şimdi robotumuzu kalibre edip çalıştırmaya başlayacağız!
 
-Continue to [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon).
+[SO-101'i Kalibre Etme](/sim-to-real/robot-laboratuvari/kalibrasyon) bölümüne devam edin.

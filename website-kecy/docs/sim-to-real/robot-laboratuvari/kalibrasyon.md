@@ -2,7 +2,7 @@
 title: 'SO-101 Kalibrasyonu'
 sidebar_position: 3
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: SO-101 Kalibrasyonu'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,69 +13,69 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Hands-on. You'll need the physical SO-101 robot, teleop arm, USB cables, and the assembled workspace from [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani).
+Uygulamalı. Fiziksel SO-101 robota, teleop kola, USB kablolara ve [Çalışma Alanını Kurma](/sim-to-real/robot-laboratuvari/calisma-alani) bölümünde monte edilen çalışma alanına ihtiyacınız olacak.
 
-In this session, you'll power up the SO-101 robot, run through the calibration process, and verify the calibration is correct.
+Bu oturumda SO-101 robotuna güç verecek, kalibrasyon sürecini tamamlayacak ve kalibrasyonun doğru olduğunu doğrulayacaksınız.
 
-While calibration can be a bit tedious, it is essential for accurate robot control and for our AI model to perform well.
+Kalibrasyon biraz yorucu olabilse de doğru robot kontrolü ve AI modelimizin iyi performans göstermesi için şarttır.
 
 :::tip
 
-If you encounter hardware issues during this session, see the [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme) for solutions to common problems.
+Bu oturumda donanım sorunlarıyla karşılaşırsanız yaygın sorunlara çözümler için [Sorun Giderme Kılavuzu](/sim-to-real/referans/sorun-giderme) bölümüne bakın.
 
 :::
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Power on** and safely operate the SO-101 robot arm
+- SO-101 robot koluna **güç verme** ve güvenli şekilde çalıştırma
 
-- **Calibrate** the teleop and robot arms for accurate positioning
+- Teleop ve robot kolları doğru konumlandırma için **kalibre etme**
 
-## Safety Guidelines
+## Güvenlik Yönergeleri
 
-Review the [Safety](/sim-to-real/robot-laboratuvari/calisma-alani#set-up-the-light) protocol before powering on the robot.
+Robota güç vermeden önce [Güvenlik](/sim-to-real/robot-laboratuvari/calisma-alani#işığı-kurma) protokolünü inceleyin.
 
-## Workspace Setup
+## Çalışma Alanı Kurulumu
 
-You should already have assembled and staged the physical task environment in [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani). Keep that lightbox layout, lighting, mat, vials, and rack consistent while you power on, calibrate, and teleoperate here—and again whenever you run real-robot evaluation later.
+[Çalışma Alanını Kurma](/sim-to-real/robot-laboratuvari/calisma-alani) bölümünde fiziksel görev ortamını zaten monte edip hazırlamış olmanız gerekir. Burada güç verme, kalibrasyon ve teleoperasyon sırasında — sonrasında gerçek robot değerlendirmesi yaptığınızda da — bu ışık kutusu düzenini, aydınlatmasını, matını, tüplerini ve rafını tutarlı tutun.
 
-## Powering On the Robot
+## Robota Güç Verme
 
-### Physical Inspection
+### Fiziksel Muayene
 
-Before powering on:
+Güç vermeden önce:
 
-1.  **Inspect** the robot for any visible damage
+1.  Robotu görünür herhangi bir hasar için **muayene edin**
 
-2.  **Verify** all cables are securely connected
+2.  Tüm kabloların güvenli şekilde bağlı olduğunu **doğrulayın**
 
 :::warning
 
-The teleop arm uses a lower voltage power supply (5V) compared to the follower (12V).
+Teleop kol, follower'a (12V) göre daha düşük voltajlı bir güç kaynağı (5V) kullanır.
 
-It is **very important** to not mix these up.
+Bunları karıştırmamak **çok önemlidir**.
 
-We recommend labeling or color coding them, so it's easy to tell them apart.
+Kolayca ayırt edebilmeniz için etiketlemenizi veya renk kodlamanızı öneririz.
 
 :::
 
-3.  **Connect** the power cables.
+3.  Güç kablolarını **bağlayın**.
 
-4.  **Verify** the **power LED** illuminates on the control board at the back of the robot.
+4.  Robotun arkasındaki kontrol kartında **güç LED'inin** yandığını **doğrulayın**.
 
-### Run the Docker Container for This Course
+### Bu Kurs İçin Docker Kapsayıcısını Çalıştırma
 
-When USB devices are plugged and re-plugged, the port assignments from your operating system may change.
+USB aygıtları takılıp çıkarıldığında işletim sisteminizin port atamaları değişebilir.
 
-Use the LeRobot port finder to find the address assigned to the robot, and to the teleop arm. After you've found the ports, we'll assign them to environment variables in your terminal. This way when we run commands, we don't have to keep typing the ports manually.
+Robota ve teleop kola atanan adresi bulmak için LeRobot port bulucusunu kullanın. Portları bulduktan sonra bunları terminalinizde ortam değişkenlerine atayacağız. Böylece komutları çalıştırırken portları elle yazmak zorunda kalmayız.
 
-1.  **Open** a new terminal window (**CTRL+ALT+T**).
+1.  Yeni bir terminal penceresi **açın** (**CTRL+ALT+T**).
 
-2.  **Run** the `teleop-docker` container:
+2.  `teleop-docker` kapsayıcısını **çalıştırın**:
 
 ```bash
 xhost +
@@ -99,15 +99,15 @@ docker run --name teleop -it --privileged --gpus all -e "ACCEPT_EULA=Y" --rm --n
 teleop-docker:latest
 ```
 
-### Identify the Teleop Arm Port
+### Teleop Kol Portunu Belirleme
 
-3.  **Run** this command to start port identification:
+3.  Port belirlemeyi başlatmak için şu komutu **çalıştırın**:
 
 ```bash
 lerobot-find-port
 ```
 
-4.  The tool will prompt you to remove the USB cable from the robot and press **Enter** when done. Let's start with the **teleop arm**.
+4.  Araç, USB kablosunu robottan çıkarıp işlem tamamlanınca **Enter**'a basmanızı isteyecektir. **Teleop kol** ile başlayalım.
 
 ```bash
 Finding all available ports for the MotorBus.
@@ -115,85 +115,85 @@ Finding all available ports for the MotorBus.
 Remove the usb cable from your MotorsBus and press Enter when done.
 ```
 
-5.  After removing the cable, **press** **Enter**.
+5.  Kabloyu çıkardıktan sonra **Enter'a basın**.
 
 ```
 The port of this MotorsBus is '/dev/ttyACM2'
 Reconnect the USB cable.
 ```
 
-In this example, `/dev/ttyACM2` is the port assigned by the host computer.
+Bu örnekte, `/dev/ttyACM2` ana bilgisayar tarafından atanan porttur.
 
-6.  Using this info, **set** environment variables for the teleop arm - make sure to make the port match the output of the last command.
+6.  Bu bilgiyi kullanarak teleop kol için ortam değişkenlerini **ayarlayın** — portun son komutun çıktısıyla eşleştiğinden emin olun.
 
 ```bash
-setenv TELEOP_PORT=/dev/ttyACM # !! make sure to update
-setenv TELEOP_ID=orange_teleop # use this line as-is
+setenv TELEOP_PORT=/dev/ttyACM # !! güncellediğinizden emin olun
+setenv TELEOP_ID=orange_teleop # bu satırı olduğu gibi kullanın
 ```
 
 :::note
 
-We are using a special method called `setenv` to export the environment variables, this will help us keep them persistent across sessions and across containers. The variables will be saved into the `~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env` file
+Ortam değişkenlerini dışa aktarmak için `setenv` adlı özel bir yöntem kullanıyoruz; bu, değişkenleri oturumlar ve kapsayıcılar arasında kalıcı tutmamızı sağlar. Değişkenler `~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env` dosyasına kaydedilecektir.
 
 :::
 
-### Identify the Robot Arm Port
+### Robot Kol Portunu Belirleme
 
-7.  **Repeat** again for the **robot arm**, and note the port.
+7.  **Robot kol** için aynı işlemi **tekrarlayın** ve portu not edin.
 
 ```bash
 lerobot-find-port
 ```
 
-8.  Using this info, **set** environment variables for the robot arm - make sure to make the port match the output of the last command.
+8.  Bu bilgiyi kullanarak robot kol için ortam değişkenlerini **ayarlayın** — portun son komutun çıktısıyla eşleştiğinden emin olun.
 
 ```bash
-setenv ROBOT_PORT=/dev/ttyACM # !! make sure to update
-setenv ROBOT_ID=orange_robot # use this as-is
+setenv ROBOT_PORT=/dev/ttyACM # !! güncellediğinizden emin olun
+setenv ROBOT_ID=orange_robot # bunu olduğu gibi kullanın
 ```
 
 :::note
 
-The ID determines where calibration data is stored (~/.cache/huggingface/lerobot/calibration). Use consistent IDs across sessions so calibration persists.
+ID, kalibrasyon verisinin nerede saklandığını belirler (`~/.cache/huggingface/lerobot/calibration`). Kalibrasyonun kalıcı olması için oturumlar boyunca tutarlı ID kullanın.
 
 :::
 
-9.  (Optional) to double check the values, **run** this command and **confirm** the values are what you expect.
+9.  (Opsiyonel) değerleri kontrol etmek için şu komutu **çalıştırın** ve değerlerin beklediğiniz gibi olduğunu **doğrulayın**.
 
 ```bash
 echo "Teleop port is ${TELEOP_PORT} with id ${TELEOP_ID}"
 echo "Robot port is ${ROBOT_PORT} with id ${ROBOT_ID}"
 ```
 
-10. **Keep** this terminal open.
+10. Bu terminali **açık tutun**.
 
-If you close it, restart the docker container and reset these environment variables. It's a good idea to write down these ports in a notebook, if you have it.
+Kapatırsanız docker kapsayıcısını yeniden başlatıp bu ortam değişkenlerini sıfırlayın. Elinizde varsa, bu portları bir deftere yazmanız iyi bir fikirdir.
 
 :::info
 
-If you re-connect multiple USB cables at once, the ports may change. These common tasks can be easily re-found on the [Quick Reference](/sim-to-real/referans/hizli-referans) page. You can identify which port corresponds to which arm by disconnecting one and pressing Enter.
+Birden fazla USB kabloyu aynı anda yeniden bağlarsanız portlar değişebilir. Bu yaygın görevler [Hızlı Referans](/sim-to-real/referans/hizli-referans) sayfasından kolayca yeniden bulunabilir. Birini söküp Enter'a basarak hangi portun hangi kola karşılık geldiğini belirleyebilirsiniz.
 
 :::
 
-## Calibration Process
+## Kalibrasyon Süreci
 
-Calibration ensures that the leader and follower arms have the same position values when they are in the same physical position.
+Kalibrasyon, leader ve follower kolların aynı fiziksel konumda aynı konum değerlerine sahip olmasını sağlar.
 
-The process is the same for both arms, just a slightly different command.
+Süreç her iki kol için de aynıdır, yalnızca komut biraz farklıdır.
 
-Don't worry, calibrating the SO-101 is a simple process once you've done it a few times.
+Endişelenmeyin, SO-101'i kalibre etmek birkaç kez yaptıktan sonra basit bir süreçtir.
 
-### Why Calibration Matters (expand to read)
+### Kalibrasyon Neden Önemli (okumak için genişletin)
 
-Good calibration is essential for sim-to-real transfer. Without it, the policy will not be able to control the robot accurately.
+İyi kalibrasyon, sim-to-real aktarımı için şarttır. Onsuz politika robotu doğru kontrol edemez.
 
-Without calibration, we introduce a major source of error that could cause damage or just unpredictable behavior.
+Kalibrasyon olmadan hasara ya da öngörülemez davranışa yol açabilecek büyük bir hata kaynağı ekliyoruz.
 
-Let's start by calibrating the teleop arm.
+Teleop kolunu kalibre ederek başlayalım.
 
-### Calibrate the Teleop Arm (Leader)
+### Teleop Kolun (Leader) Kalibrasyonu
 
-1.  **Run** the calibration command for the leader arm (the robot that teleoperates). Make sure you have already assigned $TELEOP_PORT in the earlier step.
+1.  Leader kol (teleoperasyon yapan robot) için kalibrasyon komutunu **çalıştırın**. Önceki adımda `$TELEOP_PORT`'u atadığınızdan emin olun.
 
 ```bash
 lerobot-calibrate \
@@ -202,47 +202,47 @@ lerobot-calibrate \
 --teleop.id=$TELEOP_ID
 ```
 
-The calibration script output will guide you through the process:
+Kalibrasyon betiğinin çıktısı sizi süreç boyunca yönlendirir:
 
-2.  **Move to the middle of the range**: When instructed, manually move each joint to the middle of its range of motion. This is what that looks like:
+2.  **Aralığın ortasına hareket ettirin**: Talimat verildiğinde her eklemi, hareket aralığının ortasına manuel olarak götürün. Şuna benzer:
 
-![Teleop Arm Calibration Pose Example](/img/sim-to-real/07-kalibrasyon/teleop_arm_neutral_pose.jpg)
+![Teleop Kol Kalibrasyon Pozu Örneği](/img/sim-to-real/07-kalibrasyon/teleop_arm_neutral_pose.jpg)
 
-_Teleop Arm: Calibration Pose Example_
+_Teleop Kol: Kalibrasyon Pozu Örneği._
 
 :::info
 
-**Pay particular attention to the wrist axis here.** This axis uses almost the entire motor rotation, so if it's not properly centered, you may encounter encoder overflow / underflow. Note how the gripper handle is oriented.
+**Burada bilek (wrist) eksenine özellikle dikkat edin.** Bu eksen motorun neredeyse tüm dönüş aralığını kullanır; dolayısıyla doğru ortalanmazsa enkoder taşması (overflow) / eksik dökme (underflow) ile karşılaşabilirsiniz. Kavrayıcı sapının nasıl yönlendirildiğine dikkat edin.
 
-We added two black dots to the gripper to help you find this position. Otherwise, just make your robot match the image.
+Bu konumu bulmanıza yardımcı olmak için kavrayıcıya iki siyah nokta ekledik. Aksi takdirde robotunuzu yalnızca görsele uydurun.
 
 :::
 
-3.  Once you've confirmed the neutral pose, **press Enter** to begin calibration process.
+3.  Nötr pozu onayladıktan sonra kalibrasyon sürecini başlatmak için **Enter'a basın**.
 
-4.  **Move** each joint through its entire range of motion, moving until the joint stops or hits its end point. You can repeat to make sure you found it.
+4.  Her eklemi tüm hareket aralığı boyunca, durana veya son noktasına çarpana kadar **hareket ettirin**. Bulduğunuzdan emin olmak için tekrarlayabilirsiniz.
 
-![Teleop Arm Calibration Process Animation](/img/sim-to-real/07-kalibrasyon/teleop_calibration.gif)
+![Teleop Kol Kalibrasyon Süreci Animasyonu](/img/sim-to-real/07-kalibrasyon/teleop_calibration.gif)
 
-**Animated example: Teleop Arm Calibration process. Move each joint to the center, confirm, then sweep to end stops one by one to complete calibration.**
+**Animasyonlu örnek: Teleop Kol Kalibrasyon süreci. Her eklemi ortaya hareket ettirin, onaylayın, sonra kalibrasyonu tamamlamak için son duraklara kadar tek tek tarayın.**
 
-5.  **Hit Enter** when done.
+5.  Bittiğinde **Enter'a basın**.
 
 :::tip
 
-We recommend moving each joint through its entire range, one by one, to ensure you've met its full range of motion and didn't miss one.
+Her eklemi tüm aralığı boyunca teker teker hareket ettirmenizi öneririz; böylece hareket aralığının tamamını bulduğunuzdan ve birini atlamadığınızdan emin olursunuz.
 
-It's okay to move an axis more than once. The script records min and max positions for each joint.
+Bir ekseni birden fazla kez hareket ettirmekte sakınca yoktur. Betik her eklem için minimum ve maksimum konumları kaydeder.
 
-And if you make a mistake or aren't sure, you can always run the calibration again.
+Hata yaparsanız veya emin değilseniz kalibrasyonu her zaman tekrar çalıştırabilirsiniz.
 
 :::
 
-### Calibrate the Follower Arm (Robot)
+### Follower Kolun (Robot) Kalibrasyonu
 
-This is the same process, the command flags just change to reflect the follower arm.
+Bu aynı süreçtir, yalnızca komut bayrakları follower kolu yansıtacak şekilde değişir.
 
-1.  **Run** the same command, but note the change in arguments:
+1.  Aynı komutu **çalıştırın**, ama argüman değişikliğine dikkat edin:
 
 ```bash
 lerobot-calibrate \
@@ -251,69 +251,69 @@ lerobot-calibrate \
 --robot.id=$ROBOT_ID
 ```
 
-2.  **Move** the robot to the calibration pose. This is what that pose looks like. Each joint is in the middle of its range of motion.
+2.  Robotu kalibrasyon pozuna **götürün**. Pozun görüntüsü aşağıdadır. Her eklem hareket aralığının ortasındadır.
 
 ![](/img/sim-to-real/07-kalibrasyon/calibration_pose.jpg)
 
-_Calibration Pose Example_
+_Kalibrasyon Pozu Örneği._
 
 ![](/img/sim-to-real/07-kalibrasyon/wrist_center.jpg)
 
-_Pay particular attention to the wrist axis here. This is what the centered position looks like. This axis uses almost the entire motor rotation, so if it's not properly centered, you may encounter encoder overflow / underflow._
+_Burada bilek eksenine özellikle dikkat edin. Ortalanmış pozisyon şuna benzer. Bu eksen motorun neredeyse tüm dönüş aralığını kullanır; dolayısıyla doğru ortalanmazsa enkoder taşması / eksik dökme ile karşılaşabilirsiniz._
 
-3.  **Press Enter** to begin calibration.
+3.  Kalibrasyonu başlatmak için **Enter'a basın**.
 
-4.  **Move** the robot through its entire range of motion, moving until the joint stops or hits its end point. You can repeat to make sure you found it.
+4.  Robotu tüm hareket aralığı boyunca, durana veya son noktasına çarpana kadar **hareket ettirin**. Bulduğunuzdan emin olmak için tekrarlayabilirsiniz.
 
 :::tip
 
-**True end stops only.** Move each joint until it reaches its **mechanical** end stop, not a cable or obstacle. If a cable is pinched between links or the robot hits a cable, you will record a false min/max limit and calibration will be wrong. Check cable routing so the arm can reach its real limits.
+**Yalnızca gerçek son duraklar.** Her eklemi bir kabloya veya engele değil, **mekanik** son durağına kadar hareket ettirin. Bir kablo bağlantılar arasında sıkışırsa ya da robot bir kabloya çarparsa yanlış bir min/maks sınır kaydeder ve kalibrasyon yanlış olur. Kolun gerçek sınırlarına ulaşabilmesi için kablo güzergahını kontrol edin.
 
 :::
 
-5.  **Hit Enter** when done.
+5.  Bittiğinde **Enter'a basın**.
 
-![Full SO-101 Calibration Sequence](/img/sim-to-real/07-kalibrasyon/full_so101_calibration.gif)
+![SO-101 Tam Kalibrasyon Sırası](/img/sim-to-real/07-kalibrasyon/full_so101_calibration.gif)
 
-_Full calibration workflow example: moving all joints through their ranges on the SO-101._
+_Tam kalibrasyon iş akışı örneği: SO-101'de tüm eklemleri aralıkları boyunca hareket ettirme._
 
-The calibration file will then be saved in the `~/.cache/huggingface/lerobot/calibration` directory, using the `type` for the folder name, and the `id` parameter as the filename.
+Kalibrasyon dosyası daha sonra `~/.cache/huggingface/lerobot/calibration` dizinine, klasör adı olarak `type` ve dosya adı olarak `id` parametresi kullanılarak kaydedilir.
 
 :::warning
 
-**Calibration File Warning**
+**Kalibrasyon Dosyası Uyarısı**
 
-When running the robot after calibration, you may see this message if the calibration file is not correct for your robot:
+Kalibrasyondan sonra robotu çalıştırırken, kalibrasyon dosyası robotunuz için doğru değilse şu mesajı görebilirsiniz:
 
 ```
 Press ENTER to use provided calibration file associated with the id leader_arm_1, or type 'c' and press ENTER to run calibration
 ```
 
-**Take caution when you see this message.** It may indicate:
+**Bu mesajı gördüğünüzde dikkatli olun.** Şunlara işaret edebilir:
 
-- The calibration file is not correct for your robot
+- Kalibrasyon dosyası robotunuz için doğru değil
 
-- The robot and teleop arm are mixed up (wrong ID assignment)
+- Robot ve teleop kol karışmış (yanlış ID ataması)
 
-- A previous calibration that doesn't match the current hardware state
+- Geçerli donanım durumuyla eşleşmeyen önceki bir kalibrasyon
 
-When in doubt, press CTRL+C to cancel the command, and double check the robot assignments. If they are correct, you can run the calibration again.
+Emin değilseniz komutu iptal etmek için CTRL+C'ye basın ve robot atamalarını iki kez kontrol edin. Doğruysa kalibrasyonu tekrar çalıştırabilirsiniz.
 
 :::
 
-### Check Your Work
+### Çalışmanızı Kontrol Etme
 
-How do you know if your calibration is correct?
+Kalibrasyonunuzun doğru olduğunu nasıl anlarsınız?
 
-We have a small script that will compare your calibration to a small dataset of calibrations we collected.
+Kalibrasyonunuzu, topladığımız küçük bir kalibrasyon veri setiyle karşılaştıran küçük bir betik var.
 
-1.  **Run** this command:
+1.  Şu komutu **çalıştırın**:
 
 ```bash
 python docker/real/scripts/so101_check_calibration.py
 ```
 
-Example output:
+Örnek çıktı:
 
 ```
 ============================================================================
@@ -349,22 +349,22 @@ Overall: ✓ PASS — calibration looks good.
 ============================================================================
 ```
 
-2.  **Make sure** you see `Overall: ✓ PASS — calibration looks good.` in the output. If not, try re-calibrating.
+2.  Çıktıda `Overall: ✓ PASS — calibration looks good.` ifadesini gördüğünüzden **emin olun**. Değilse yeniden kalibrasyon deneyin.
 
 :::tip
 
-If you need help, see the [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme) for common issues and diagnostic steps.
+Yardıma ihtiyacınız olursa yaygın sorunlar ve tanı adımları için [Sorun Giderme Kılavuzu](/sim-to-real/referans/sorun-giderme) bölümüne bakın.
 
 :::
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- Proper calibration is essential for sim-to-real correspondence
+- Sim-to-real uyumu için düzgün kalibrasyon şarttır
 
-- LeRobot provides unified commands for robot control
+- LeRobot, robot kontrolü için birleşik komutlar sunar
 
-- Always verify hardware before data collection or deployment
+- Veri toplama veya konuşlandırmadan önce donanımı her zaman doğrulayın
 
-## What's Next?
+## Sırada Ne Var?
 
-With both arms calibrated, continue to [Operating the SO-101](/sim-to-real/robot-laboratuvari/calistirma) to teleoperate the robot and configure cameras.
+Her iki kol da kalibre edildikten sonra, robotu teleoperasyonla çalıştırmak ve kameraları yapılandırmak için [SO-101'i Çalıştırma](/sim-to-real/robot-laboratuvari/calistirma) bölümüne devam edin.

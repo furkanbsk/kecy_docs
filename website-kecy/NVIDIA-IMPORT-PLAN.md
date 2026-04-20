@@ -1,6 +1,6 @@
 # NVIDIA Sim-to-Real SO-101 → Türkçe İçe Aktarma Planı
 
-**Kaynak:** https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/ **Hedef kategori:** `sim-to-real` (website-kecy/docs/sim-to-real/) **Durum:** Aşama A/B/C tamamlandı — İngilizce içerik Docusaurus'a aktarıldı; sıra Aşama D'de (Türkçe çeviri) **Başlangıç:** 2026-04-12
+**Kaynak:** https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/ **Hedef kategori:** `sim-to-real` (website-kecy/docs/sim-to-real/) **Durum:** Aşama A/B/C/D/E tamamlandı — tüm 19 sayfa Türkçeleştirildi, build temiz **Başlangıç:** 2026-04-12 **Tamamlanma:** 2026-04-21
 
 ---
 
@@ -251,11 +251,11 @@ Her sayfanın görselleri kendi klasöründe toplanacak. Beklenen toplam: ~80–
 
 - **Toplam sayfa:** 19
 - **İndir + MD dönüşümü tamamlanan:** 19 / 19 ✅
-- **Türkçe çevrilen:** 0 / 19 (Aşama D'ye hazır — içerik şu an hâlâ İngilizce, `needsTranslation: true` bayrağı var)
+- **Türkçe çevrilen:** 19 / 19 ✅ — tüm sayfalar Türkçeleştirildi; `needsTranslation: false` bayrağı tüm dosyalarda güncellendi
 - **Görsel indirilen:** 35 içerik görseli (+ NVIDIA chrome temizlendi)
-- **Build durumu:** ✅ `yarn build` geçiyor (4 anchor warn, bloke değil)
+- **Build durumu:** ✅ `yarn workspace website-kecy build` temiz geçiyor (0 kırık bağlantı, 0 kırık çapa)
 - **Kaynakta bozuk 2 görsel:** `images/n15_vs_n16_comparison.gif`, `images/two-viewports.png` → metin notuna indirgendi
-- **Son güncelleme:** 2026-04-20 — Aşama A, B, C ve E'nin yapısal kısmı tamamlandı; sıra Aşama D'de (çeviri)
+- **Son güncelleme:** 2026-04-21 — Aşama D tamamlandı; tüm 19 sayfa çevrildi; MDX `{#id}` sözdizimi sorunu Türkçe auto-slug'a geçilerek çözüldü; final build yeşil
 
 ---
 

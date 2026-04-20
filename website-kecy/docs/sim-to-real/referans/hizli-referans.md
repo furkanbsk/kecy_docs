@@ -2,7 +2,7 @@
 title: 'Hızlı Referans'
 sidebar_position: 1
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Hızlı Referans'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,11 +13,11 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-Quick commands for common tasks. For detailed explanations, see [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon) and [Operating the SO-101](/sim-to-real/robot-laboratuvari/calistirma).
+Yaygın görevler için hızlı komutlar. Ayrıntılı açıklamalar için [SO-101'i Kalibre Etme](/sim-to-real/robot-laboratuvari/kalibrasyon) ve [SO-101'i Çalıştırma](/sim-to-real/robot-laboratuvari/calistirma) bölümlerine bakın.
 
-## Simulation (teleop and eval) — Docker
+## Simülasyon (teleop ve değerlendirme) — Docker
 
-Launch the Isaac Sim container for sim teleop and sim policy evaluation:
+Sim teleop ve sim politika değerlendirmesi için Isaac Sim kapsayıcısını başlatın:
 
 ```bash
 xhost +
@@ -41,7 +41,7 @@ docker run --name teleop -it --privileged --gpus all -e "ACCEPT_EULA=Y" --rm --n
 teleop-docker:latest
 ```
 
-Run this container for the client/server GR00T inference workflow.
+İstemci/sunucu GR00T çıkarım iş akışı için bu kapsayıcıyı çalıştırın.
 
 ```bash
 xhost +
@@ -59,49 +59,49 @@ real-robot \
 /bin/bash
 ```
 
-## Find Robot Ports
+## Robot Portlarını Bulma
 
-Inside the `teleop-docker` container:
+`teleop-docker` kapsayıcısının içinde:
 
 ```bash
 lerobot-find-port
 ```
 
-When prompted, **disconnect** USB cable and **press Enter**. The tool reports the port (e.g., `/dev/ttyACM0`).
+İstendiğinde USB kablosunu **çıkarın** ve **Enter'a basın**. Araç portu bildirir (ör. `/dev/ttyACM0`).
 
-You can either write these down to use for future commands, or assign them to environment variables in your terminal.
+Bunları ileride kullanacağınız komutlarda kullanmak için yazabilir veya terminalinizdeki ortam değişkenlerine atayabilirsiniz.
 
 ```bash
-# Save to environment variables
+# Ortam değişkenlerine kaydet
 setenv ROBOT_PORT=/dev/ttyACM0
 setenv TELEOP_PORT=/dev/ttyACM1
 
-# Set robot IDs (based on your station label)
+# Robot kimliklerini ayarla (istasyon etiketinize göre)
 setenv ROBOT_ID=orange_robot
 setenv TELEOP_ID=orange_teleop
 ```
 
-## Find Cameras
+## Kameraları Bulma
 
-Inside the `teleop-docker` container:
+`teleop-docker` kapsayıcısının içinde:
 
 ```bash
 lerobot-find-cameras opencv
 ```
 
-Review captured images in `./output/captured_images` to identify gripper vs. external camera indices.
+Kavrayıcı ve dış kamera indekslerini tanımlamak için `./output/captured_images` içindeki yakalanmış görüntüleri inceleyin.
 
-Similar to the robot ports, you can save these to environment variables in your terminal or enter them manually into commands.
+Robot portlarına benzer şekilde, bunları terminalinizdeki ortam değişkenlerine kaydedebilir veya komutlara manuel olarak girebilirsiniz.
 
 ```bash
-# Save to environment variables
+# Ortam değişkenlerine kaydet
 setenv CAMERA_GRIPPER=0
 setenv CAMERA_EXTERNAL=2
 ```
 
-## Calibrate Leader Arm (Teleop)
+## Leader Kolu (Teleop) Kalibre Etme
 
-Inside `teleop-docker` container:
+`teleop-docker` kapsayıcısının içinde:
 
 ```bash
 lerobot-calibrate \
@@ -110,11 +110,11 @@ lerobot-calibrate \
 --teleop.id=$TELEOP_ID
 ```
 
-Follow prompts to move joints to middle-of-range, then through full range of motion.
+Eklemleri aralığın ortasına getirmek, ardından tam hareket aralığında hareket ettirmek için istemleri takip edin.
 
-## Calibrate Follower Arm (Robot)
+## Follower Kolu (Robot) Kalibre Etme
 
-Inside `teleop-docker` container:
+`teleop-docker` kapsayıcısının içinde:
 
 ```bash
 lerobot-calibrate \
@@ -123,9 +123,9 @@ lerobot-calibrate \
 --robot.id=$ROBOT_ID
 ```
 
-## Teleoperation of Real Robot
+## Gerçek Robotun Teleoperasyonu
 
-Inside `teleop-docker` container:
+`teleop-docker` kapsayıcısının içinde:
 
 ```bash
 lerobot-teleoperate \
@@ -137,14 +137,14 @@ lerobot-teleoperate \
 --teleop.id=$TELEOP_ID
 ```
 
-## Common Issues
+## Yaygın Sorunlar
 
-See [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme) for detailed solutions.
+Ayrıntılı çözümler için [Sorun Giderme Rehberi'ne](/sim-to-real/referans/sorun-giderme) bakın.
 
-| Symptom               | Likely Cause                             |
-| --------------------- | ---------------------------------------- |
-| All motors missing    | Power not connected                      |
-| One motor missing     | Loose motor cable, or just needs restart |
-| `Torque_Enable` error | Power cycle robot                        |
-| Camera index changed  | Re-run `lerobot-find-cameras`            |
-| Port not found        | Check USB, run `lerobot-find-port`       |
+| Belirti                | Olası Neden                                         |
+| ---------------------- | --------------------------------------------------- |
+| Tüm motorlar eksik     | Güç bağlı değil                                     |
+| Bir motor eksik        | Gevşek motor kablosu veya yeniden başlatma gerekli  |
+| `Torque_Enable` hatası | Robotu güç döngüsü (power cycle) yapın              |
+| Kamera indeksi değişti | `lerobot-find-cameras` komutunu tekrar çalıştırın   |
+| Port bulunamadı        | USB'yi kontrol edin, `lerobot-find-port` çalıştırın |

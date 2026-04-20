@@ -2,7 +2,7 @@
 title: 'Bu Kursu Nasıl Takip Edersiniz'
 sidebar_position: 2
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Bu Kursu Nasıl Takip Edersiniz'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,62 +13,62 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Nothing — this module is theory-only.
+Hiçbir şeye — bu modül tamamen teoriktir.
 
-## Learning Strategies
+## Öğrenme Stratejileri
 
-There are several ways to work through this learning path, depending on your goals, how much time you want to invest, and how much of a challenge you want to take on.
+Hedeflerinize, ne kadar zaman ayırmak istediğinize ve kendinize ne kadar meydan okumak istediğinize bağlı olarak bu öğrenme yolunu farklı şekillerde çalışabilirsiniz.
 
-### Option 1: As-Is
+### Seçenek 1: Olduğu Gibi
 
-If you're not sure, just take the course as-is!
+Emin değilseniz, kursu olduğu gibi alın!
 
-Buy the workspace materials from the Bill of Materials, use our pre-trained checkpoints and pre-collected datasets, and follow the course as-is.
-
-:::tip
-
-This is the fastest way to experience the full sim-to-real workflow end-to-end.
-
-:::
-
-### Option 2: Use Your Own Data
-
-Same as option 1, except you collect your own teleoperation data and train your own models on the same vial-to-rack task.
+Malzeme Listesi'nden çalışma alanı malzemelerini satın alın, önceden eğitilmiş kontrol noktalarımızı ve önceden toplanmış veri setlerimizi kullanın ve kursu olduğu gibi takip edin.
 
 :::tip
 
-This will take more time and work, but will help you experience the value of good demonstration data, watch how this affects policy performance, and more. Prove you can replicate the results independently.
+Bu, tüm sim-to-real iş akışını baştan sona deneyimlemenin en hızlı yoludur.
 
 :::
 
-### Option 3: Bring Your Own Task
+### Seçenek 2: Kendi Verilerinizi Kullanın
 
-Get more creative with this learning path as a base for your own exploration.
-
-Buy the workspace, but swap out the props and task. Define a new manipulation problem, collect data for it, and apply the same sim-to-real strategies covered in this course.
+Seçenek 1 ile aynı — tek farkla: kendi teleoperasyon verilerinizi toplar ve aynı tüp-rafa yerleştirme görevi üzerinde kendi modellerinizi eğitirsiniz.
 
 :::tip
 
-This will take some creativity, or maybe you already have a task in mind. But it will ultimately teach you the most, to build and apply the process to a new task.
+Bu daha fazla zaman ve emek gerektirir; ancak iyi gösterim verisinin değerini hissetmenizi, bunun politika performansını nasıl etkilediğini gözlemlemenizi ve sonuçları bağımsız olarak yeniden üretebildiğinizi kanıtlamanızı sağlar.
 
 :::
 
-### Option 4: Going Further
+### Seçenek 3: Kendi Görevinizi Getirin
 
-Train a robust enough model that you can completely remove the lightbox enclosure and run the task in an uncontrolled environment.
+Bu öğrenme yolunu kendi araştırmanız için bir başlangıç noktası olarak kullanıp daha yaratıcı olun.
 
-## Computer Hardware Prerequisites
+Çalışma alanını satın alın ama nesneleri ve görevi değiştirin. Yeni bir manipülasyon problemi tanımlayın, bunun için veri toplayın ve bu kursta işlenen sim-to-real stratejilerini uygulayın.
 
-We have tested this workshop on:
+:::tip
 
-- Ubuntu Linux 24.04 with an RTX 5090 Laptop edition, 64GB RAM
+Bu biraz yaratıcılık gerektirir ya da belki aklınızda zaten bir görev vardır. Sürecin yeni bir göreve uygulanması, sonuçta size en çok şeyi öğretecektir.
 
-- Ubuntu Linux 24.04 with an RTX PRO 6000 Blackwell Workstation Edition, 125GB RAM
+:::
 
-Details on the robot and workspace requirements can be found in [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani).
+### Seçenek 4: Daha İleri Gidin
 
-## What's Next?
+Yeterince sağlam bir model eğitin ki ışık kutusunu tamamen kaldırıp görevi kontrolsüz bir ortamda çalıştırabilesiniz.
 
-Continue to [What is Sim-to-Real?](/sim-to-real/giris/sim-to-real-nedir).
+## Bilgisayar Donanım Ön Koşulları
+
+Bu atölyeyi şu donanımlarda test ettik:
+
+- Ubuntu Linux 24.04, RTX 5090 Laptop Edition, 64GB RAM
+
+- Ubuntu Linux 24.04, RTX PRO 6000 Blackwell Workstation Edition, 125GB RAM
+
+Robot ve çalışma alanı gereksinimlerinin ayrıntıları için bkz. [Çalışma Alanını Kurma](/sim-to-real/robot-laboratuvari/calisma-alani).
+
+## Sırada Ne Var?
+
+[Sim-to-Real Nedir?](/sim-to-real/giris/sim-to-real-nedir) bölümüne devam edin.

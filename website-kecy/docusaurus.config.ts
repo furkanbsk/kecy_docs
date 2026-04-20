@@ -13,11 +13,11 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://kecyai.github.io',
-  baseUrl: '/robotik-wiki/',
+  url: 'https://furkanbsk.online',
+  baseUrl: '/',
 
-  organizationName: 'kecyai',
-  projectName: 'robotik-wiki',
+  organizationName: 'furkanbsk',
+  projectName: 'kecy_docs',
 
   onBrokenLinks: 'throw',
 
@@ -72,7 +72,7 @@ const config: Config = {
           label: 'Dokümanlar',
         },
         {
-          href: 'https://github.com/kecyai/robotik-wiki',
+          href: 'https://github.com/furkanbsk/kecy_docs',
           label: 'GitHub',
           position: 'right',
         },
@@ -87,7 +87,7 @@ const config: Config = {
             {label: 'Giriş', to: '/'},
             {
               label: 'GitHub',
-              href: 'https://github.com/kecyai/robotik-wiki',
+              href: 'https://github.com/furkanbsk/kecy_docs',
             },
           ],
         },

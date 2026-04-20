@@ -2,7 +2,7 @@
 title: 'Strateji 4: SAGE + GapONet ile Aktüatör Boşluğunu Ölçme'
 sidebar_position: 1
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Strateji 4: SAGE + GapONet ile Aktüatör Boşluğunu Ölçme'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,194 +13,195 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-![SAGE GapONet Comparison](/img/sim-to-real/15-strateji-4-sage/sage-gaponet-comparison-feb9-model.png)
+![SAGE GapONet Karşılaştırması](/img/sim-to-real/15-strateji-4-sage/sage-gaponet-comparison-feb9-model.png)
 
-_SAGE GapONet Comparison_
+_SAGE GapONet Karşılaştırması_
 
-In this session, you'll learn how to quantify the actuation gap precisely using SAGE, and how GapONet can model complex actuation dynamics that aren't captured by simple parameter tuning.
+Bu oturumda, SAGE kullanarak aktüasyon boşluğunu hassas bir şekilde nasıl nicelleştireceğinizi ve basit parametre ayarıyla yakalanamayan karmaşık aktüasyon dinamiklerini GapONet'in nasıl modelleyebildiğini öğreneceksiniz.
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Explain** how SAGE quantifies the sim-to-real gap per joint
+- SAGE'in eklem bazında sim-to-real boşluğunu nasıl nicelleştirdiğini **açıklama**
 
-- **Interpret** SAGE analysis results to guide improvement
+- İyileştirmeye yol göstermek için SAGE analiz sonuçlarını **yorumlama**
 
-- **Describe** how GapONet models complex actuation dynamics
+- GapONet'in karmaşık aktüasyon dinamiklerini nasıl modellediğini **tanımlama**
 
-## The Problem: Unknown Gap Sources
+## Sorun: Bilinmeyen Boşluk Kaynakları
 
-You've seen the improvements made by these strategies so far:
+Şimdiye kadar bu stratejilerin sağladığı iyileştirmeleri gördünüz:
 
-- Domain randomization (Strategy 1)
+- Domain randomization (Strateji 1)
 
-- Co-training with real data (Strategy 2)
+- Gerçek veriyle ortak eğitim (Strateji 2)
 
-- Cosmos augmentation (Strategy 3)
+- Cosmos zenginleştirmesi (Strateji 3)
 
-But we haven't addressed actuation gaps yet. To close them systematically, let's first understand some of the sources:
+Ancak aktüasyon boşluklarını henüz ele almadık. Bunları sistematik olarak kapatmak için, önce bazı kaynakları anlayalım:
 
-### Sources of the Sim-to-Real Gap
+### Sim-to-Real Boşluğunun Kaynakları
 
-**During Sensing:**
+**Algılama (Sensing) Sırasında:**
 
-- Simplified or inaccurate sensor models for cameras
+- Kameralar için basitleştirilmiş veya yanlış sensör modelleri
 
-- Physics modeling gaps in the simulator
+- Simülatördeki fizik modelleme boşlukları
 
-**During Actuation:**
+**Aktüasyon Sırasında:**
 
-- Inaccurate or missing actuator models
+- Yanlış veya eksik aktüatör modelleri
 
-- Physics modeling gaps (contact nuances, friction, closed-loop linkages)
+- Fizik modelleme boşlukları (temas nüansları, sürtünme, kapalı döngü bağlantılar)
 
-- Uncharacterized dynamic effects at system level (changing inertial behavior with payload, varying friction)
+- Sistem düzeyinde karakterize edilmemiş dinamik etkiler (yük ile değişen eylemsizlik davranışı, değişken sürtünme)
 
-- Inaccurate URDF (missing component details, missing properties, user input error)
+- Yanlış URDF (eksik bileşen ayrıntıları, eksik özellikler, kullanıcı girdi hatası)
 
-- CAD → URDF → USD format conversion errors
+- CAD → URDF → USD format dönüşüm hataları
 
-To close these gaps, you need to know:
+Bu boşlukları kapatmak için şunları bilmeniz gerekir:
 
-- **Where** exactly are the gaps?
+- Boşluklar tam olarak **nerede**?
 
-- **How large** are they?
+- **Ne kadar büyük**?
 
-- **What causes** them?
+- **Neyin neden olduğu**?
 
-Specifically for the SO-101, one challenge is that the actuators are hobby servos that can introduce significant backlash into the system, and this backlash adds up through the kinematic chain of the robot.
+Özellikle SO-101 için bir zorluk, aktüatörlerin sisteme ciddi bir geri tepme (backlash) sokabilen hobi servoları olmasıdır ve bu geri tepme robotun kinematik zinciri boyunca birikir.
 
-SAGE can help us visualize and collect data related to this gap.
+SAGE, bu boşluğu görselleştirmemize ve ilgili verileri toplamamıza yardımcı olabilir.
 
-## What Is SAGE?
+## SAGE Nedir?
 
-**SAGE** (Sim-to-Real Actuation Gap Estimation) is a collaborative project by Tongji University (TJU), Peking University (PKU), and NVIDIA to demonstrate an approach for sim-to-real gap perception, measurement, and bridging.
+**SAGE** (Sim-to-Real Actuation Gap Estimation), sim-to-real boşluk algılaması, ölçümü ve köprülenmesine yönelik bir yaklaşımı göstermek amacıyla Tongji Üniversitesi (TJU), Pekin Üniversitesi (PKU) ve NVIDIA'nın ortaklaşa yürüttüğü bir projedir.
 
-SAGE provides a systematic way of collecting real and sim paired datasets, analyzing, estimating, and visualizing the sim-to-real gap.
+SAGE, eşleştirilmiş gerçek ve sim veri setlerini toplamanın, analiz etmenin, sim-to-real boşluğunu tahmin etmenin ve görselleştirmenin sistematik bir yolunu sunar.
 
-**Repository**: [isaac-sim2real/sage](https://github.com/isaac-sim2real/sage)
+**Depo**: [isaac-sim2real/sage](https://github.com/isaac-sim2real/sage)
 
-SAGE systematically:
+SAGE sistematik olarak:
 
-1.  **Collects** paired real and simulation data for the same motions
+1.  Aynı hareketler için eşleştirilmiş gerçek ve simülasyon verilerini **toplar**
 
-2.  **Compares** position, velocity, and torque across domains
+2.  Alanlar arasında konum, hız ve torku **karşılaştırır**
 
-3.  **Quantifies** the gap per joint
+3.  Eklem bazında boşluğu **nicelleştirir**
 
-4.  **Visualizes** where the gap is largest
+4.  Boşluğun en büyük olduğu yeri **görselleştirir**
 
-5.  **Enables** targeted improvement via GapONet or parameter tuning
+5.  GapONet veya parametre ayarı ile hedefli iyileştirmeyi **mümkün kılar**
 
-![SAGE Overview](/img/sim-to-real/15-strateji-4-sage/sage-overview.png)
+![SAGE Genel Bakış](/img/sim-to-real/15-strateji-4-sage/sage-overview.png)
 
-_SAGE pipeline overview: from diverse motion sources through gap estimation to gap bridging._
+_SAGE boru hattı genel bakış: çeşitli hareket kaynaklarından boşluk tahmininden boşluk köprülemeye kadar._
 
-### SAGE Workflow
+### SAGE İş Akışı
 
 ```
 ┌─────────────────┐     ┌─────────────────┐
-│  Motion Files   │     │  Real Robot     │
-│  (retargeted    │────▶│  Data Collection│
-│   sequences)    │     │  (pos, vel, τ)  │
+│  Hareket        │     │  Gerçek Robot   │
+│  Dosyaları      │────▶│  Veri Toplama   │
+│  (retargeted    │     │  (pos, hız, τ)  │
+│   diziler)      │     │                 │
 └─────────────────┘     └────────┬────────┘
                              │
                              ▼
 ┌─────────────────┐     ┌─────────────────┐
-│  Same Motions   │     │   Simulation    │
-│   in Isaac Sim  │────▶│  Data Collection│
-│                 │     │  (pos, vel, τ)  │
+│  Isaac Sim'de   │     │   Simülasyon    │
+│  Aynı Hareketler│────▶│  Veri Toplama   │
+│                 │     │  (pos, hız, τ)  │
 └─────────────────┘     └────────┬────────┘
                              │
                              ▼
                     ┌─────────────────┐
-                    │  Gap Analysis   │
-                    │  Per-Joint      │
-                    │  Visualization  │
+                    │  Boşluk Analizi │
+                    │  Eklem Bazında  │
+                    │  Görselleştirme │
                     └────────┬────────┘
                              │
                              ▼
                     ┌─────────────────┐
-                    │  Gap Bridging   │
-                    │  (GapONet, etc.)│
+                    │  Boşluk Köprüleme│
+                    │  (GapONet, vb.) │
                     └─────────────────┘
 ```
 
-### Case Study: SO-101 SAGE Pipeline Overview
+### Vaka Çalışması: SO-101 SAGE Boru Hattı Genel Bakışı
 
-The following gives you an intuitive overview of the full pipeline; the step-by-step walkthrough comes later in this document.
+Aşağıdakiler size tüm boru hattının sezgisel bir genel bakışını sunar; adım adım uygulama bu belgenin ilerleyen kısımlarında yer almaktadır.
 
-**Pipeline in brief.** For the SO-101 we (1) collect sim data, (2) collect real robot data, and (3) train a gap-bridging model (GapONet; its details are covered later). Our SO-101 setup collected 8 hours of real trajectory data for such training.
+**Boru hattı kısaca.** SO-101 için biz (1) sim verisi toplarız, (2) gerçek robot verisi toplarız ve (3) bir boşluk-köprüleme modeli (GapONet; ayrıntıları daha sonra ele alınır) eğitiriz. SO-101 kurulumumuz bu tür bir eğitim için 8 saatlik gerçek yörünge verisi topladı.
 
-![SO-101 during real-robot data collection](/img/sim-to-real/15-strateji-4-sage/so101_data_collection.gif)
+![Gerçek robot veri toplama sırasında SO-101](/img/sim-to-real/15-strateji-4-sage/so101_data_collection.gif)
 
-_SO-101 during real-robot data collection._
+_Gerçek robot veri toplama sırasında SO-101._
 
-Below we show two ways to see the effect of GapONet after it is trained.
+Aşağıda GapONet eğitildikten sonraki etkisini görmenin iki yolunu gösteriyoruz.
 
-**1\. Visual comparison in the simulation environment.** In Isaac Sim we overlay real-robot motion with sim replay. The GUI screenshot below shows: **top** — real result vs sim _without_ GapONet; **bottom** — real result vs sim _with_ GapONet. With GapONet, the sim trace matches the real motion much more closely.
+**1\. Simülasyon ortamında görsel karşılaştırma.** Isaac Sim'de gerçek robot hareketini sim tekrarı (replay) ile üst üste koyarız. Aşağıdaki GUI ekran görüntüsü şunu gösterir: **üstte** — gerçek sonuç ile GapONet _olmadan_ sim; **altta** — gerçek sonuç ile GapONet _ile_ sim. GapONet ile sim izi, gerçek harekete çok daha yakından uyuyor.
 
-![Real vs sim without GapONet (top) and real vs sim with GapONet (bottom) in Isaac Sim](/img/sim-to-real/15-strateji-4-sage/sage-gaponet-comparison-feb9-model.png)
+![Isaac Sim'de gerçek vs sim GapONet olmadan (üst) ve gerçek vs sim GapONet ile (alt)](/img/sim-to-real/15-strateji-4-sage/sage-gaponet-comparison-feb9-model.png)
 
-_Top: real vs sim without GapONet. Bottom: real vs sim with GapONet._
+_Üst: gerçek vs sim GapONet olmadan. Alt: gerçek vs sim GapONet ile._
 
-**2\. Quantitative joint-level error.** We measure error between real and sim at each joint. In the plot below, **orange** is the error for real vs sim _without_ GapONet; **green** is the error for real vs sim _with_ GapONet. Lower green bars show that GapONet reduces the gap.
+**2\. Nicel eklem düzeyi hatası.** Her eklemde gerçek ile sim arasındaki hatayı ölçeriz. Aşağıdaki grafikte **turuncu**, GapONet _olmadan_ gerçek vs sim hatasıdır; **yeşil**, GapONet _ile_ gerçek vs sim hatasıdır. Daha düşük yeşil çubuklar, GapONet'in boşluğu azalttığını gösterir.
 
-![Joint-level error: orange = real vs sim without GapONet, green = real vs sim with GapONet](/img/sim-to-real/15-strateji-4-sage/sage_new_dataset_results.png)
+![Eklem düzeyi hata: turuncu = GapONet olmadan gerçek vs sim, yeşil = GapONet ile gerçek vs sim](/img/sim-to-real/15-strateji-4-sage/sage_new_dataset_results.png)
 
-_Joint error: orange = real vs sim without GapONet; green = real vs sim with GapONet._
+_Eklem hatası: turuncu = GapONet olmadan gerçek vs sim; yeşil = GapONet ile gerçek vs sim._
 
-## SAGE Repository Structure
+## SAGE Depo Yapısı
 
-Understanding the file layout helps navigate the framework. See the [SAGE repository](https://github.com/isaac-sim2real/sage) for the current structure; a simplified overview:
+Dosya düzenini anlamak, çerçevede gezinmeye yardımcı olur. Mevcut yapı için [SAGE deposuna](https://github.com/isaac-sim2real/sage) bakın; basitleştirilmiş bir genel bakış:
 
 ```
 sage/
-├── assets/                    # Robot USD files
+├── assets/                    # Robot USD dosyaları
 │   └── {robot_name}/
 ├── configs/
-│   ├── {robot_name}_joints.yaml       # Complete joint list
-│   └── {robot_name}_valid_joints.txt  # Motion-relevant joints
-├── docs/                      # Robot-specific guides (e.g. LEROBOT_REAL for SO-101)
+│   ├── {robot_name}_joints.yaml       # Tam eklem listesi
+│   └── {robot_name}_valid_joints.txt  # Hareketle ilgili eklemler
+├── docs/                      # Robota özgü kılavuzlar (ör. SO-101 için LEROBOT_REAL)
 ├── motion_files/
-│   └── {robot_name}/{source}/         # Retargeted motion files
+│   └── {robot_name}/{source}/         # Retargeted hareket dosyaları
 ├── output/
-│   ├── sim/{robot_name}/{source}/{motion_name}/   # Simulation results
-│   └── real/{robot_name}/{source}/{motion_name}/  # Real robot results
-├── sage/                      # Python package
-│   ├── assets.py              # Robot configuration (USD path, PD gains, etc.)
-│   ├── simulation.py          # Isaac Sim simulation code
-│   ├── analysis.py            # Sim vs. real comparison and metrics
-│   ├── real_unitree/          # Unitree H1-2 real robot code
-│   ├── real_realman/          # Realman WR75S real robot code
-│   └── real_so101/            # LeRobot SO-101 real robot code
+│   ├── sim/{robot_name}/{source}/{motion_name}/   # Simülasyon sonuçları
+│   └── real/{robot_name}/{source}/{motion_name}/  # Gerçek robot sonuçları
+├── sage/                      # Python paketi
+│   ├── assets.py              # Robot yapılandırması (USD yolu, PD kazançları vb.)
+│   ├── simulation.py          # Isaac Sim simülasyon kodu
+│   ├── analysis.py            # Sim vs gerçek karşılaştırma ve metrikler
+│   ├── real_unitree/          # Unitree H1-2 gerçek robot kodu
+│   ├── real_realman/          # Realman WR75S gerçek robot kodu
+│   └── real_so101/            # LeRobot SO-101 gerçek robot kodu
 └── scripts/
-├── run_simulation.py      # Run simulation data collection
-├── run_analysis.py        # Compare sim vs real, generate metrics and plots
-└── run_real.py            # Run real robot data collection
+├── run_simulation.py      # Simülasyon veri toplamayı çalıştır
+├── run_analysis.py        # Sim vs gerçek karşılaştır, metrik ve grafik üret
+└── run_real.py            # Gerçek robot veri toplamayı çalıştır
 ```
 
-## Walkthrough: Running SAGE on an Action Sequence in Simulation
+## Uygulama: Simülasyonda Bir Eylem Dizisinde SAGE Çalıştırma
 
-This walkthrough demonstrates the complete SAGE pipeline: running the same motion in simulation and on real hardware, then analyzing the gap.
+Bu uygulama, tam SAGE boru hattını gösterir: aynı hareketi hem simülasyonda hem de gerçek donanımda çalıştırmak ve ardından boşluğu analiz etmek.
 
 :::info
 
-This walkthrough is for reference; we won't be doing this hands-on today for time.
+Bu uygulama referans amaçlıdır; zaman nedeniyle bugün bunu uygulamalı yapmayacağız.
 
 :::
 
-### Startup
+### Başlangıç
 
-1.  First, **clone** the SAGE repository:
+1.  İlk olarak, SAGE deposunu **klonlayın**:
 
 ```bash
 git clone git@github.com:isaac-sim2real/sage.git
 cd sage
 ```
 
-2.  **Start** the SAGE container:
+2.  SAGE kapsayıcısını **başlatın**:
 
 ```bash
 xhost +
@@ -221,23 +222,23 @@ docker run --name isaac-lab --entrypoint bash -it --gpus all -e "ACCEPT_EULA=Y" 
 sage
 ```
 
-### Choose Motion File
+### Hareket Dosyası Seçme
 
-Motion files contain retargeted action sequences. SAGE supports diverse motion sources:
+Hareket dosyaları retargeted eylem dizilerini içerir. SAGE çeşitli hareket kaynaklarını destekler:
 
-- **Teleoperation**: Human-guided motions
+- **Teleoperasyon**: İnsan güdümlü hareketler
 
-- **Remote control**: Joystick or keyboard controlled
+- **Uzaktan kumanda**: Joystick veya klavye kontrollü
 
-- **Retargeted motions**: From motion capture or other robots
+- **Retargeted hareketler**: Hareket yakalamadan (motion capture) veya başka robotlardan
 
-For SO-101, motion files live under `motion_files/so101/custom/`, including pick-and-place and other trajectories:
+SO-101 için hareket dosyaları `motion_files/so101/custom/` altında bulunur; pick-and-place ve diğer yörüngeler dahil:
 
 ```bash
-# Motion files location
+# Hareket dosyaları konumu
 ls motion_files/so101/custom/
 
-# Example output (subset):
+# Örnek çıktı (altküme):
 # actuator_bandwidth.txt
 # pick_place.txt
 # oscillation_low_freq.txt
@@ -245,29 +246,29 @@ ls motion_files/so101/custom/
 # ...
 ```
 
-Each `.txt` file contains joint angle positions over time (format: first line joint names, then comma-separated angles in radians per line).
+Her `.txt` dosyası zaman içinde eklem açı pozisyonlarını içerir (biçim: ilk satır eklem adları, ardından her satırda radyan cinsinden virgülle ayrılmış açılar).
 
-### Verify the Robot Configuration
+### Robot Yapılandırmasını Doğrulama
 
-Verifying robot configuration in `sage/assets.py`:
+`sage/assets.py` içinde robot yapılandırmasını doğrulama:
 
 ```python
-1# SO-101 entry in ROBOT_CONFIGS
+1# ROBOT_CONFIGS içindeki SO-101 girişi
 2"so101": {
 3    "usd_path": "assets/so101/SO-ARM101-USD.usd",
 4    "offset": (0.0, 0.0, 0.0),
-5    "default_kp": 100.0,   # PD controller stiffness
-6    "default_kd": 2.0,     # PD controller damping
-7    "default_control_freq": 50.0,  # Control frequency (Hz)
+5    "default_kp": 100.0,   # PD kontrolörü sertliği (stiffness)
+6    "default_kd": 2.0,     # PD kontrolörü sönümlemesi (damping)
+7    "default_control_freq": 50.0,  # Kontrol frekansı (Hz)
 8}
 ```
 
-Verifying the valid joints list:
+Geçerli eklem listesini doğrulama:
 
 ```bash
 cat configs/so101_valid_joints.txt
 
-# Example output:
+# Örnek çıktı:
 # Rotation
 # Pitch
 # Elbow
@@ -276,9 +277,9 @@ cat configs/so101_valid_joints.txt
 # Jaw
 ```
 
-### Run Simulation Data Collection
+### Simülasyon Veri Toplamayı Çalıştırma
 
-From within the same terminal in the SAGE container, we'd now execute the motion sequence in Isaac Sim:
+SAGE kapsayıcısındaki aynı terminalin içinden, hareket dizisini Isaac Sim'de şimdi çalıştıracaktık:
 
 ```bash
 ${ISAACSIM_PATH}/python.sh scripts/run_simulation.py \
@@ -295,25 +296,25 @@ ${ISAACSIM_PATH}/python.sh scripts/run_simulation.py \
 --kd 2
 ```
 
-This collects:
+Bu şunları toplar:
 
-- Commanded joint positions
+- Komuta edilen eklem pozisyonları
 
-- Actual joint positions (from simulation)
+- Gerçek eklem pozisyonları (simülasyondan)
 
-- Joint velocities
+- Eklem hızları
 
-- Joint torques
+- Eklem torkları
 
-### Run Real Robot Data Collection
+### Gerçek Robot Veri Toplamayı Çalıştırma
 
-Now to create a paired dataset, we'll execute the same motion on the physical SO-101. This will actually move the robot and record data.
+Şimdi eşleştirilmiş bir veri seti oluşturmak için, aynı hareketi fiziksel SO-101 üzerinde çalıştıracağız. Bu gerçekten robotu hareket ettirecek ve veri kaydedecektir.
 
-Follow the instructions here: [LEROBOT_REAL.md](https://github.com/isaac-sim2real/sage/blob/main/docs/LEROBOT_REAL.md)
+Buradaki talimatları izleyin: [LEROBOT_REAL.md](https://github.com/isaac-sim2real/sage/blob/main/docs/LEROBOT_REAL.md)
 
-### Analyze the Gap
+### Boşluğu Analiz Etme
 
-Compare the paired sim-real data:
+Eşleştirilmiş sim-gerçek verisini karşılaştırın:
 
 ```bash
 python scripts/run_analysis.py \
@@ -324,48 +325,48 @@ python scripts/run_analysis.py \
 --valid-joints-file configs/so101_valid_joints.txt
 ```
 
-![SAGE Elbow Axis Analysis](/img/sim-to-real/15-strateji-4-sage/sage-elbow-axis-analysis.png)
+![SAGE Elbow Axis Analizi](/img/sim-to-real/15-strateji-4-sage/sage-elbow-axis-analysis.png)
 
-_Analysis of SAGE data to quantify the gap for a given axis, and a given motion._
+_Belirli bir eksen ve belirli bir hareket için boşluğu nicelleştirmek amacıyla SAGE verisinin analizi._
 
-## Using Paired Data for Gap Bridging
+## Boşluk Köprüleme İçin Eşleştirilmiş Veriyi Kullanma
 
-Once you have sim-real paired data, you can train a neural network that bridges the actuation gap. This gap-bridging model can be used in two ways:
+Sim-gerçek eşleştirilmiş veriniz olduğunda, aktüasyon boşluğunu köprüleyen bir sinir ağı eğitebilirsiniz. Bu boşluk-köprüleme modeli iki şekilde kullanılabilir:
 
-**1\. Integrate into the simulation environment.** Use the model inside sim so that the environment better matches real actuation. Policies trained in this gap-corrected sim are more likely to achieve seamless sim-to-real deployment. The figure below illustrates this use.
+**1\. Simülasyon ortamına entegre etme.** Modeli sim içinde kullanın, böylece ortam gerçek aktüasyonla daha iyi eşleşir. Bu boşluk-düzeltilmiş sim'de eğitilen politikaların sorunsuz sim-to-real konuşlandırma elde etme olasılığı daha yüksektir. Aşağıdaki şekil bu kullanımı göstermektedir.
 
-**2\. Use at real-robot deployment.** Apply the model on the real robot at inference time so that the policy's actions are corrected for the actuation gap before execution. This is the idea behind the future work on GapONet + GR00T integration: a policy trained in sim benefits from gap bridging when deployed on hardware.
+**2\. Gerçek robot konuşlandırmasında kullanma.** Modeli gerçek robotta çıkarım (inference) zamanında uygulayın, böylece politikanın eylemleri yürütmeden önce aktüasyon boşluğu için düzeltilir. GapONet + GR00T entegrasyonu üzerine gelecekteki çalışmanın arkasındaki fikir budur: sim'de eğitilen bir politika, donanımda konuşlandırıldığında boşluk köprülemeden yararlanır.
 
-![Gap-bridging model inside simulation](/img/sim-to-real/15-strateji-4-sage/sage-use-in-training.png)
+![Simülasyon içinde boşluk-köprüleme modeli](/img/sim-to-real/15-strateji-4-sage/sage-use-in-training.png)
 
-_Using a gap-bridging model inside the simulation environment so that policies are trained with more realistic actuation._
+_Politikaların daha gerçekçi aktüasyonla eğitilebilmesi için simülasyon ortamı içinde bir boşluk-köprüleme modeli kullanımı._
 
-## What Is GapONet?
+## GapONet Nedir?
 
-**GapONet**, developed by Peking University (PKU), learns a neural network model of actuator behavior that captures effects not easily modeled analytically. GapONet is part of the SAGE ecosystem, and its integration in SAGE is in progress.
+**GapONet**, Pekin Üniversitesi (PKU) tarafından geliştirilmiştir ve analitik olarak kolayca modellenemeyen etkileri yakalayan bir aktüatör davranış sinir ağı modeli öğrenir. GapONet, SAGE ekosisteminin bir parçasıdır ve SAGE'e entegrasyonu devam etmektedir.
 
-### How GapONet Works
+### GapONet Nasıl Çalışır?
 
 ```
-Training Phase:
-Input:  Commanded action sequences (from motions)
-Target: Actual resulting motion (from real robot)
-Learns: Mapping from command → actual behavior
+Eğitim Aşaması:
+Girdi:  Komut edilen eylem dizileri (hareketlerden)
+Hedef:  Gerçek sonuç hareketi (gerçek robottan)
+Öğrenir: Komut → gerçek davranış eşlemesi
 
-Inference Phase:
-Input:  Policy's intended action
-Output: Compensated action that achieves intended behavior
+Çıkarım Aşaması:
+Girdi:  Politikanın amaçlanan eylemi
+Çıktı:  Amaçlanan davranışı gerçekleştiren kompanse edilmiş eylem
 ```
 
-### Training GapONet
+### GapONet Eğitimi
 
 :::note
 
-This section is for reference; we won't be doing this training hands-on today for time.
+Bu bölüm referans amaçlıdır; zaman nedeniyle bugün bu eğitimi uygulamalı yapmayacağız.
 
 :::
 
-The [GapONet repository](https://github.com/jiemingcui/gaponet) provides an Isaac Lab-based implementation with DeepONet, Transformer, and MLP architectures for sim-to-real humanoid control. After installing the repo and required assets (see the repo README), train with the operator environment:
+[GapONet deposu](https://github.com/jiemingcui/gaponet), sim-to-real insansı robot kontrolü için DeepONet, Transformer ve MLP mimarilerine sahip Isaac Lab tabanlı bir uygulama sunar. Depoyu ve gerekli assetleri kurduktan sonra (depo README'sine bakın), operatör ortamıyla eğitin:
 
 ```bash
 python scripts/rsl_rl/train.py --task Isaac-Humanoid-Operator-Delta-Action \
@@ -373,16 +374,16 @@ python scripts/rsl_rl/train.py --task Isaac-Humanoid-Operator-Delta-Action \
 --letter amass --run_name delta_action_mlp_payload --device cuda env.mode=train --headless
 ```
 
-Adjust `--num_envs`, `--max_iterations`, and `--run_name` as needed. For other architectures or tasks, see the repo's [Usage](https://github.com/jiemingcui/gaponet#usage) and [Adding a New Robot](https://github.com/jiemingcui/gaponet#adding-a-new-robot) sections.
+`--num_envs`, `--max_iterations` ve `--run_name` değerlerini gerektiği gibi ayarlayın. Diğer mimariler veya görevler için deponun [Usage](https://github.com/jiemingcui/gaponet#usage) ve [Adding a New Robot](https://github.com/jiemingcui/gaponet#adding-a-new-robot) bölümlerine bakın.
 
-**Evaluation and export.** Evaluate a checkpoint:
+**Değerlendirme ve dışa aktarma.** Bir kontrol noktasını değerlendirin:
 
 ```bash
 python scripts/rsl_rl/play.py --task Isaac-Humanoid-Operator-Delta-Action \
 --model ./model/model_17950.pt --num_envs 20 --headless
 ```
 
-Export to JIT for lightweight inference without Isaac Sim:
+Isaac Sim olmadan hafif çıkarım için JIT'e dışa aktarın:
 
 ```bash
 python scripts/rsl_rl/inference_jit.py \
@@ -394,7 +395,7 @@ python scripts/rsl_rl/inference_jit.py \
 --num_envs 20
 ```
 
-Then run inference on test data (no Isaac Sim required):
+Ardından test verisi üzerinde çıkarım çalıştırın (Isaac Sim gerekmez):
 
 ```bash
 python scripts/rsl_rl/deploy.py \
@@ -402,82 +403,82 @@ python scripts/rsl_rl/deploy.py \
 --test_data ./source/sim2real/sim2real/tasks/humanoid_operator/motions/motion_amass/edited_27dof/test.npz
 ```
 
-For SO-101 or other arms, SAGE's gap-bridging training typically focuses on joints with the largest sim-to-real gaps (e.g. gripper, wrist) using paired SAGE data; the exact scripts depend on the [SAGE repository](https://github.com/isaac-sim2real/sage) and any GapONet integration there.
+SO-101 veya diğer kollar için SAGE'in boşluk-köprüleme eğitimi genellikle eşleştirilmiş SAGE verisi kullanarak en büyük sim-to-real boşluğuna sahip eklemlere (ör. kavrayıcı, bilek) odaklanır; kesin betikler [SAGE deposuna](https://github.com/isaac-sim2real/sage) ve oradaki herhangi bir GapONet entegrasyonuna bağlıdır.
 
-## Pre-Collected Dataset
+## Önceden Toplanmış Veri Seti
 
-For humanoid research, SAGE provides pre-collected datasets:
+İnsansı robot araştırması için SAGE, önceden toplanmış veri setleri sunar:
 
-**Unitree Dataset** (H1-2 humanoid):
+**Unitree Veri Seti** (H1-2 insansı robot):
 
-- Upper-body motions under varying payloads (0-3 kg)
+- Değişen yükler altında (0-3 kg) üst vücut hareketleri
 
-- Motions adapted from AMASS dataset
+- AMASS veri setinden uyarlanmış hareketler
 
-- Paired sim-real data
+- Eşleştirilmiş sim-gerçek verisi
 
-**RealMan Dataset** (WR75S arms):
+**RealMan Veri Seti** (WR75S kollar):
 
-- Four arms tested under four payload conditions
+- Dört farklı yük koşulu altında test edilmiş dört kol
 
-- Cross-robot generalization studies
+- Robotlar arası genelleme çalışmaları
 
-The PKU Disk link for downloading these datasets is in the SAGE repository's [Processed Sim2Real Datasets](https://github.com/isaac-sim2real/sage#processed-sim2real-datasets) section.
+Bu veri setlerini indirmek için PKU Disk bağlantısı, SAGE deposunun [Processed Sim2Real Datasets](https://github.com/isaac-sim2real/sage#processed-sim2real-datasets) bölümündedir.
 
-## Community-Driven Future
+## Topluluk Odaklı Gelecek
 
-SAGE is designed to become a community-driven effort where roboticists around the world come together to collectively work on solutions.
+SAGE, dünya çapındaki robot bilimcilerinin ortak çözümler için bir araya geldiği topluluk odaklı bir çaba haline gelmek üzere tasarlanmıştır.
 
-**Community Contributions:**
+**Topluluk Katkıları:**
 
-- **Paired datasets**: Real-sim motion data for new robots and tasks
+- **Eşleştirilmiş veri setleri**: Yeni robotlar ve görevler için gerçek-sim hareket verisi
 
-- **Sim-Ready assets**: Robot USD files calibrated for accurate simulation
+- **Sim-Ready assetler**: Doğru simülasyon için kalibre edilmiş robot USD dosyaları
 
-- **Novel NN architectures**: New models for gap estimation and compensation
+- **Yeni NN mimarileri**: Boşluk tahmini ve kompanzasyonu için yeni modeller
 
-- **Hybrid solutions**: Combinations of analytical and learned approaches
+- **Hibrit çözümler**: Analitik ve öğrenilmiş yaklaşımların kombinasyonları
 
-**Planned Community Features:**
+**Planlanan Topluluk Özellikleri:**
 
-- **Leaderboards**: Rank trained networks by quality, enabled task space, and robot models
+- **Lider tablosu (leaderboard)**: Eğitilmiş ağları kalite, desteklediği görev uzayı ve robot modellerine göre sıralar
 
-- **OEM Feedback**: Guide humanoid manufacturers in improving their assets and APIs
+- **OEM Geri Bildirimi**: İnsansı robot üreticilerine assetlerini ve API'lerini iyileştirmede rehberlik eder
 
-Contributing your own data and models helps the entire robotics community close the sim-to-real gap faster.
+Kendi verinizi ve modellerinizi katkıda bulunmak, tüm robotik topluluğunun sim-to-real boşluğunu daha hızlı kapatmasına yardımcı olur.
 
-## Future Work: GapONet + GR00T Integration
+## Gelecek İş: GapONet + GR00T Entegrasyonu
 
-A key next step is integrating GapONet inference directly into the GR00T deployment loop for our SO-101 task:
+Kilit bir sonraki adım, SO-101 görevimiz için GapONet çıkarımını doğrudan GR00T konuşlandırma döngüsüne entegre etmektir:
 
 ```
-GR00T Policy → Action Command → GapONet Compensation → Robot Execution
+GR00T Politikası → Eylem Komutu → GapONet Kompanzasyonu → Robot Yürütmesi
 ```
 
-This would allow the VLA policy to output its intended actions while GapONet automatically compensates for actuator dynamics in real-time—combining the generalization of foundation models with the precision of learned actuator models.
+Bu, VLA politikasının amaçlanan eylemlerini çıkarırken GapONet'in gerçek zamanlı olarak aktüatör dinamiklerini otomatik olarak kompanse etmesine olanak tanır—temel modellerin genelleme yeteneğini öğrenilmiş aktüatör modellerinin hassasiyetiyle birleştirir.
 
-This integration is under active development.
+Bu entegrasyon aktif geliştirme aşamasındadır.
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- SAGE provides quantitative, per-joint gap analysis
+- SAGE, nicel ve eklem bazında boşluk analizi sağlar
 
-- The pipeline: same motion → sim + real → compare → quantify
+- Boru hattı: aynı hareket → sim + gerçek → karşılaştır → nicelleştir
 
-- Knowing where gaps are enables targeted improvement
+- Boşlukların nerede olduğunu bilmek hedefli iyileştirmeyi mümkün kılar
 
-- Small gaps: tune parameters; large gaps: use GapONet
+- Küçük boşluklar: parametreleri ayarlayın; büyük boşluklar: GapONet kullanın
 
-- GapONet models complex dynamics that resist simple tuning
+- GapONet, basit ayarla düzelmeyen karmaşık dinamikleri modelleyebilir
 
-- Isaac Lab integration enables direct use in simulation workflows
+- Isaac Lab entegrasyonu, simülasyon iş akışlarında doğrudan kullanımı mümkün kılar
 
-## Resources
+## Kaynaklar
 
-- **SAGE Repository**: [isaac-sim2real/sage](https://github.com/isaac-sim2real/sage)
+- **SAGE Deposu**: [isaac-sim2real/sage](https://github.com/isaac-sim2real/sage)
 
-- **GapONet Repository**: [jiemingcui/gaponet](https://github.com/jiemingcui/gaponet)
+- **GapONet Deposu**: [jiemingcui/gaponet](https://github.com/jiemingcui/gaponet)
 
-## What's Next?
+## Sırada Ne Var?
 
-Continue to the [Conclusion](/sim-to-real/aktuator-bosluk/sonuc) for a summary of what you've learned and next steps.
+Neler öğrendiğinizin bir özeti ve sonraki adımlar için [Sonuç](/sim-to-real/aktuator-bosluk/sonuc) bölümüne devam edin.

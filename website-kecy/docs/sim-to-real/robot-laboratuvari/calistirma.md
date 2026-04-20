@@ -2,7 +2,7 @@
 title: "SO-101'i Çalıştırma"
 sidebar_position: 4
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: SO-101''i Çalıştırma'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,35 +13,35 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Hands-on. You'll need the calibrated SO-101 robot, teleop arm, both cameras, and the Docker container running from [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon).
+Uygulamalı. Kalibre edilmiş SO-101 robotuna, teleop kola, her iki kameraya ve [SO-101 Kalibrasyonu](/sim-to-real/robot-laboratuvari/kalibrasyon) bölümünden çalışır durumdaki Docker kapsayıcısına ihtiyacınız olacak.
 
-In this session, you'll teleoperate the SO-101 using the leader arm, configure cameras, and run teleoperation with live camera views in Rerun.
+Bu oturumda leader kolu kullanarak SO-101'i teleoperasyonla çalıştıracak, kameraları yapılandıracak ve Rerun'da canlı kamera görünümleriyle teleoperasyon yapacaksınız.
 
-This will give you hands-on practice operating the robot in general, but also with this specific task.
+Bu size hem genel olarak robotu çalıştırmada hem de bu özel görevde uygulamalı pratik sağlayacaktır.
 
-Make sure you have completed [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon) first. You'll need a calibrated robot and the Docker container running with environment variables set.
+Önce [SO-101 Kalibrasyonu](/sim-to-real/robot-laboratuvari/kalibrasyon) bölümünü tamamladığınızdan emin olun. Kalibre edilmiş bir robota ve ortam değişkenleri ayarlanmış çalışır durumdaki Docker kapsayıcısına ihtiyacınız olacak.
 
 :::tip
 
-If you encounter hardware issues during this session, see the [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme) for solutions to common problems.
+Bu oturumda donanım sorunlarıyla karşılaşırsanız yaygın sorunlara çözümler için [Sorun Giderme Kılavuzu](/sim-to-real/referans/sorun-giderme) bölümüne bakın.
 
 :::
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Teleoperate** the robot using the teleoperation arm
+- Teleoperasyon kolunu kullanarak robotu **teleoperasyonla çalıştırma**
 
-- **Configure** cameras so you can teleoperate using the same camera views our AI models will use, and Rerun for debugging
+- AI modellerimizin kullanacağı aynı kamera görünümlerini ve hata ayıklama için Rerun'u kullanarak teleoperasyon yapabilmek için kameraları **yapılandırma**
 
-## Teleoperation
+## Teleoperasyon
 
-Now that both arms are calibrated, we're ready to begin teleoperating!
+Her iki kol da kalibre edildiğine göre teleoperasyona başlamaya hazırız!
 
-1.  **Begin** the teleoperation process. It's a good idea to make sure both arms are in similar poses, because the robot will move to match the teleop arm.
+1.  Teleoperasyon sürecini **başlatın**. Her iki kolun da benzer pozlarda olduğundan emin olmak iyi bir fikirdir; çünkü robot teleop kolla eşleşecek şekilde hareket edecektir.
 
 ```bash
 lerobot-teleoperate \
@@ -53,49 +53,49 @@ lerobot-teleoperate \
 --teleop.id=$TELEOP_ID
 ```
 
-2.  **Move** the teleop arm and watch how the robot arm moves to match.
+2.  Teleop kolu **hareket ettirin** ve robot kolun eşleşmek için nasıl hareket ettiğini izleyin.
 
-3.  **Try** to pick up a vial and place it in the rack!
+3.  Bir tüpü alıp rafa yerleştirmeyi **deneyin**!
 
-4.  **Press Ctrl+C** in the terminal to stop the teleoperation.
+4.  Teleoperasyonu durdurmak için terminalde **Ctrl+C'ye basın**.
 
-## Camera Setup
+## Kamera Kurulumu
 
-The teleoperation you just did used an incredible vision system: your human perception system.
+Az önce yaptığınız teleoperasyon inanılmaz bir görme sistemi kullandı: insan algılama sisteminiz.
 
-Our AI model will not have this information, so we need to use the cameras instead when we collect demonstrations.
+AI modelimizin bu bilgisi olmayacak, bu yüzden gösterim toplarken kameraları kullanmamız gerekiyor.
 
-Each robot workspace today is equipped with **two cameras**:
+Her robot çalışma alanı bugün **iki kamera** ile donatılmıştır:
 
-- **Gripper camera**: Mounted on the robot's wrist/gripper
+- **Kavrayıcı kamerası**: Robotun bileğine/kavrayıcısına monte edilmiştir
 
-- **External camera**: Stationary camera viewing the workspace from above or the side
+- **Harici kamera**: Çalışma alanını yukarıdan veya yandan gören sabit kamera
 
-And because the policy works off of these visual images, camera assignment is critical to policy performance. If they are swapped (gripper cam thinks it's the external cam, or vice versa), the policy will fail.
+Politika bu görsel imgelerle çalıştığı için kamera ataması politika performansı açısından kritiktir. Değiştirilirlerse (kavrayıcı kamerası kendini harici kamera zannederse ya da tam tersi), politika başarısız olur.
 
-### Why Two Cameras?
+### Neden İki Kamera?
 
-The gripper camera becomes occluded after the robot grasps an object like a vial.
+Kavrayıcı kamerası, robot tüp gibi bir nesneyi kavradıktan sonra kapanır.
 
-The external camera provides continuous visibility of the workspace throughout the entire manipulation sequence, ensuring the policy always has usable visual input even when the gripper camera is blocked.
+Harici kamera, manipülasyon sırasının tamamı boyunca çalışma alanını kesintisiz görünür tutar; böylece kavrayıcı kamerası engellense bile politikanın her zaman kullanılabilir görsel girdisi olur.
 
-### Finding Available Cameras
+### Kullanılabilir Kameraları Bulma
 
-Similar to the port finder, LeRobot has a tool for identifying available cameras.
+Port bulucusuna benzer şekilde LeRobot'un da kullanılabilir kameraları belirlemek için bir aracı vardır.
 
-We need to determine the id of both the camera on the robot, and the external stationary camera.
+Hem robot üzerindeki kameranın hem de harici sabit kameranın ID'sini belirlememiz gerekiyor.
 
-1.  **Make sure** the two cameras' USB cables are plugged into your computer.
+1.  İki kameranın USB kablolarının bilgisayarınıza takılı olduğundan **emin olun**.
 
-2.  **Run** the command:
+2.  Şu komutu **çalıştırın**:
 
 ```bash
 lerobot-find-cameras opencv
 ```
 
-This command captures an image from each available camera, allowing you to determine the index of each camera.
+Bu komut, her kullanılabilir kameradan bir görüntü yakalar ve her kameranın indeksini belirlemenize olanak tanır.
 
-Example output:
+Örnek çıktı:
 
 ```
 Searching for cameras...
@@ -110,66 +110,66 @@ Camera 1: 640x480 @ 30fps - saved to ./camera_test/cam_1.jpg
 Camera 2: 1280x720 @ 30fps - saved to ./camera_test/cam_2.jpg
 ```
 
-3.  **Open** a new terminal outside of the docker container.
+3.  Docker kapsayıcısının dışında yeni bir terminal **açın**.
 
-4.  **Navigate** to the task repository:
+4.  Görev deposuna **gidin**:
 
 ```bash
 cd ~/Sim-to-Real-SO-101-Workshop
 ```
 
-5.  **Run** this command to open the folder with the images:
+5.  Görüntülerin bulunduğu klasörü açmak için şu komutu **çalıştırın**:
 
 ```
 open ./outputs/captured_images
 ```
 
-6.  **Open** each image, and **note** which index correlates to wrist and stationary camera. For instance `opencv__dev_video0.png` indicates an index of `0`.
+6.  Her görüntüyü **açın** ve hangi indeksin bilek ve sabit kameraya karşılık geldiğini **not edin**. Örneğin `opencv__dev_video0.png` `0` indeksini gösterir.
 
-7.  **Return** to the terminal inside the `teleop-docker` container.
+7.  `teleop-docker` kapsayıcısı içindeki terminale **geri dönün**.
 
-8.  **Assign** these to environment variables in your terminal - make sure to update the values to match what you saw in the last command.
+8.  Bunları terminalinizdeki ortam değişkenlerine **atayın** — değerleri son komutta gördüklerinizle eşleşecek şekilde güncellediğinizden emin olun.
 
 ```bash
-setenv CAMERA_GRIPPER=4 # make sure to update to your values
-setenv CAMERA_EXTERNAL=6 # make sure to update to your values
+setenv CAMERA_GRIPPER=4 # kendi değerlerinize güncellediğinizden emin olun
+setenv CAMERA_EXTERNAL=6 # kendi değerlerinize güncellediğinizden emin olun
 ```
 
 :::info
 
-**Camera Index Warning**
+**Kamera İndeks Uyarısı**
 
-Camera indices may change any time cameras are unplugged or replugged into your computer. Always verify camera assignments before collecting data or running policies.
+Kameralar bilgisayarınızdan çıkarılıp yeniden takıldığında kamera indeksleri değişebilir. Veri toplamadan veya politika çalıştırmadan önce her zaman kamera atamalarını doğrulayın.
 
-If you see unexpected behavior during teleoperation or policy execution, camera index reassignment is a common cause.
+Teleoperasyon veya politika yürütme sırasında beklenmedik davranış görürseniz kamera indeksinin yeniden atanması yaygın bir nedendir.
 
 :::
 
 :::tip
 
-Having camera or hardware issues? See the [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme), also available on the sidebar, for common solutions and detailed diagnostic steps.
+Kamera veya donanım sorunları mı yaşıyorsunuz? Yaygın çözümler ve ayrıntılı tanı adımları için kenar çubuğunda da bulunan [Sorun Giderme Kılavuzu](/sim-to-real/referans/sorun-giderme) bölümüne bakın.
 
-See the [Quick Reference](/sim-to-real/referans/hizli-referans) for common commands.
+Yaygın komutlar için [Hızlı Referans](/sim-to-real/referans/hizli-referans) bölümüne bakın.
 
 :::
 
 :::note
 
-Notice what makes this task challenging:
+Bu görevi zorlaştıran şeylere dikkat edin:
 
-- the gripper camera becomes occluded after grasp
+- Kavrayıcı kamerası kavramadan sonra kapanır
 
-- the rack requires precise placement
+- Raf, hassas yerleşim gerektirir
 
-- lack of depth data makes rack alignment difficult
+- Derinlik verisi eksikliği raf hizalamasını zorlaştırır
 
 :::
 
-## Run Teleoperation With Cameras
+## Kameralarla Teleoperasyon Çalıştırma
 
-Now that we have the camera indices, we can run teleoperation with the real cameras in your workspace.
+Kamera indekslerini aldığımıza göre çalışma alanınızdaki gerçek kameralarla teleoperasyon çalıştırabiliriz.
 
-1.  **Run** the command:
+1.  Şu komutu **çalıştırın**:
 
 ```bash
 lerobot-teleoperate \
@@ -198,36 +198,36 @@ lerobot-teleoperate \
 }'
 ```
 
-![Rerun Viewer Teleop Example](/img/sim-to-real/08-calistirma/rerun_viewer_teleop_hq.gif)
+![Rerun Görüntüleyici Teleop Örneği](/img/sim-to-real/08-calistirma/rerun_viewer_teleop_hq.gif)
 
-_Rerun Viewer Teleop Example_
+_Rerun Görüntüleyici Teleop Örneği._
 
-This will launch the teleoperation interface. You should see two cameras, one on the wrist and one on the front.
+Bu, teleoperasyon arayüzünü başlatır. Bilekte ve önde birer olmak üzere iki kamera görmelisiniz.
 
-This is a valuable tool for both teleoperation and debugging.
+Bu, hem teleoperasyon hem de hata ayıklama için değerli bir araçtır.
 
-2.  Now using the **Rerun** viewer that opened, **try** picking up vials and placing them in the rack **only using the camera views**, not your eyes. See if your partner and you can perform the task a few times.
+2.  Şimdi açılan **Rerun** görüntüleyicisini kullanarak, gözlerinizi değil, **yalnızca kamera görünümlerini kullanarak** tüpleri alıp rafa yerleştirmeyi **deneyin**. Partneriniz ve sizin görevi birkaç kez yapabildiğinizi görün.
 
-We'll spend some time here - try to do several picks. Emphasize smooth, direct movements.
+Burada biraz vakit geçireceğiz — birkaç alma denemesi yapın. Pürüzsüz, doğrudan hareketlere vurgu yapın.
 
-3.  **Press Ctrl+C** to stop the teleoperation.
+3.  Teleoperasyonu durdurmak için **Ctrl+C'ye basın**.
 
-4.  **Close** the Rerun viewer if it's still open.
+4.  Hâlâ açıksa Rerun görüntüleyicisini **kapatın**.
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- Camera assignment directly affects policy performance
+- Kamera ataması politika performansını doğrudan etkiler
 
-- How tricky this task is - gripper camera becomes occluded after grasp, external camera provides continuous visibility
+- Bu görevin ne kadar çetrefilli olduğu — kavrayıcı kamerası kavramadan sonra kapanır, harici kamera sürekli görünürlük sağlar
 
-- The Rerun viewer is a valuable debugging tool for verifying camera views and robot state
+- Rerun görüntüleyicisi, kamera görünümlerini ve robot durumunu doğrulamak için değerli bir hata ayıklama aracıdır
 
-## Resources
+## Kaynaklar
 
-- [SO-101 Getting Started Guide](https://huggingface.co/docs/lerobot/en/so101) — Full assembly, motor setup, and calibration instructions
+- [SO-101 Getting Started Guide](https://huggingface.co/docs/lerobot/en/so101) — Tam montaj, motor kurulum ve kalibrasyon talimatları
 
-- [Rerun](https://rerun.io/) — A tool for visualizing camera views and robot actions
+- [Rerun](https://rerun.io/) — Kamera görünümlerini ve robot eylemlerini görselleştirmek için bir araç
 
-## What's Next?
+## Sırada Ne Var?
 
-With your robot ready, apply your first sim-to-real strategy. In the next session, [Sim-to-Real Strategy 1: Domain Randomization With Teleoperation](/sim-to-real/veri-egitim-degerlendirme/strateji-1-domain-randomization), you'll collect demonstrations in simulation with domain randomization.
+Robotunuz hazır olduğuna göre, ilk sim-to-real stratejinizi uygulayın. Sonraki oturum [Sim-to-Real Strateji 1: Teleoperasyonla Domain Randomization](/sim-to-real/veri-egitim-degerlendirme/strateji-1-domain-randomization) bölümünde, domain randomization ile simülasyonda gösterim toplayacaksınız.

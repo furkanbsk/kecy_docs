@@ -2,7 +2,7 @@
 title: 'Sorun Giderme'
 sidebar_position: 3
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Sorun Giderme'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,39 +13,39 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-This page consolidates troubleshooting information from across this learning path for easy access.
+Bu sayfa, kolay erişim için bu öğrenme yolu boyunca dağılmış sorun giderme bilgilerini tek bir yerde toplar.
 
-This learning path uses Docker for teleoperation in sim, real-robot evaluation, and GR00T inference.
+Bu öğrenme yolu, simülasyonda teleoperasyon, gerçek robot değerlendirmesi ve GR00T çıkarımı için Docker kullanır.
 
-Commands such as `lerobot-find-port` and `lerobot-find-cameras opencv` are run inside the `teleop-docker` container.
+`lerobot-find-port` ve `lerobot-find-cameras opencv` gibi komutlar `teleop-docker` kapsayıcısının içinde çalıştırılır.
 
-GR00T inference and real-robot evaluation are run inside the `real-robot` container.
+GR00T çıkarımı ve gerçek robot değerlendirmesi `real-robot` kapsayıcısının içinde çalıştırılır.
 
-## Hardware Issues
+## Donanım Sorunları
 
-### First Thing to Try
+### İlk Denenecek Şey
 
-Unplug power, and replug the power cable. Do this 2X if the next command doesn't run. If that doesn't solve, proceed to the next steps.
+Güç kablosunu çıkarıp tekrar takın. Sonraki komut çalışmazsa bunu 2 kez yapın. Bu çözmezse aşağıdaki adımlara geçin.
 
-### Robot Doesn't Respond
+### Robot Yanıt Vermiyor
 
-1.  **Check** USB connection
+1.  USB bağlantısını **kontrol edin**
 
-2.  **Verify** power LED is on
+2.  Güç LED'inin yandığını **doğrulayın**
 
-3.  **Try** a different USB port
+3.  Farklı bir USB portu **deneyin**
 
-4.  Inside the `teleop-docker` container, **run** `lerobot-find-port` to confirm the port is correct.
+4.  `teleop-docker` kapsayıcısının içinde portun doğru olduğunu onaylamak için `lerobot-find-port` **çalıştırın**.
 
-### No Ports Found or Permission Denied on /dev/ttyACM\*
+### Port Bulunamadı veya /dev/ttyACM\*'de İzin Reddedildi
 
-If `lerobot-find-port` finds no ports, or you see permission denied when accessing the robot:
+`lerobot-find-port` port bulamazsa veya robota erişirken izin reddedildi (permission denied) görürseniz:
 
-1.  **Close** terminals.
+1.  Terminalleri **kapatın**.
 
-2.  **Open** a new terminal window (**CTRL+ALT+T**).
+2.  Yeni bir terminal penceresi **açın** (**CTRL+ALT+T**).
 
-3.  **Grant** read/write access to the serial ports (update device paths to match your assigned ports):
+3.  Seri portlara okuma/yazma erişimi **verin** (cihaz yollarını atanmış portlarınıza uyacak şekilde güncelleyin):
 
 ```bash
 sudo chmod 666 /dev/ttyACM0
@@ -54,9 +54,9 @@ sudo chmod 666 /dev/ttyACM2
 sudo chmod 666 /dev/ttyACM3
 ```
 
-Permissions reset when devices are reconnected; re-run these after unplugging/replugging USB if needed.
+İzinler, cihazlar yeniden bağlandığında sıfırlanır; gerekirse USB'yi çıkarıp takmadan sonra bunları yeniden çalıştırın.
 
-4.  **Permanent fix:** add your user to the `dialout` group (and optionally `tty` and `video` for cameras), then log out and back in:
+4.  **Kalıcı düzeltme:** Kullanıcınızı `dialout` grubuna (ve kameralar için isteğe bağlı olarak `tty` ve `video`) ekleyin, ardından oturumu kapatıp tekrar açın:
 
 ```bash
 sudo usermod -a -G dialout "$USER"
@@ -64,9 +64,9 @@ sudo usermod -a -G tty "$USER"
 sudo usermod -a -G video "$USER"
 ```
 
-### Power Not Connected (All Motors Missing)
+### Güç Bağlı Değil (Tüm Motorlar Eksik)
 
-If you see this error showing all motors missing:
+Tüm motorların eksik göründüğü şu hatayı görürseniz:
 
 ```
 Missing motor IDs:
@@ -84,19 +84,19 @@ Full found motor list (id: model_number):
 {}
 ```
 
-This indicates **power is not connected** to the robot. The USB connection allows communication, but the motors need separate power.
+Bu, robota **gücün bağlı olmadığını** gösterir. USB bağlantısı iletişime izin verir ama motorların ayrı güce ihtiyacı vardır.
 
-**Solution:**
+**Çözüm:**
 
-1.  **Connect** the 12V power supply to the robot
+1.  12V güç kaynağını robota **bağlayın**
 
-2.  **Verify** the power LED illuminates
+2.  Güç LED'inin yandığını **doğrulayın**
 
-3.  **Retry** the command
+3.  Komutu **yeniden deneyin**
 
-### Single Motor Disconnected
+### Tek Motor Bağlantısız
 
-If you see an error showing one motor missing:
+Bir motorun eksik göründüğü bir hata görürseniz:
 
 ```
 Full expected motor list (id: model_number):
@@ -106,145 +106,145 @@ Full found motor list (id: model_number):
 {2: 777, 3: 777, 4: 777, 5: 777, 6: 777}
 ```
 
-This indicates motor 1 is disconnected or not communicating. Sometimes this will happen unexpectedly, in which case a simple repower should solve it.
+Bu, motor 1'in bağlantısının kesildiğini veya iletişim kurmadığını gösterir. Bu bazen beklenmedik şekilde olur; bu durumda basit bir yeniden güçlendirme çözebilir.
 
-**Solution:**
+**Çözüm:**
 
-1.  **Power cycle**: Unplug and replug the power cable
+1.  **Güç döngüsü (power cycle)**: Güç kablosunu çıkarıp takın
 
-2.  If that doesn't work, **inspect motor cables** for loose connections
+2.  Bu işe yaramazsa, gevşek bağlantılar için **motor kablolarını inceleyin**
 
-3.  **Check** the cable connecting to the specific missing motor
+3.  Belirli eksik motora bağlanan kabloyu **kontrol edin**
 
-4.  The motor chain is daisy-chained—a loose connection can affect motors downstream
+4.  Motor zinciri zincirleme bağlıdır (daisy-chained)—gevşek bir bağlantı aşağı yöndeki motorları etkileyebilir
 
-### Motor Connection Error
+### Motor Bağlantı Hatası
 
-If you see this error:
+Şu hatayı görürseniz:
 
 ```
 ConnectionError: Failed to write 'Torque_Enable' on id_=2 with '1' after 1 tries. [TxRxResult] There is no status packet!
 ```
 
-This indicates communication failure with a specific motor.
+Bu, belirli bir motorla iletişim hatasını gösterir.
 
-**Solution:**
+**Çözüm:**
 
-1.  **Check power**: Ensure the 12V power supply is connected and LED is on
+1.  **Gücü kontrol edin**: 12V güç kaynağının bağlı ve LED'in yandığından emin olun
 
-2.  **Check USB**: Verify the USB cable is securely connected at both ends
+2.  **USB'yi kontrol edin**: USB kablosunun her iki uçta da sağlam bağlı olduğunu doğrulayın
 
-3.  **Restart motors**: Power cycle the robot (disconnect and reconnect power)
+3.  **Motorları yeniden başlatın**: Robotu güç döngüsü yapın (gücü çıkarıp yeniden bağlayın)
 
-4.  **Check motor ID**: The motor with the specified ID may have a loose connection
+4.  **Motor kimliğini kontrol edin**: Belirtilen kimliğe sahip motorun bağlantısı gevşek olabilir
 
-### Calibration Fails
+### Kalibrasyon Başarısız
 
-1.  **Ensure** the robot port matches the robot.id of the real robot
+1.  Robot portunun gerçek robotun robot.id değeriyle eşleştiğinden **emin olun**
 
-2.  **Ensure** robot is in exact calibration pose
+2.  Robotun tam kalibrasyon pozunda olduğundan **emin olun**
 
-3.  **Check** that motors can move freely
+3.  Motorların serbestçe hareket edebildiğini **kontrol edin**
 
-4.  **Verify** no joint is at a limit
+4.  Hiçbir eklemin sınırda olmadığını **doğrulayın**
 
-5.  **True end stops only** — Move each joint to its mechanical end stop, not a cable or obstacle. A cable pinched between links (or the robot hitting a cable) creates a false min/max and wrong calibration. Check cable routing so the arm can reach its real limits.
+5.  **Yalnızca gerçek durak (end stop)** — Her eklemi mekanik durağa (end stop) getirin; bir kabloya veya engele değil. Parçalar arasında sıkışmış bir kablo (veya robotun bir kabloya çarpması) yanlış bir min/max ve hatalı kalibrasyon oluşturur. Kolun gerçek sınırlarına ulaşabilmesi için kablo yönlendirmesini kontrol edin.
 
-![SO-101 arm segment showing cable routing near a joint](/img/sim-to-real/referans-sorun-giderme/calibration_cable_snag.gif)
+![SO-101 kol segmenti, bir eklem yakınındaki kablo yönlendirmesini gösteriyor](/img/sim-to-real/referans-sorun-giderme/calibration_cable_snag.gif)
 
-6.  **Re-run** calibration from step 1
+6.  Kalibrasyonu 1. adımdan itibaren **yeniden çalıştırın**
 
-## Camera Issues
+## Kamera Sorunları
 
-### Dark or No Image
+### Karanlık veya Görüntü Yok
 
-If the camera feed is very dark or black:
+Kamera akışı çok karanlık veya siyahsa:
 
-1.  **Check the lens cap** — Ensure the lens cap is removed from the camera. This is a common cause of dark or missing feed.
+1.  **Lens kapağını kontrol edin** — Kameradaki lens kapağının çıkarıldığından emin olun. Bu, karanlık veya eksik akışın yaygın bir nedenidir.
 
-2.  **Verify** the camera is powered and connected
+2.  Kameranın güçlü ve bağlı olduğunu **doğrulayın**
 
-3.  Inside the `teleop-docker` container, **run** `lerobot-find-cameras opencv` to confirm the camera is detected
+3.  `teleop-docker` kapsayıcısının içinde kameranın algılandığını onaylamak için `lerobot-find-cameras opencv` **çalıştırın**
 
-### Camera Index Changed
+### Kamera İndeksi Değişti
 
-Camera indices may change any time cameras are unplugged or replugged into your computer.
+Kameralar bilgisayarınızdan çıkarılıp tekrar takıldığında kamera indeksleri değişebilir.
 
-**Solution:**
+**Çözüm:**
 
-1.  Inside the `teleop-docker` container, **run** `lerobot-find-cameras opencv` to discover current indices
+1.  `teleop-docker` kapsayıcısının içinde mevcut indeksleri keşfetmek için `lerobot-find-cameras opencv` **çalıştırın**
 
-2.  **Update** your configuration with the new indices
+2.  Yapılandırmanızı yeni indekslerle **güncelleyin**
 
-3.  **Verify** by checking the captured test images
+3.  Yakalanan test görüntülerini kontrol ederek **doğrulayın**
 
-### Blurry or Out-of-Focus Image
+### Bulanık veya Odak Dışı Görüntü
 
-If the camera feed is blurry or the policy has trouble with fine visual detail:
+Kamera akışı bulanıksa veya politika ince görsel ayrıntılarda zorlanıyorsa:
 
-1.  **Check focus** — Ensure the camera lens is in focus.
+1.  **Odağı kontrol edin** — Kamera lensinin odakta olduğundan emin olun.
 
-2.  **Clean** the lens if it is smudged or dusty
+2.  Lens kirliyse veya tozluysa **temizleyin**
 
-3.  **Verify** the camera is fixed in place and not vibrating
+3.  Kameranın sabit yerinde olduğunu ve titreşmediğini **doğrulayın**
 
-### Wrong Camera Feed
+### Yanlış Kamera Akışı
 
-If the policy receives incorrect visual input:
+Politika yanlış görsel girdi alıyorsa:
 
-1.  **Check** camera assignments match expectations
+1.  Kamera atamalarının beklentilerle eşleştiğini **kontrol edin**
 
-2.  **Verify** gripper camera vs. external camera are correctly identified
+2.  Kavrayıcı kamera ile dış kameranın doğru tanımlandığını **doğrulayın**
 
-3.  **Re-run** `lerobot-find-cameras opencv` to confirm indices
+3.  İndeksleri onaylamak için `lerobot-find-cameras opencv` komutunu **yeniden çalıştırın**
 
-## Policy Deployment Issues
+## Politika Konuşlandırma Sorunları
 
-### "It worked once but not consistently"
+### "Bir kez çalıştı ama tutarlı değil"
 
-**Likely cause:** Distribution shift
+**Olası neden:** Dağılım kayması (distribution shift)
 
-**Solution:**
+**Çözüm:**
 
-- Check if initial conditions vary between trials
+- Denemeler arasında başlangıç koşullarının değişip değişmediğini kontrol edin
 
-- Ensure cameras are stable and haven't shifted
+- Kameraların sabit olduğundan ve kaymadığından emin olun
 
-### "Grasp is always off by the same amount"
+### "Kavrama her zaman aynı miktarda kayık"
 
-**Likely cause:** Calibration or camera positioning
+**Olası neden:** Kalibrasyon veya kamera konumlandırması
 
-**Solution:**
+**Çözüm:**
 
-- Re-run robot calibration
+- Robot kalibrasyonunu yeniden çalıştırın
 
-- Check camera positioning
+- Kamera konumlandırmasını kontrol edin
 
-- Verify workspace setup matches training
+- Çalışma alanı kurulumunun eğitimle eşleştiğini doğrulayın
 
-## Dataset and Recording Issues
+## Veri Seti ve Kayıt Sorunları
 
-### Dataset Already Exists (FileExistsError)
+### Veri Seti Zaten Var (FileExistsError)
 
-If you see this error when recording or evaluating:
+Kayıt veya değerlendirme sırasında şu hatayı görürseniz:
 
 ```
 FileExistsError: [Errno 17] File exists: '/home/user/.cache/huggingface/lerobot/username/dataset_name'
 ```
 
-Or a traceback ending with:
+Veya şu şekilde biten bir geri izleme (traceback):
 
 ```
 AttributeError: 'NoneType' object has no attribute 'push_to_hub'
 ```
 
-This indicates a dataset already exists at that path from a previous run.
+Bu, önceki bir çalıştırmadan kalan bir veri setinin o yolda zaten var olduğunu gösterir.
 
-**Solution:**
+**Çözüm:**
 
-1.  **Ideal: Use a different dataset name** by changing the `--dataset.repo_id` parameter (e.g., append `_v2`, `_v3`, etc.)
+1.  **İdeal: Farklı bir veri seti adı kullanın** — `--dataset.repo_id` parametresini değiştirin (ör. `_v2`, `_v3` vb. ekleyin)
 
-2.  **Delete the existing directory** and re-run:
+2.  **Mevcut dizini silin** ve yeniden çalıştırın:
 
 ```bash
 rm -rf ~/.cache/huggingface/lerobot/<repo_id>
@@ -252,18 +252,18 @@ rm -rf ~/.cache/huggingface/lerobot/<repo_id>
 
 :::warning
 
-**Be extremely careful with `rm -rf`**. Always double-check the path before pressing Enter. A typo like `rm -rf /` or `rm -rf ~` can permanently delete critical system files or your entire home directory. Copy-paste the exact path from the error message to avoid mistakes.
+**`rm -rf` ile son derece dikkatli olun**. Enter'a basmadan önce yolu her zaman iki kez kontrol edin. `rm -rf /` veya `rm -rf ~` gibi bir yazım hatası kritik sistem dosyalarını veya tüm ev dizininizi kalıcı olarak silebilir. Hataları önlemek için tam yolu hata mesajından kopyala-yapıştır yapın.
 
 :::
 
-Getting Help
+Yardım Alma
 
-If you're stuck:
+Takılırsanız:
 
-1.  **Check this guide** for your specific error message
+1.  Belirli hata mesajınız için **bu kılavuzu kontrol edin**
 
-2.  **Power cycle** the robot (fixes many transient issues)
+2.  Robotu **güç döngüsü** yapın (birçok geçici sorunu düzeltir)
 
-3.  **Re-run camera detection** if visual behavior is unexpected
+3.  Görsel davranış beklenmedikse **kamera algılamayı yeniden çalıştırın**
 
-4.  **Re-run** the diagnostic steps above if the issue persists
+4.  Sorun devam ederse yukarıdaki tanı adımlarını **yeniden çalıştırın**

@@ -2,7 +2,7 @@
 title: 'Sim-to-Real Nedir?'
 sidebar_position: 3
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Sim-to-Real Nedir?'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,95 +13,95 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Nothing — this module is theory-only.
+Hiçbir şeye — bu modül tamamen teoriktir.
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Define** sim-to-real transfer and its goals
+- Sim-to-real aktarımını ve hedeflerini **tanımlama**
 
-- **Identify** the four major categories of sim-to-real gaps
+- Sim-to-real boşluklarının dört ana kategorisini **belirleme**
 
-- **Explain** why transfer is difficult even with high-fidelity simulation
+- Yüksek sadakatli simülasyonla bile aktarımın neden zor olduğunu **açıklama**
 
-## Sim-to-Real Defined
+## Sim-to-Real'in Tanımı
 
-**Sim-to-real** refers to the process of training a policy in simulation and deploying it on real hardware. The goal is a policy that performs well in the real world despite being trained entirely (or primarily) in simulation.
+**Sim-to-real**, bir politikayı simülasyonda eğitip gerçek donanımda konuşlandırma sürecidir. Hedef; tamamen (veya büyük oranda) simülasyonda eğitilmiş olmasına rağmen gerçek dünyada iyi performans gösteren bir politikadır.
 
 ![Sim-to-Real](/img/sim-to-real/03-sim-to-real-nedir/sim-and-real.png)
 
-_Sim-to-Real with Unitree H1_
+_Unitree H1 ile Sim-to-Real._
 
-## The Sim-to-Real Gap
+## Sim-to-Real Boşluğu
 
-The **sim-to-real gap** is the performance difference between simulation and reality. A policy achieving high success rates in simulation may perform significantly worse on real hardware.
+**Sim-to-real boşluğu**, simülasyon ile gerçeklik arasındaki performans farkıdır. Simülasyonda yüksek başarı oranına ulaşan bir politika, gerçek donanımda belirgin biçimde daha kötü sonuç verebilir.
 
 :::warning
 
-The sim-to-real gap is often larger than expected. And while colloquially we may discuss "the gap" as if it's a single entity, the gap is a complex combination of gaps in sensing, actuation, physics, and modeling.
+Sim-to-real boşluğu çoğu zaman beklenenden büyüktür. Günlük konuşmada "boşluk" tek bir kavram gibi ele alınsa da aslında algılama, aktüasyon, fizik ve modellemedeki boşlukların karmaşık bir bileşimidir.
 
-Never assume a policy will "just work" on real hardware without systematic testing and iteration.
+Sistematik test ve yineleme yapmadan bir politikanın gerçek donanımda "kendiliğinden çalışacağını" asla varsaymayın.
 
 :::
 
-## Sources of the Gap
+## Boşluğun Kaynakları
 
-### Sensing Gaps
+### Algılama (Sensing) Boşlukları
 
-- Camera models lack real sensor noise, blur, and distortion
+- Kamera modelleri gerçek sensör gürültüsünü, bulanıklığı ve distorsiyonu barındırmaz
 
-- Depth sensors have idealized measurements without artifacts
+- Derinlik sensörleri, yapaylıklar (artifact) olmadan idealleştirilmiş ölçümler sunar
 
-- Simulated lighting differs from real lighting conditions
+- Simüle ışıklandırma, gerçek ışık koşullarından farklıdır
 
-### Actuation Gaps
+### Aktüasyon (Actuation) Boşlukları
 
-- Motor models lack friction, backlash, and thermal effects
+- Motor modellerinde sürtünme, geri boşluk (backlash) ve termal etkiler eksiktir
 
-- Joint dynamics are simplified
+- Eklem dinamikleri basitleştirilmiştir
 
-- Control loop timing differs between simulation and hardware
+- Kontrol döngüsü zamanlaması simülasyon ve donanımda farklıdır
 
-### Physics Gaps
+### Fizik (Physics) Boşlukları
 
-- Contact dynamics (friction, restitution) are approximations
+- Temas dinamikleri (sürtünme, geri tepme) yaklaşık değerlerdir
 
-- Deformable objects are difficult to simulate accurately
+- Deforme olabilen nesneleri doğru şekilde simüle etmek zordur
 
-- Fluid dynamics and granular materials are computationally expensive
+- Akışkan dinamiği ve granüler malzemeler hesap açısından pahalıdır
 
-### Modeling Gaps
+### Modelleme (Modeling) Boşlukları
 
-- CAD models differ from as-built hardware
+- CAD modelleri, inşa edilmiş (as-built) donanımdan farklıdır
 
-- Mass and inertia properties are estimates
+- Kütle ve atalet değerleri tahmindir
 
-## What Makes Transfer Hard?
+## Aktarımı Zorlaştıran Nedir?
 
-The sim-to-real gap isn't just about simulation fidelity. Even with perfect simulation, transfer is challenging because:
+Sim-to-real boşluğu yalnızca simülasyon sadakatiyle ilgili değildir. Kusursuz simülasyonda bile aktarım zordur çünkü:
 
-1.  **Distribution shift**: Real-world conditions vary from training
+1.  **Dağılım kayması (distribution shift)**: Gerçek dünya koşulları eğitim sırasındakinden farklılaşır
 
-2.  **Compounding errors**: Small perception errors lead to large action errors
+2.  **Birikimli hatalar**: Küçük algı hataları büyük eylem hatalarına yol açar
 
-3.  **Unmodeled dynamics**: Real physics has effects that may not be represented in simulation
+3.  **Modellenmemiş dinamikler**: Gerçek fizikte, simülasyonda temsil edilmeyen etkiler bulunur
 
-4.  **Temporal differences**: Real-time constraints affect behavior
+4.  **Zamansal farklılıklar**: Gerçek zamanlı kısıtlar davranışı etkiler
 
-## Summary
+## Özet
 
-| Gap Category | Examples                                |
-| ------------ | --------------------------------------- |
-| Sensing      | Camera noise, lighting, depth artifacts |
-| Actuation    | Friction, backlash, thermal effects     |
-| Physics      | Contact dynamics, deformables           |
-| Modeling     | CAD errors, mass/inertia estimates      |
+| Boşluk Kategorisi | Örnekler                                            |
+| ----------------- | --------------------------------------------------- |
+| Algılama          | Kamera gürültüsü, aydınlatma, derinlik yapaylıkları |
+| Aktüasyon         | Sürtünme, geri boşluk, termal etkiler               |
+| Fizik             | Temas dinamikleri, deforme olabilen nesneler        |
+| Modelleme         | CAD hataları, kütle/atalet tahminleri               |
 
-Understanding these gaps is essential—throughout this learning path, you'll learn strategies to address each category.
+Bu boşlukları anlamak hayati önemdedir — bu öğrenme yolu boyunca her bir kategoriyi ele alacak stratejiler öğreneceksiniz.
 
-## What's Next?
+## Sırada Ne Var?
 
-Now that you understand the sim-to-real challenge, let's learn about the tools we'll use. In the next session, [LeRobot: Background and Community](/sim-to-real/giris/lerobot), you'll learn about the Hugging Face ecosystem for robotics.
+Sim-to-real zorluğunu anladığınıza göre şimdi kullanacağımız araçları öğrenelim. Sonraki oturum olan [LeRobot: Arka Plan ve Topluluk](/sim-to-real/giris/lerobot) bölümünde, robotik için Hugging Face ekosistemini öğreneceksiniz.

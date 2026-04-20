@@ -2,7 +2,7 @@
 title: 'Strateji 3: Cosmos ile Veri Seti Zenginleştirme'
 sidebar_position: 2
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Strateji 3: Cosmos ile Veri Seti Zenginleştirme'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,57 +13,57 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Hands-on. You'll need the calibrated SO-101 robot, both cameras, the assembled workspace, and the `real-robot` container.
+Uygulamalı. Kalibre edilmiş SO-101 robota, her iki kameraya, monte edilmiş çalışma alanına ve `real-robot` kapsayıcısına ihtiyacınız olacak.
 
-In this session, you'll learn how Cosmos can create diverse synthetic training data and deploy Cosmos-augmented policies to the real robot.
+Bu oturumda, Cosmos'un nasıl çeşitli sentetik eğitim verisi oluşturabildiğini öğrenecek ve Cosmos ile zenginleştirilmiş politikaları gerçek robota konuşlandıracaksınız.
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Explain** how Cosmos and world models generate synthetic robot data
+- Cosmos ve dünya modellerinin sentetik robot verisini nasıl ürettiğini **açıklama**
 
-- **Deploy** policies trained with Cosmos augmentation
+- Cosmos zenginleştirmesiyle eğitilmiş politikaları **konuşlandırma**
 
-- **Compare** performance across different training data strategies
+- Farklı eğitim verisi stratejileri arasında performansı **karşılaştırma**
 
-## Beyond Domain Randomization and Co-Training
+## Domain Randomization ve Ortak Eğitimin Ötesinde
 
-In Strategy 1, you used domain randomization to vary simulation parameters. This is effective, but limited:
+Strateji 1'de simülasyon parametrelerini çeşitlendirmek için domain randomization (DR) kullandınız. Bu etkilidir ama sınırlıdır:
 
-- Only varies what you explicitly randomize
+- Yalnızca açıkça rastgeleleştirdiğiniz şeyleri çeşitlendirir
 
-- Simulation rendering still looks "synthetic"
+- Simülasyon render'ı hâlâ "sentetik" görünür
 
-- Can't generate truly novel scenarios
+- Gerçekten yeni senaryolar üretemez
 
-**Cosmos** addresses these limitations through generative modeling.
+**Cosmos**, üretken modelleme (generative modeling) yoluyla bu kısıtlamaları ele alır.
 
-## What Is Cosmos?
+## Cosmos Nedir?
 
-Cosmos is NVIDIA's world foundation model for physical AI. It can:
+Cosmos, NVIDIA'nın fiziksel AI için geliştirdiği dünya temel modelidir (world foundation model). Şunları yapabilir:
 
-- **Generate** realistic video sequences from prompts or initial frames
+- İstemlerden veya başlangıç karelerinden gerçekçi video dizileri **üretmek**
 
-- **Simulate** plausible physical interactions
+- Makul fiziksel etkileşimleri **simüle etmek**
 
-- **Augment** robot training data with diverse synthetic scenarios
+- Çeşitli sentetik senaryolarla robot eğitim verisini **zenginleştirmek**
 
-### How Cosmos Works
+### Cosmos Nasıl Çalışır?
 
 ```
-Input: Robot demonstration video + prompt
-   "Same task, different lighting, different vial positions"
+Girdi: Robot demonstrasyon videosu + istem (prompt)
+   "Aynı görev, farklı aydınlatma, farklı şişe konumları"
 
-Cosmos generates: Multiple variations of the scenario
-              with consistent physics and new visual appearance
+Cosmos şunu üretir: Tutarlı fiziğe ve yeni görsel görünüme sahip
+                    senaryonun çoklu varyasyonları
 
-Output: Augmented training data with diverse conditions
+Çıktı: Çeşitli koşullarla zenginleştirilmiş eğitim verisi
 ```
 
-Prompt:
+İstem (prompt):
 
 ```
 prompt: Photorealistic first-person view from a robotic arm's orange claw-like gripper. The prongs are visible at the bottom edge, hovering over a heavily corroded, textured rusty steel plate showing oxidation and wear mat. To the left is a yellow rectangular vial rack; to the right, two white opaque centrifuge tubes with blue caps, filled with a white substance, lie horizontally. Plain white wall background with {bright, diffused clinical LED lighting. Sharp macro focus, realistic plastic finishes, and fluid mechanical motion.
@@ -89,88 +89,88 @@ prompt: Photorealistic first-person view from a robotic arm's orange claw-like g
 }
 ```
 
-![Cosmos Augmentation Example 1](/img/sim-to-real/14-strateji-3-cosmos/cosmos-augment-1.gif)
+![Cosmos Zenginleştirme Örneği 1](/img/sim-to-real/14-strateji-3-cosmos/cosmos-augment-1.gif)
 
-_Cosmos Augmentation Example 1_
+_Cosmos Zenginleştirme Örneği 1_
 
-### Key Capabilities
+### Temel Yetenekler
 
-**Visual Diversity**
+**Görsel Çeşitlilik**
 
-- Photorealistic rendering variations
+- Fotogerçekçi render varyasyonları
 
-- Natural lighting changes
+- Doğal aydınlatma değişiklikleri
 
-- Background and texture diversity
+- Arka plan ve doku çeşitliliği
 
-**Scenario Variation**
+**Senaryo Çeşitliliği**
 
-- Object position changes
+- Nesne konumu değişiklikleri
 
-- Different object instances
+- Farklı nesne örnekleri
 
-- Environmental modifications
+- Çevresel modifikasyonlar
 
-**Physical Consistency**
+**Fiziksel Tutarlılık**
 
-- Maintains plausible physics
+- Makul fiziği korur
 
-- Preserves task structure
+- Görev yapısını korur
 
-- Coherent object interactions
+- Tutarlı nesne etkileşimleri
 
-## Hands-On: Using Cosmos-Augmented Data
+## Uygulama: Cosmos ile Zenginleştirilmiş Veriyi Kullanma
 
-We've pre-generated Cosmos-augmented datasets for this learning path.
+Bu öğrenme yolu için Cosmos ile zenginleştirilmiş veri setlerini önceden ürettik.
 
-Compare to the DR-augmented data:
+DR ile zenginleştirilmiş veriyle karşılaştırın:
 
-- Notice the visual difference in rendering
+- Render'daki görsel farkı fark edin
 
-- Observe lighting and texture variations
+- Aydınlatma ve doku varyasyonlarını gözlemleyin
 
-- Check for physical plausibility
+- Fiziksel makullüğü kontrol edin
 
-## Policies to Evaluate
+## Değerlendirilecek Politikalar
 
-Deploy a policy trained with Cosmos-augmented data using the same two-terminal GR00T server + client setup as in [Strategy 2](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining) and [Real Evaluation](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme).
+Cosmos ile zenginleştirilmiş veriyle eğitilmiş bir politikayı, [Strateji 2](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining) ve [Gerçek Değerlendirme](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme) bölümlerindekiyle aynı iki terminalli GR00T sunucu + istemci kurulumunu kullanarak konuşlandırın.
 
 :::tip
 
-See the [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme) for help with deployment issues.
+Konuşlandırma sorunları için [Sorun Giderme Rehberi'ne](/sim-to-real/referans/sorun-giderme) bakın.
 
 :::
 
-### What Policy Are We Running?
+### Hangi Politikayı Çalıştırıyoruz?
 
-We have two Cosmos-augmented policies to test. Set `MODEL` in Terminal 1 to the checkpoint you want to evaluate:
+Test edilecek iki adet Cosmos ile zenginleştirilmiş politikamız var. Terminal 1'de `MODEL`'i değerlendirmek istediğiniz kontrol noktasına ayarlayın:
 
-| Training Data Mix | Visualize Dataset | Model Checkpoint |
+| Eğitim Verisi Karışımı | Veri Setini Görselleştir | Model Kontrol Noktası |
 | --- | --- | --- |
-| 75 sim episodes + 7 Cosmos-augmented episodes | [visualize on Hugging Face](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_augment_02%2Fepisode_75) | [aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02/](https://huggingface.co/aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02) |
-| 75 sim episodes + 70 Cosmos-augmented episodes | [visualize on Hugging Face](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_cosmos_70%2Fepisode_75) | [aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70](https://huggingface.co/aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70) |
+| 75 sim bölümü + 7 Cosmos ile zenginleştirilmiş bölüm | [Hugging Face'te görselleştir](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_augment_02%2Fepisode_75) | [aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02/](https://huggingface.co/aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02) |
+| 75 sim bölümü + 70 Cosmos ile zenginleştirilmiş bölüm | [Hugging Face'te görselleştir](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_cosmos_70%2Fepisode_75) | [aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70](https://huggingface.co/aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70) |
 
-### Workspace Prep
+### Çalışma Alanı Hazırlığı
 
-Same as Strategy 2: verify robot connection, place vials and rack, ensure cameras have a clear view, turn on the lightbox. See [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani), [Strategy 2: Workspace prep](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining#workspace-prep), and [Real Evaluation: Workspace prep](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme).
+Strateji 2 ile aynı: robot bağlantısını doğrulayın, şişeleri ve rafı yerleştirin, kameraların net bir görüşü olduğundan emin olun, ışık kutusunu açın. [Çalışma Alanını Oluşturma](/sim-to-real/robot-laboratuvari/calisma-alani), [Strateji 2: Çalışma alanı hazırlığı](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining#çalışma-alanı-hazırlığı) ve [Gerçek Değerlendirme: Çalışma alanı hazırlığı](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme) bölümlerine bakın.
 
-### Running Policy Evaluation on the Real Robot
+### Gerçek Robotta Politika Değerlendirmesi Çalıştırma
 
-Throughout this course, when we run evaluations there will be two terminals involved:
+Bu kurs boyunca değerlendirme çalıştırdığımızda iki terminal söz konusu olacaktır:
 
-1.  The host terminal, where we start the GR00T container and policy server
+1.  Host terminali; burada GR00T kapsayıcısını ve politika sunucusunu başlatırız
 
-2.  The client terminal, where we run the evaluation rollout and control the robot
+2.  İstemci (client) terminali; burada değerlendirme koşusunu (rollout) çalıştırır ve robotu kontrol ederiz
 
-For real robot evaluation, the client is the physical robot.
+Gerçek robot değerlendirmesi için istemci fiziksel robottur.
 
-### Terminal 1 (real-robot container) — Start the GR00T policy server
+### Terminal 1 (real-robot kapsayıcısı) — GR00T politika sunucusunu başlatma
 
-1.  **Locate** the terminal already running the `real-robot` container.
+1.  `real-robot` kapsayıcısını zaten çalıştıran terminali **bulun**.
 
-### If you can't find it, click here to see the command to run the container.
+### Bulamıyorsanız kapsayıcıyı çalıştırma komutunu görmek için tıklayın.
 
-If you don't have the `real-robot` container terminal open, **open** a new terminal window (**CTRL+ALT+T**), and run the docker `real-robot` container using:
+`real-robot` kapsayıcısının terminali açık değilse yeni bir terminal penceresi **açın** (**CTRL+ALT+T**) ve docker `real-robot` kapsayıcısını şu komutla çalıştırın:
 
 ```bash
 xhost +
@@ -188,30 +188,30 @@ real-robot \
 /bin/bash
 ```
 
-2.  Inside this container, **run** the following. Set `MODEL` to the Cosmos-augmented checkpoint you want to test (e.g. 75+70 Cosmos).
+2.  Bu kapsayıcının içinde şunu **çalıştırın**. `MODEL`'i test etmek istediğiniz Cosmos ile zenginleştirilmiş kontrol noktasına ayarlayın (ör. 75+70 Cosmos).
 
 ```bash
 export MODEL=aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70
 ```
 
-3.  **Run** the policy server with that model.
+3.  Politika sunucusunu bu modelle **çalıştırın**.
 
 ```bash
 python Isaac-GR00T/gr00t/eval/run_gr00t_server.py \
 --model-path /workspace/models/$MODEL
 ```
 
-### Terminal 2 (real-robot container) — Evaluation rollout
+### Terminal 2 (real-robot kapsayıcısı) — Değerlendirme koşusu
 
-Open a second terminal. You will attach to the same `real-robot` container and run the robot client.
+İkinci bir terminal açın. Aynı `real-robot` kapsayıcısına bağlanacak ve robot istemcisini çalıştıracaksınız.
 
-1.  On the host, **attach** to the container:
+1.  Host'ta, kapsayıcıya **bağlanın**:
 
 ```bash
 docker exec -it real-robot /bin/bash
 ```
 
-2.  Inside the container, **run** the evaluation script:
+2.  Kapsayıcının içinde değerlendirme betiğini **çalıştırın**:
 
 ```bash
 python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
@@ -230,47 +230,47 @@ python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
 
 :::note
 
-The `--rerun` flag is optional.
+`--rerun` bayrağı opsiyoneldir.
 
-It adds Rerun into the loop for debugging, so you can see joint actions and the camera feeds while the policy is running. This lets you confirm the camera views are reasonable and the assignments are correct.
+Hata ayıklama için döngüye Rerun'u dahil eder; böylece politika çalışırken eklem eylemlerini ve kamera akışlarını görebilirsiniz. Bu, kamera görünümlerinin makul ve atamaların doğru olduğunu onaylamanıza olanak tanır.
 
 :::
 
-### Watching the Evaluation
+### Değerlendirmeyi İzleme
 
-Watch the robot and the terminal during execution. Compare behavior to the sim-only and co-trained policies: Cosmos-augmented policies may show different robustness to lighting and visual variation.
+Yürütme sırasında robotu ve terminali izleyin. Davranışı yalnızca sim ve ortak eğitilmiş politikalarla karşılaştırın: Cosmos ile zenginleştirilmiş politikalar, aydınlatma ve görsel varyasyona karşı farklı bir dayanıklılık gösterebilir.
 
-**To stop the robot:** Press **CTRL+C** in Terminal 2 (robot client). The policy server in Terminal 1 keeps running.
+**Robotu durdurmak için:** Terminal 2'de (robot istemcisi) **CTRL+C'ye basın**. Terminal 1'deki politika sunucusu çalışmaya devam eder.
 
-**To run again:** Simply run the command again `python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py ...` in Terminal 2
+**Tekrar çalıştırmak için:** Terminal 2'de `python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py ...` komutunu tekrar çalıştırmanız yeterlidir.
 
-**To switch model or fully restart:**
+**Modeli değiştirmek veya tamamen yeniden başlatmak için:**
 
-1.  **Stop** both terminals' commands (**CTRL+C**)
+1.  Her iki terminaldeki komutları **durdurun** (**CTRL+C**)
 
-2.  **Set** `MODEL` environment variable to the model you want to evaluate
+2.  Değerlendirmek istediğiniz modeli yansıtacak şekilde `MODEL` ortam değişkenini **ayarlayın**
 
-3.  **Restart** the commands for each terminal (model server, robot client)
+3.  Her terminaldeki komutları (model sunucusu, robot istemcisi) **yeniden başlatın**
 
-### To Try the Other Policy Trained on Cosmos-Augmented Data
+### Cosmos ile Zenginleştirilmiş Veriyle Eğitilen Diğer Politikayı Denemek İçin
 
-1.  In terminal 1, **press CTRL+C** to stop the policy server.
+1.  Terminal 1'de, politika sunucusunu durdurmak için **CTRL+C'ye basın**.
 
-2.  In terminal 2, **press CTRL+C** to stop the robot client.
+2.  Terminal 2'de, robot istemcisini durdurmak için **CTRL+C'ye basın**.
 
-3.  **Set** `MODEL` environment variable to the model you want to evaluate.
+3.  `MODEL` ortam değişkenini değerlendirmek istediğiniz modele **ayarlayın**.
 
 ```bash
 export MODEL=aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02/checkpoint-10000
 ```
 
-4.  **Restart** the policy server by running the same command again.
+4.  Aynı komutu tekrar çalıştırarak politika sunucusunu **yeniden başlatın**.
 
 ```bash
 python Isaac-GR00T/gr00t/eval/run_gr00t_server.py --model-path /workspace/models/$MODEL
 ```
 
-5.  **Run** the robot client again by running the same command again.
+5.  Aynı komutu tekrar çalıştırarak robot istemcisini tekrar **çalıştırın**.
 
 ```bash
 python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
@@ -289,38 +289,38 @@ python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
 
 :::note
 
-- At evaluation start, the robot will slowly rise to its initial pose, then enter into inference mode.
+- Değerlendirme başladığında robot yavaşça başlangıç pozuna yükselir, ardından çıkarım (inference) moduna geçer.
 
-- At robot stop (**CTRL+C**), it will slowly drive itself back to its home pose.
+- Robot durdurulduğunda (**CTRL+C**), yavaşça kendi başlangıç (home) pozuna geri gider.
 
 :::
 
 :::tip
 
-Keep the policy server running between evaluation attempts. Only restart it when you want to load a different model checkpoint.
+Değerlendirme denemeleri arasında politika sunucusunu çalışır durumda tutun. Yalnızca farklı bir model kontrol noktası yüklemek istediğinizde yeniden başlatın.
 
 :::
 
-### Comparing Policies
+### Politikaları Karşılaştırma
 
-After running the Cosmos-augmented policy, compare with your notes from Strategy 2 (co-trained) and your earlier real evaluation baseline (sim-only policy). Note whether Cosmos augmentation improves consistency, grasp success, or placement accuracy on the real robot.
+Cosmos ile zenginleştirilmiş politikayı çalıştırdıktan sonra, Strateji 2'den (ortak eğitilmiş) aldığınız notlarla ve daha önceki gerçek değerlendirme temel çizgisi (yalnızca sim politikası) ile karşılaştırın. Cosmos zenginleştirmesinin gerçek robotta tutarlılığı, kavrama başarısını veya yerleştirme doğruluğunu iyileştirip iyileştirmediğini not edin.
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- Cosmos generates photorealistic synthetic data beyond DR capabilities
+- Cosmos, DR yeteneklerinin ötesinde fotogerçekçi sentetik veri üretir
 
-- Different approaches address different aspects of the sim-to-real gap
+- Farklı yaklaşımlar sim-to-real boşluğunun farklı yönlerini ele alır
 
-- Combining strategies often works better than any single approach
+- Stratejileri birleştirmek çoğu zaman herhangi bir tek yaklaşımdan daha iyi çalışır
 
-- Visual diversity from Cosmos can unlock performance gains
+- Cosmos'tan gelen görsel çeşitlilik performans kazanımları açabilir
 
-## Resources
+## Kaynaklar
 
-- [Cosmos Transfer 2.5](https://research.nvidia.com/labs/dir/cosmos-transfer2.5/) — NVIDIA Research page on Cosmos video-to-video transfer capabilities
+- [Cosmos Transfer 2.5](https://research.nvidia.com/labs/dir/cosmos-transfer2.5/) — Cosmos video-to-video transfer yetenekleri üzerine NVIDIA Research sayfası
 
-- [Cosmos Cookbook](https://nvidia-cosmos.github.io/cosmos-cookbook/) — Recipes and examples for Cosmos world foundation models
+- [Cosmos Cookbook](https://nvidia-cosmos.github.io/cosmos-cookbook/) — Cosmos dünya temel modelleri için tarifler ve örnekler
 
-## What's Next?
+## Sırada Ne Var?
 
-We have not measured or addressed the actuation gap. In the next session, [Sim-to-Real Strategy 4: SAGE + GapONet](/sim-to-real/aktuator-bosluk/strateji-4-sage), you'll learn to systematically measure and close the actuation gap.
+Aktüasyon boşluğunu henüz ölçmedik veya ele almadık. Bir sonraki oturumda, [Sim-to-Real Strateji 4: SAGE + GapONet](/sim-to-real/aktuator-bosluk/strateji-4-sage) bölümünde aktüasyon boşluğunu sistematik olarak ölçmeyi ve kapatmayı öğreneceksiniz.

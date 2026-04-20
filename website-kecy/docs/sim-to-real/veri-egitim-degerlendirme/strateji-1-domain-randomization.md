@@ -2,7 +2,7 @@
 title: 'Strateji 1: Domain Randomization'
 sidebar_position: 1
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Strateji 1: Domain Randomization'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,125 +13,125 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Hands-on. You'll need the `teleop-docker` container, the SO-101 teleop arm, and an NVIDIA GPU for Isaac Lab simulation.
+Uygulamalı. `teleop-docker` kapsayıcısına, SO-101 teleop koluna ve Isaac Lab simülasyonu için bir NVIDIA GPU'ya ihtiyacınız olacak.
 
-Now that you've done teleoperation on a real robot, let's try it in _simulation_ with Isaac Lab.
+Gerçek robotta teleoperasyon yaptığınıza göre şimdi aynı şeyi _simülasyonda_ Isaac Lab ile deneyelim.
 
-In this module, you'll use the teleop arm to drive a simulated SO-101 robot, allowing us to collect demonstrations with Isaac Lab.
+Bu modülde, simüle edilmiş bir SO-101 robotunu sürmek için teleop kolu kullanacak, böylece Isaac Lab ile gösterimler toplayacağız.
 
-Because it's simulation, we have control of the world and can manipulate it in interesting ways, like using **domain randomization** to ensure our dataset will be sufficiently varied.
+Simülasyon olduğu için dünyayı kontrol edebilir ve ilginç şekillerde manipüle edebiliriz — örneğin veri setimizin yeterince çeşitli olmasını sağlamak için **domain randomization (alan rastgeleleştirme)** kullanabiliriz.
 
-![Teleoperation in Simulation](/img/sim-to-real/09-strateji-1-domain-randomization/teleop_in_sim.gif)
+![Simülasyonda Teleoperasyon](/img/sim-to-real/09-strateji-1-domain-randomization/teleop_in_sim.gif)
 
-_Teleoperation in Simulation_
+_Simülasyonda Teleoperasyon._
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Explain** domain randomization and why it improves sim-to-real transfer
+- Domain randomization'ı ve sim-to-real aktarımını neden iyileştirdiğini **açıklama**
 
-- **Collect** demonstration data through teleoperation, in simulation
+- Simülasyonda teleoperasyon yoluyla gösterim verisi **toplama**
 
-- **Apply** domain randomization to augment demonstrations
+- Gösterimleri zenginleştirmek için domain randomization **uygulama**
 
-## What Is Domain Randomization?
+## Domain Randomization Nedir?
 
-Domain randomization (DR) is a sim-to-real strategy based on this idea: instead of making simulation perfectly match reality, randomize simulation parameters during training so the policy becomes robust to any value in the range, including real-world values.
+Domain randomization (DR), şu fikre dayanan bir sim-to-real stratejisidir: simülasyonun gerçeği mükemmel şekilde eşleştirmesini sağlamak yerine, eğitim sırasında simülasyon parametrelerini rastgeleleştirin; böylece politika, gerçek dünya değerleri de dahil aralıktaki herhangi bir değere karşı sağlam (robust) hale gelir.
 
-Put in simple terms: think about how you might learn to catch a ball.
+Basitçe söylemek gerekirse: top yakalamayı nasıl öğrenebileceğinizi düşünün.
 
-If you always catch it in the same pose, you might not learn to _reach_ and catch the ball, or hold the glove in different orientations. By varying where the ball is thrown to you when you practice, you will likely learn a better "policy" for catching the ball.
+Her zaman aynı pozda yakalarsanız, topa _uzanmayı_ veya eldiveni farklı yönlerde tutmayı öğrenemeyebilirsiniz. Pratikte topun size farklı yerlere atılmasını çeşitlendirerek top yakalama için büyük olasılıkla daha iyi bir "politika" öğrenirsiniz.
 
-### What should we randomize?
+### Neleri rastgeleleştirmeliyiz?
 
-There is no single answer for what to randomize. But a good rule of thumb is to randomize **parameters that are likely to vary in the real world**, or to change in the robot's environment.
+Neyin rastgeleleştirileceğinin tek bir yanıtı yoktur. Ancak iyi bir genel kural, **gerçek dünyada değişmesi muhtemel** ya da robotun ortamında değişebilecek **parametreleri** rastgeleleştirmektir.
 
-Let's analyze what worked well for this case study of the SO-101 with a vial rack.
+SO-101 ile tüp rafı vaka çalışması için neyin iyi sonuç verdiğini inceleyelim.
 
-![Domain Randomization Example](/img/sim-to-real/09-strateji-1-domain-randomization/teleop-domain-randomization.gif)
+![Domain Randomization Örneği](/img/sim-to-real/09-strateji-1-domain-randomization/teleop-domain-randomization.gif)
 
-_Domain Randomization Example. Each time the scene is reset, a number of parameters are randomized within given ranges._
+_Domain Randomization Örneği. Sahne her sıfırlandığında bir dizi parametre verilen aralıklar içinde rastgeleleştirilir._
 
-**Visual Domain Randomization:**
+**Görsel Domain Randomization:**
 
-- Object colors, textures, materials
+- Nesne renkleri, dokuları, malzemeleri
 
-- Lighting intensity, direction, color temperature
+- Aydınlatma yoğunluğu, yönü, renk sıcaklığı
 
-- Camera position, orientation, field of view
+- Kamera konumu, yönlendirmesi, görüş alanı
 
-- Background appearance
+- Arka plan görünümü
 
-Other examples of visual domain randomization include:
+Görsel domain randomization'ın başka örnekleri şunlardır:
 
-**Physics Domain Randomization:**
+**Fizik Domain Randomization:**
 
-- Object mass, friction, restitution
+- Nesne kütlesi, sürtünme, geri tepme (restitution)
 
-- Joint damping, friction, limits
+- Eklem sönümleme (damping), sürtünme, sınırlar
 
-- Actuator delays, noise, offsets
+- Aktüatör gecikmeleri, gürültüsü, ofsetleri
 
-- Sensor noise characteristics
+- Sensör gürültü karakteristikleri
 
-Strengths and Limitations
+Güçlü Yönler ve Sınırlamalar
 
-**Strengths:**
+**Güçlü yönler:**
 
-- No real-world data required for augmentation
+- Zenginleştirme için gerçek dünya verisi gerekmez
 
-- Handles unknown parameters
+- Bilinmeyen parametreleri ele alır
 
-- Scales to many parameters
+- Birçok parametreye ölçeklenir
 
-- Simple to implement
+- Uygulaması basittir
 
-**Limitations:**
+**Sınırlamalar:**
 
-- More art than science (tuning ranges)
+- Bilimden çok sanat (aralıkları ayarlamak)
 
-- Trades optimality for robustness
+- Optimalliği sağlamlık karşılığında takas eder
 
-- May produce conservative, slow motions
+- Muhafazakâr, yavaş hareketler üretebilir
 
-- Doesn't work well for highly dynamic tasks
+- Oldukça dinamik görevlerde iyi çalışmaz
 
-## Teleoperation: Collecting Human Demonstrations
+## Teleoperasyon: İnsan Gösterimlerini Toplama
 
-In this lesson we'll apply domain randomization during teleoperation. We will use these to perform a kind of robot learning known as _imitation learning_.
+Bu derste teleoperasyon sırasında domain randomization uygulayacağız. Bunları _taklit öğrenmesi (imitation learning)_ olarak bilinen bir robot öğrenme türünü gerçekleştirmek için kullanacağız.
 
-### Why Imitation Learning? (expand to read)
+### Neden Taklit Öğrenmesi? (okumak için genişletin)
 
-Teleoperation enables us to capture human expertise in action, allowing the system to benefit from the natural, intuitive motions people provide when performing tasks.
+Teleoperasyon, insan uzmanlığını iş başında yakalamamıza olanak tanır; böylece sistem, görevleri yerine getirirken insanların sağladığı doğal, sezgisel hareketlerden yararlanabilir.
 
-Humans instinctively know what matters for task success, leading to demonstrations that reflect important aspects of the job.
+İnsanlar içgüdüsel olarak görev başarısı için neyin önemli olduğunu bilir ve bu, işin önemli yönlerini yansıtan gösterimlere yol açar.
 
-This process also brings in diversity, as different individuals may approach the same task in unique ways. Most importantly, demonstrations collected through teleoperation reliably represent successful task completion, ensuring high-quality data for imitation learning.
+Bu süreç ayrıca çeşitlilik getirir; çünkü farklı bireyler aynı göreve kendilerine özgü şekillerde yaklaşabilir. En önemlisi, teleoperasyonla toplanan gösterimler güvenilir biçimde başarılı görev tamamlamasını temsil eder ve taklit öğrenmesi için yüksek kaliteli veri sağlar.
 
-## Hands-On: Collecting Demonstrations
+## Uygulamalı: Gösterim Toplama
 
-Here is a video of the task:
+Görevin videosu aşağıdadır:
 
-![Teleoperation example in the LeRobot Dataset Visualizer](/img/sim-to-real/09-strateji-1-domain-randomization/sim-teleop-example-huggingface.gif)
+![LeRobot Dataset Visualizer'da teleoperasyon örneği](/img/sim-to-real/09-strateji-1-domain-randomization/sim-teleop-example-huggingface.gif)
 
-_Example: Teleoperation of SO-101, being replayed through the LeRobot Dataset Visualizer._
+_Örnek: LeRobot Dataset Visualizer üzerinden yeniden oynatılan SO-101 teleoperasyonu._
 
-See this dataset on Hugging Face, using the [Dataset Visualizer](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left%2Fepisode_29%3Ft%3D0)
+Bu veri setini Hugging Face'te [Dataset Visualizer](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left%2Fepisode_29%3Ft%3D0) ile görüntüleyin.
 
 :::tip
 
-Having trouble with cameras or robot connection? See the [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme).
+Kameralar veya robot bağlantısıyla sorun mu yaşıyorsunuz? [Sorun Giderme Kılavuzu](/sim-to-real/referans/sorun-giderme) bölümüne bakın.
 
 :::
 
-### Launch Simulation Environment (Docker)
+### Simülasyon Ortamını Başlatma (Docker)
 
-1.  If you still have the `teleop-docker` container's terminal open from the last module, you can skip this step. If not, **expand** the dropdown and **run** the command.
+1.  Önceki modülden `teleop-docker` kapsayıcısının terminali hâlâ açıksa bu adımı atlayabilirsiniz. Değilse açılır menüyü **genişletin** ve komutu **çalıştırın**.
 
-### Start the Isaac Sim container used for sim teleop and sim evaluation:
+### Simülasyonda teleop ve değerlendirme için kullanılan Isaac Sim kapsayıcısını başlatın:
 
 ```bash
 xhost +
@@ -155,151 +155,151 @@ docker run --name teleop -it --privileged --gpus all -e "ACCEPT_EULA=Y" --rm --n
 teleop-docker:latest
 ```
 
-### Practice Teleoperation in Simulation
+### Simülasyonda Teleoperasyon Pratiği
 
-Let's launch the simulation environment to practice teleoperation without recording.
+Kayıt yapmadan teleoperasyon pratiği yapmak için simülasyon ortamını başlatalım.
 
-This is a good way to get familiar with the teleop controls and camera views before collecting data.
+Bu, veri toplamadan önce teleop kontrollerine ve kamera görünümlerine aşina olmanın iyi bir yoludur.
 
-1.  (Optional) **Run** this quick sanity check to make sure your environment variables are set correctly.
+1.  (Opsiyonel) Ortam değişkenlerinizin doğru ayarlandığından emin olmak için hızlı bir sağlamlık kontrolü **çalıştırın**.
 
 ```bash
 echo "Teleop port is ${TELEOP_PORT} with id ${TELEOP_ID}"
 ```
 
-If they aren't set, find the ports using `lerobot-find-port` and assign them again:
+Ayarlı değillerse `lerobot-find-port` kullanarak portları bulun ve tekrar atayın:
 
-### Example of setting port vars
+### Port değişkenlerini ayarlama örneği
 
 ```bash
-setenv TELEOP_PORT=/dev/ttyACM # !! make sure to update
-setenv ROBOT_PORT=/dev/ttyACM # !! make sure to update
+setenv TELEOP_PORT=/dev/ttyACM # !! güncellediğinizden emin olun
+setenv ROBOT_PORT=/dev/ttyACM # !! güncellediğinizden emin olun
 
-setenv TELEOP_ID=orange_teleop # use this line as-is
-setenv ROBOT_ID=orange_robot # use this as-is
+setenv TELEOP_ID=orange_teleop # bu satırı olduğu gibi kullanın
+setenv ROBOT_ID=orange_robot # bunu olduğu gibi kullanın
 ```
 
-2.  **Move** the teleop arm to a packed position. If the robot is in a strange starting position, it may run into items in simulation on startup.
+2.  Teleop kolu toplu bir pozisyona **hareket ettirin**. Robot garip bir başlangıç konumundaysa başlangıçta simülasyondaki nesnelere çarpabilir.
 
-3.  **Run** the following command to open Isaac Lab, with our pre-configured simulation environment. You can choose between two options: `Lerobot-So101-Teleop-Vials-To-Rack` which has no domain randomization or `Lerobot-So101-Teleop-Vials-To-Rack-DR`, which has domain randomization enabled.
+3.  Önceden yapılandırılmış simülasyon ortamımızla Isaac Lab'i açmak için aşağıdaki komutu **çalıştırın**. İki seçenek arasından tercih yapabilirsiniz: domain randomization'ı olmayan `Lerobot-So101-Teleop-Vials-To-Rack` veya domain randomization'ı etkinleştirilmiş `Lerobot-So101-Teleop-Vials-To-Rack-DR`.
 
 ```bash
 lerobot_agent --task Lerobot-So101-Teleop-Vials-To-Rack-DR
 ```
 
-This will launch Isaac Sim and load the training environment.
+Bu, Isaac Sim'i başlatır ve eğitim ortamını yükler.
 
 :::note
 
-The first time this launches, it will take about 2 minutes to load.
+Bu ilk başlatıldığında yüklenmesi yaklaşık 2 dakika sürer.
 
-If it gets stuck, check the console for errors. It's likely the robot isn't fully connected. Power cycle the robot (plug/replug power on the back) if you have issues.
+Takılırsa konsolu hata için kontrol edin. Büyük olasılıkla robot tam olarak bağlı değildir. Sorunlar yaşıyorsanız robota güç döngüsü yapın (arkadaki güç kablosunu çekip tekrar takın).
 
 :::
 
 ![](/img/sim-to-real/09-strateji-1-domain-randomization/teleop-open.png)
 
-4.  **Keep** Isaac Lab open for the next step.
+4.  Sonraki adım için Isaac Lab'i **açık tutun**.
 
-### Setup Cameras
+### Kameraları Kurma
 
-We need our simulation to show us the same camera views our AI model will use.
+Simülasyonumuzun bize AI modelimizin kullanacağı aynı kamera görünümlerini göstermesi gerekir.
 
-When doing teleoperation for training VLAs, it's crucial that we use the same camera views for teleoperation that the model will use for autonomous operation.
+VLA eğitimi için teleoperasyon yaparken, modelin otonom çalışırken kullanacağı kamera görünümlerini teleoperasyon için de kullanmamız kritiktir.
 
-Otherwise, we may introduce biases or advantages the model won't have.
+Aksi takdirde modelin sahip olmayacağı önyargılar veya avantajlar ekleyebiliriz.
 
 :::info
 
-**Only look through the gripper and external cameras when teleoperating.**
+**Teleoperasyon yaparken yalnızca kavrayıcı ve harici kameralardan bakın.**
 
-When looking at the scene with your own eyes, or other cameras in the simulation scene, you may introduce perceptual affordances that the model will not have access to during inference.
+Sahneyi kendi gözlerinizle ya da simülasyon sahnesindeki diğer kameralarla izlediğinizde, modelin çıkarım sırasında erişimi olmayacak algısal avantajlar (affordance) ekleyebilirsiniz.
 
-The policy will only see what the cameras see. Train yourself to rely solely on the camera views displayed on your screen. This ensures your demonstrations reflect what the policy can actually perceive.
+Politika yalnızca kameraların gördüğünü görür. Ekranınızda görüntülenen kamera görünümlerine tamamen güvenmek için kendinizi eğitin. Bu, gösterimlerinizin politikanın gerçekten algılayabileceği şeyleri yansıtmasını sağlar.
 
 :::
 
-By default you'll just see the general perspective camera. Let's fix that.
+Varsayılan olarak yalnızca genel perspektif kamerasını göreceksiniz. Bunu düzeltelim.
 
-1.  **Go** to **Window > Viewports**, and **enable** both viewport _Viewport 1_ and _Viewport 2_ so we can see two cameras rendered at once.
+1.  **Window > Viewports** menüsüne **gidin** ve aynı anda iki kamera görebilmemiz için hem _Viewport 1_ hem de _Viewport 2_'yi **etkinleştirin**.
 
 ![](/img/sim-to-real/09-strateji-1-domain-randomization/enable_second_viewport.png) _(Görsel kaynakta eksik)_
 
-2.  In one viewport, **go** to the **camera menu**, and **choose** the `gripper_cam`.
+2.  Viewport'lardan birinde **camera menüsüne** **gidin** ve `gripper_cam`'ı **seçin**.
 
 ![](/img/sim-to-real/09-strateji-1-domain-randomization/choose_camera.png)
 
-3.  In the other viewport, **go** to the **camera menu**, and **choose** the `Camera_OmniVision_9782_Color` camera.
+3.  Diğer viewport'ta **camera menüsüne** **gidin** ve `Camera_OmniVision_9782_Color` kamerasını **seçin**.
 
-For each viewport, **set** the aspect ratio to 4:3 to match the cameras.
+Her viewport için kameralarla eşleşmesi için en-boy oranını 4:3'e **ayarlayın**.
 
-4.  Go to the **settings menu** in the viewport.
+4.  Viewport'taki **settings menüsüne** gidin.
 
-5.  **Under** **Viewport > Aspect Ratio** on the right side you'll see `16:9`. **Change** it to `4:3`. ![](/img/sim-to-real/09-strateji-1-domain-randomization/set_aspect_ratio.png) ![](/img/sim-to-real/09-strateji-1-domain-randomization/viewports_and_cameras_setup.png)
+5.  Sağ taraftaki **Viewport > Aspect Ratio altında** `16:9` göreceksiniz. Bunu `4:3` olarak **değiştirin**. ![](/img/sim-to-real/09-strateji-1-domain-randomization/set_aspect_ratio.png) ![](/img/sim-to-real/09-strateji-1-domain-randomization/viewports_and_cameras_setup.png)
 
-6.  Now try teleoperating, and take some time to get familiar with the teleop controls and camera views before collecting data in episodic format.
+6.  Şimdi teleoperasyon yapmayı deneyin ve bölüm (episode) biçiminde veri toplamaya geçmeden önce teleop kontrolleri ve kamera görünümlerine aşina olmak için biraz vakit harcayın.
 
-7.  **Press** **R** to reset the environment with domain randomization. If it doesn't work, **click** on the viewport to give the application focus, and **try** again.
+7.  Ortamı domain randomization ile sıfırlamak için **R'ye basın**. Çalışmazsa uygulamaya odak vermek için viewport'a **tıklayın** ve tekrar **deneyin**.
 
-8.  **Notice** in the terminal, you will see status updates about the subtask success, such as when the vials are grasped or placed in the rack.
+8.  Terminalde tüplerin kavrandığı veya rafa yerleştirildiği gibi alt görev başarısına ilişkin durum güncellemelerini göreceğinizi **fark edin**.
 
-**Controls (click in Viewport to use these commands)**
+**Kontroller (bu komutları kullanmak için Viewport'a tıklayın)**
 
-- **Press** **R** to reset the environment (also stops recording)
+- Ortamı sıfırlamak için **R'ye basın** (kaydı da durdurur)
 
-- Episodes are queued for processing while you continue working
+- Çalışmaya devam ederken bölümler işlenmek üzere kuyruğa alınır
 
-9.  When finished, **stop** Isaac Lab by pressing **CTRL+C** in the terminal.
+9.  Bittiğinde terminalde **CTRL+C'ye basarak** Isaac Lab'i **durdurun**.
 
-### Start Recording Demonstrations
+### Gösterim Kaydına Başlama
 
-When ready to collect data, we'll add a few extra arguments for where to save the data we collect.
+Veri toplamaya hazır olduğunuzda, topladığımız verinin nereye kaydedileceğine dair birkaç ek argüman ekleyeceğiz.
 
-Before launching the teleop agent, set your Hugging Face username as an environment variable. This is used to organize your datasets in a unique namespace.
+Teleop etmenini başlatmadan önce Hugging Face kullanıcı adınızı bir ortam değişkeni olarak ayarlayın. Bu, veri setlerinizi benzersiz bir ad alanında (namespace) düzenlemek için kullanılır.
 
-If you don't have one, or don't want to login, you can make up a username for local data collection.
+Hesabınız yoksa veya giriş yapmak istemiyorsanız yerel veri toplama için kendiniz bir kullanıcı adı uydurabilirsiniz.
 
-1.  **Run** this, replacing `your-hf-username` with your actual Hugging Face username:
+1.  `your-hf-username` yerine gerçek Hugging Face kullanıcı adınızı yazarak şunu **çalıştırın**:
 
 ```bash
 export HF_USER=your-hf-username
 ```
 
-You only need to do this once per terminal session before running the following commands. Feel free to use a made up username if you don't want to login and upload your demos.
+Bunu aşağıdaki komutları çalıştırmadan önce terminal oturumu başına yalnızca bir kez yapmanız gerekir. Giriş yapıp gösterimlerinizi yüklemek istemiyorsanız uydurma bir kullanıcı adı kullanmakta özgürsünüz.
 
-### Overall Flow
+### Genel Akış
 
-For each episode we will:
+Her bölüm için şunları yapacağız:
 
-1.  **Reset the environment**: **Press** **R** to randomize vial positions, rack position, camera poses, and lighting.
+1.  **Ortamı sıfırla**: Tüp konumlarını, raf konumunu, kamera pozlarını ve aydınlatmayı rastgeleleştirmek için **R'ye basın**.
 
-2.  **Record**: **Press** **S** to start recording
+2.  **Kaydet**: Kaydı başlatmak için **S'ye basın**
 
-3.  **Execute**: Immediately **begin** the demonstration.
+3.  **Yürüt**: Gösterime hemen **başlayın**.
 
-4.  **Complete**: **Press** **S** to stop recording
+4.  **Tamamla**: Kaydı durdurmak için **S'ye basın**
 
-**Demonstration Quality Guidelines:**
+**Gösterim Kalitesi Kılavuzu:**
 
-**Good demonstrations:**
+**İyi gösterimler:**
 
-- Smooth, deliberate motions
+- Pürüzsüz, kasıtlı hareketler
 
-- Clear grasp contact with vial
+- Tüple net kavrama teması
 
-- Successful placement in rack
+- Rafa başarılı yerleştirme
 
-- Only looking at camera views while operating
+- Çalışırken yalnızca kamera görünümlerine bakma
 
-**Avoid:**
+**Kaçının:**
 
-- Jerky, hesitant motions
+- Sarsıntılı, tereddütlü hareketler
 
-- Missed grasps or drops
+- Kaçırılan kavramalar veya düşürmeler
 
-- Including more than the actual task execution
+- Gerçek görev yürütmesinden fazlasını dahil etme
 
-1.  **Launch** recording session. This will be just like the environment before, but we have additional controls to cancel, start recording, and stop recording.
+1.  Kayıt oturumunu **başlatın**. Bu daha önceki ortama benzer olacak, ama iptal etmek, kaydı başlatmak ve durdurmak için ek kontrollerimiz olacak.
 
 ```bash
 lerobot_agent --task Lerobot-So101-Teleop-Vials-To-Rack-DR \
@@ -308,27 +308,27 @@ lerobot_agent --task Lerobot-So101-Teleop-Vials-To-Rack-DR \
 --task_name "Pick up the vial and place it in the rack"
 ```
 
-2.  **Set up** the window, viewports, and cameras (same as in **Practice Teleoperation**):
+2.  Pencereyi, viewport'ları ve kameraları **kurun** (**Teleoperasyon Pratiği**'ndeki ile aynı):
 
-    - **Window > Viewport**: **Enable** both viewports so you see two camera views at once.
+    - **Window > Viewport**: Aynı anda iki kamera görünümü görmek için her iki viewport'u **etkinleştirin**.
 
-    - In one viewport, **open** the camera menu and **choose** **gripper_cam**.
+    - Bir viewport'ta camera menüsünü **açın** ve **gripper_cam**'ı **seçin**.
 
-    - In the other viewport, **open** the camera menu and **choose** **Camera_OmniVision_9782_Color**.
+    - Diğer viewport'ta camera menüsünü **açın** ve **Camera_OmniVision_9782_Color**'ı **seçin**.
 
-    - For each viewport: **open** the viewport settings, **go** to **Viewport > Aspect Ratio**, and **set** to **4:3** (instead of 16:9).
+    - Her viewport için: viewport ayarlarını **açın**, **Viewport > Aspect Ratio**'ya **gidin** ve 16:9 yerine **4:3**'e **ayarlayın**.
 
-3.  **Recording Controls:** Isaac Sim viewport must be in "focus" (**click** the app's UI)
+3.  **Kayıt Kontrolleri:** Isaac Sim viewport'u "odak"ta olmalıdır (uygulamanın UI'ına **tıklayın**)
 
-- **Press** **S** to start/stop recording an episode
+- Bir bölümün kaydını başlat/durdur için **S'ye basın**
 
-- **Press** **C** to cancel the current recording (useful for mistakes)
+- Mevcut kaydı iptal etmek için **C'ye basın** (hatalar için yararlı)
 
-- **Press** **R** to reset the environment (also stops recording)
+- Ortamı sıfırlamak için **R'ye basın** (kaydı da durdurur)
 
-- Episodes are queued for processing while you continue working
+- Çalışmaya devam ederken bölümler işlenmek üzere kuyruğa alınır
 
-Example terminal output:
+Örnek terminal çıktısı:
 
 ```
 [INFO]: Started recording.
@@ -339,13 +339,13 @@ Example terminal output:
 [INFO]: Cleared buffers
 ```
 
-4.  When finished, **make sure** you see the message `[INFO]: No More episodes in queue`. Wait a few seconds if you don't see it. This means all the episodes have been processed and saved.
+4.  Bittiğinde `[INFO]: No More episodes in queue` mesajını gördüğünüzden **emin olun**. Göremiyorsanız birkaç saniye bekleyin. Bu, tüm bölümlerin işlendiği ve kaydedildiği anlamına gelir.
 
-5.  **Stop** Isaac Lab by pressing **CTRL+C** in the terminal.
+5.  Terminalde **CTRL+C'ye basarak** Isaac Lab'i **durdurun**.
 
-### Step 4: Review Collected Data
+### Adım 4: Toplanan Veriyi İnceleme
 
-1.  Optional: if you recorded a demonstration, **use** the LeRobot dataset visualizer to review your recorded episodes:
+1.  Opsiyonel: bir gösterim kaydettiyseniz kaydedilen bölümleri incelemek için LeRobot dataset görselleştiricisini **kullanın**:
 
 ```bash
 lerobot-dataset-viz \
@@ -354,25 +354,25 @@ lerobot-dataset-viz \
 --episode-index 0
 ```
 
-Change `--episode-index` to view different episodes.
+Farklı bölümleri görüntülemek için `--episode-index` değerini değiştirin.
 
-## Domain Randomization in Simulation
+## Simülasyonda Domain Randomization
 
-To maximize domain randomization benefits, collect demonstrations across multiple sessions. The environment randomizes conditions between episodes automatically.
+Domain randomization avantajlarını en üst düzeye çıkarmak için birden fazla oturumda gösterim toplayın. Ortam, bölümler arasında koşulları otomatik olarak rastgeleleştirir.
 
-Let's take a look at the code.
+Koda bir göz atalım.
 
-### Code Tour: Domain Randomization Implementation
+### Kod Turu: Domain Randomization Uygulaması
 
-The Isaac Lab environment implements DR through reset event handlers. Here's a tour of the key randomization methods from the teleop environment codebase.
+Isaac Lab ortamı, DR'yi sıfırlama olayı işleyicileri (reset event handlers) aracılığıyla uygular. İşte teleop ortamı kod tabanındaki temel rastgeleleştirme yöntemlerinin bir turu.
 
-In the workshop repo, these randomizations are applied in DR task variants (for example, `Lerobot-So101-Teleop-Vials-To-Rack-DR`). The base `Lerobot-So101-Teleop-Vials-To-Rack` task keeps the sky light off and uses a fixed orange robot color.
+Atölye deposunda bu rastgeleleştirmeler DR görev varyantlarında uygulanır (örneğin `Lerobot-So101-Teleop-Vials-To-Rack-DR`). Temel `Lerobot-So101-Teleop-Vials-To-Rack` görevi gök ışığını (sky light) kapalı tutar ve sabit turuncu robot rengi kullanır.
 
-**Lighting Randomization** (`randomize_sky_light`)
+**Aydınlatma Rastgeleleştirmesi** (`randomize_sky_light`)
 
-_File: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
+_Dosya: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
 
-Randomizes the environment's dome light on each reset—exposure, color temperature, and HDRI texture:
+Her sıfırlamada ortamın kubbe ışığını (dome light) — pozlama, renk sıcaklığı ve HDRI dokusu — rastgeleleştirir:
 
 ```python
 1def randomize_sky_light(
@@ -383,49 +383,49 @@ Randomizes the environment's dome light on each reset—exposure, color temperat
 6    textures_root: str,
 7    asset_cfg: SceneEntityCfg = None,
 8):
-9    # Sample random exposure and color temperature
+9    # Rastgele pozlama ve renk sıcaklığı örnekle
 10    exposure = math_utils.sample_uniform(*exposure_range, (1,), device="cpu").item()
 11    temperature = math_utils.sample_uniform(*temperature_range, (1,), device="cpu").item()
 12
-13    # Select random HDRI texture from available options
+13    # Kullanılabilir seçeneklerden rastgele HDRI dokusu seç
 14    textures = glob.glob(os.path.join(textures_root, "*.exr"))
 15    texture = textures[torch.randint(0, len(textures), (1,)).item()]
 16
-17    # Apply to the dome light
+17    # Kubbe ışığına uygula
 18    prim.GetAttribute("inputs:exposure").Set(exposure)
 19    prim.GetAttribute("inputs:colorTemperature").Set(temperature)
 20    prim.GetAttribute("inputs:texture:file").Set(Sdf.AssetPath(texture))
 ```
 
-**Camera Pose Randomization** (`randomize_camera_pose`)
+**Kamera Pozu Rastgeleleştirmesi** (`randomize_camera_pose`)
 
-_File: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
+_Dosya: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
 
-Adds small position and rotation offsets to the external camera:
+Harici kameraya küçük konum ve dönüş ofsetleri ekler:
 
 ```python
 1def randomize_camera_pose(
 2    env,
 3    env_ids: torch.Tensor | None,
 4    prim_path_pattern: str,
-5    pos_range: dict[str, tuple[float, float]] = None,  # e.g., {"x": (-0.02, 0.02)}
-6    rot_range: dict[str, tuple[float, float]] = None,  # e.g., {"pitch": (-0.05, 0.05)}
+5    pos_range: dict[str, tuple[float, float]] = None,  # örn. {"x": (-0.02, 0.02)}
+6    rot_range: dict[str, tuple[float, float]] = None,  # örn. {"pitch": (-0.05, 0.05)}
 7):
-8    # Sample random offsets relative to USD default pose
+8    # USD varsayılan pozuna göre rastgele ofsetler örnekle
 9    x = base_pos[0] + math_utils.sample_uniform(*pos_range.get("x", (0, 0)), (1,)).item()
 10    y = base_pos[1] + math_utils.sample_uniform(*pos_range.get("y", (0, 0)), (1,)).item()
 11    z = base_pos[2] + math_utils.sample_uniform(*pos_range.get("z", (0, 0)), (1,)).item()
 12
-13    # Combine base quaternion with random delta rotation
+13    # Temel kuaterniyonu rastgele delta rotasyonla birleştir
 14    delta_quat = math_utils.quat_from_euler_xyz(roll, pitch, yaw)
 15    final_quat = math_utils.quat_mul(base_quat_tensor, delta_quat)
 ```
 
-**Object Pose Randomization** (`reset_vials_rack`)
+**Nesne Pozu Rastgeleleştirmesi** (`reset_vials_rack`)
 
-_File: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
+_Dosya: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
 
-Randomizes vial and rack positions, with probability of pre-placing vials in slots:
+Tüp ve raf konumlarını rastgeleleştirir; tüpleri yuvalara önceden yerleştirme olasılığıyla:
 
 ```python
 1def reset_vials_rack(
@@ -437,16 +437,16 @@ Randomizes vial and rack positions, with probability of pre-placing vials in slo
 7    pose_range: dict[str, tuple[float, float]],
 8    rack_placement_prob: float = 0.33,
 9):
-10    # Randomize rack position and orientation
+10    # Raf konumu ve yönelimini rastgeleleştir
 11    new_rack_positions, new_rack_orientations = random_asset_pose(
 12        env, env_ids, rack, rack_pose_range, {}
 13    )
 14
-15    # With some probability, pre-place a vial in a random slot
+15    # Belirli bir olasılıkla rastgele bir yuvaya önceden bir tüp yerleştir
 16    if torch.rand(1).item() < rack_placement_prob:
 17        vial_idx = torch.randint(0, len(vial_objects), (1,)).item()
 18        slot_idx = torch.randint(0, total_slots, (1,)).item()
-19        # Transform slot position from rack local frame to world frame
+19        # Yuva konumunu raf yerel çerçevesinden dünya çerçevesine dönüştür
 20        slot_position, slot_orientation = math_utils.combine_frame_transforms(
 21            new_rack_positions, new_rack_orientations,
 22            slot_position_local, slot_orientation_local
@@ -454,11 +454,11 @@ Randomizes vial and rack positions, with probability of pre-placing vials in slo
 24        vial.write_root_pose_to_sim(slot_pose, env_ids=env_ids)
 ```
 
-**Wiring It Up: Event Configuration**
+**Bağlama: Olay Yapılandırması**
 
-_File: `sim_to_real_so101/source/sim_to_real_so101/tasks/task_env_cfg.py`_
+_Dosya: `sim_to_real_so101/source/sim_to_real_so101/tasks/task_env_cfg.py`_
 
-These randomization functions are registered as reset events in the environment config:
+Bu rastgeleleştirme fonksiyonları, ortam yapılandırmasında sıfırlama olayları olarak kaydedilir:
 
 ```python
 1@configclass
@@ -486,21 +486,21 @@ These randomization functions are registered as reset events in the environment 
 23    )
 ```
 
-Every time an episode resets, Isaac Lab calls each registered `EventTerm` with `mode="reset"`, applying fresh randomization.
+Bir bölüm her sıfırlandığında Isaac Lab, `mode="reset"` olan her kayıtlı `EventTerm`'ü çağırır ve yeni bir rastgeleleştirme uygular.
 
-For this workshop migration, the mat yaw randomization range is tightened to `(-0.1, 0.1)` in DR task configs.
+Bu atölye taşıma (migration) için DR görev yapılandırmalarında mat yaw rastgeleleştirme aralığı `(-0.1, 0.1)`'e daraltılmıştır.
 
 :::tip
 
-You can experiment with domain randomization by changing the ranges or which resets run. In `task_env_cfg.py`, the `TaskEventCfg` class registers each randomization as an `EventTerm` with a `params` dict. For example, adjust `exposure_range` or `temperature_range` in `reset_sky_light`, or `pos_range` / `rot_range` in `reset_camera_external_pose`, to widen or narrow variation. Commenting out an `EventTerm` disables that randomization.
+Aralıkları veya hangi sıfırlamaların çalıştığını değiştirerek domain randomization'ı deneyebilirsiniz. `task_env_cfg.py`'de `TaskEventCfg` sınıfı her rastgeleleştirmeyi bir `params` sözlüğüne sahip bir `EventTerm` olarak kaydeder. Örneğin, varyasyonu genişletmek veya daraltmak için `reset_sky_light`'taki `exposure_range` veya `temperature_range`'i ya da `reset_camera_external_pose`'daki `pos_range` / `rot_range`'i ayarlayın. Bir `EventTerm`'ü yorum satırına almak o rastgeleleştirmeyi devre dışı bırakır.
 
-Note where you're editing - if inside the container, changes might be lost on restart.
+Nerede düzenleme yaptığınıza dikkat edin — kapsayıcının içindeyseniz, değişiklikler yeniden başlatmada kaybolabilir.
 
 :::
 
-### Subtask Rating
+### Alt Görev Puanlaması
 
-Notice in the terminal output, that our simulation can detect when the vial is grasped, and when it is placed in the rack.
+Simülasyonumuzun tüpün ne zaman kavrandığını ve ne zaman rafa yerleştirildiğini algılayabildiğine terminal çıktısında dikkat edin.
 
 ```bash
 [GRASP] Vial grasped in env(s): [0]
@@ -508,50 +508,50 @@ Notice in the terminal output, that our simulation can detect when the vial is g
 [RACK] vial_2 placed in rack in env(s): [0]
 ```
 
-This strategy is useful when we start policy inference, because we can automatically score how well the policy is performing.
+Bu strateji, politika çıkarımına başladığımızda yararlıdır; çünkü politikanın ne kadar iyi performans gösterdiğini otomatik olarak puanlayabiliriz.
 
-### Sim vs. Real Teleoperation Comparison
+### Simülasyon ve Gerçek Teleoperasyon Karşılaştırması
 
-| Aspect | Simulation | Real Robot |
+| Özellik | Simülasyon | Gerçek Robot |
 | --- | --- | --- |
-| Domain randomization | Automatic | Manual, limited to what you can physically change in the environment |
-| Data collection speed | Faster reset, parallel envs possible | Real-time only |
-| Hardware wear | None | Accumulates over time |
-| Visual diversity | Procedural generation | Requires manual variation |
-| Physics accuracy | Approximated | Ground truth |
+| Domain randomization | Otomatik | Manuel, ortamda fiziksel olarak değiştirebileceklerinizle sınırlı |
+| Veri toplama hızı | Daha hızlı sıfırlama, paralel ortamlar mümkün | Yalnızca gerçek zamanlı |
+| Donanım aşınması | Yok | Zamanla birikir |
+| Görsel çeşitlilik | Prosedürel üretim | Manuel varyasyon gerekir |
+| Fizik doğruluğu | Yaklaşık | Temel doğruluk (ground truth) |
 
-### When to Use Each
+### Her Birini Ne Zaman Kullanmalı
 
-**Use simulation when:**
+**Şu durumlarda simülasyon kullanın:**
 
-- Building initial dataset with DR
+- DR ile başlangıç veri setini inşa ederken
 
-- Hardware is limited or shared
+- Donanım kısıtlı veya paylaşılmışken
 
-- Exploring task or policy variations quickly and safely
+- Görev veya politika varyasyonlarını hızlı ve güvenli şekilde keşfederken
 
-- Real environment isn't ready, accessible, or during development
+- Gerçek ortam hazır, erişilebilir değilken veya geliştirme sırasında
 
-**Use real robot when:**
+**Şu durumlarda gerçek robot kullanın:**
 
-- Collecting high-quality ground truth
+- Yüksek kaliteli temel doğruluk (ground truth) toplarken
 
-- Validating sim-trained policies
+- Simülasyonda eğitilmiş politikaları doğrularken
 
-- Capturing real-world nuances (friction, lighting)
+- Gerçek dünya nüanslarını (sürtünme, aydınlatma) yakalarken
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- Domain randomization makes policies robust by training on varied conditions
+- Domain randomization, politikaları çeşitli koşullarda eğiterek sağlam hale getirir
 
-- Teleoperation captures human expertise in demonstration form
+- Teleoperasyon, insan uzmanlığını gösterim biçiminde yakalar
 
-- Always teleoperate using only camera views—not your eyes
+- Teleoperasyonu her zaman yalnızca kamera görünümlerini kullanarak yapın — gözlerinizi değil
 
-- DR augmentation multiplies your dataset with varied conditions
+- DR zenginleştirmesi, veri setinizi çeşitli koşullarla çoğaltır
 
-- Combined real demonstrations + DR augmentation is a powerful baseline
+- Gerçek gösterimler + DR zenginleştirmesi birleşimi güçlü bir temel çizgidir
 
-## What's Next?
+## Sırada Ne Var?
 
-With augmented demonstrations collected, learn how policies are trained and served. In the next session, [Isaac GR00T: Vision-Language-Action Models](/sim-to-real/veri-egitim-degerlendirme/isaac-groot), you'll study VLAs and the GR00T architecture before running evaluations.
+Zenginleştirilmiş gösterimler toplandığına göre, politikaların nasıl eğitilip sunulduğunu öğrenin. Sonraki oturum [Isaac GR00T: Görü-Dil-Eylem Modelleri](/sim-to-real/veri-egitim-degerlendirme/isaac-groot) bölümünde, değerlendirmeler çalıştırmadan önce VLA'ları ve GR00T mimarisini inceleyeceksiniz.

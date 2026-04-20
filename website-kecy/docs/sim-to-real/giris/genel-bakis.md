@@ -2,7 +2,7 @@
 title: 'Genel Bakış'
 sidebar_position: 1
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: Genel Bakış'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,125 +13,125 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-This learning path will teach you how to train and deploy a physical AI model to a physical robot, starting in simulation then moving to the real world.
+Bu öğrenme yolu size, simülasyonda başlayıp gerçek dünyaya geçerek bir fiziksel AI modelini nasıl eğitip gerçek bir robota nasıl konuşlandıracağınızı öğretecek.
 
 ![](/img/sim-to-real/01-genel-bakis/sim-teleop-example-huggingface.gif)
 
-_Teleoperation example in simulation._
+_Simülasyonda teleoperasyon örneği._
 
 ![](/img/sim-to-real/01-genel-bakis/so101_vial_to_rack_task.gif)
 
-_Autonomous execution based on model trained with teleoperation data._
+_Teleoperasyon verisiyle eğitilmiş model tarafından yapılan otonom yürütme._
 
-## What Is Physical AI?
+## Fiziksel AI Nedir?
 
-Physical AI refers to AI systems that interact with and manipulate the physical world. Unlike generative or agentic AI (think image generators, chatbots), Physical AI has the ability to:
+Fiziksel AI (Physical AI), fiziksel dünya ile etkileşime giren ve onu manipüle eden AI sistemlerini ifade eder. Üretici veya etmen (agentic) AI'dan (görüntü üreticiler, sohbet botları gibi) farklı olarak Fiziksel AI şunları yapabilir:
 
-- **Perceive** the real world through sensors
+- **Algılama**: sensörler aracılığıyla gerçek dünyayı algılar
 
-- **Reason** about physics, objects, and spatial relationships
+- **Akıl yürütme**: fizik, nesneler ve uzamsal ilişkiler üzerine düşünür
 
-- **Act** through motors, actuators, and end-effectors
+- **Eylem**: motorlar, aktüatörler ve uç işlevleyiciler (end-effector) aracılığıyla hareket eder
 
-- **Adapt** to the unpredictability of real environments
+- **Uyum sağlama**: gerçek ortamların öngörülemezliğine uyum sağlar
 
-This learning path teaches a complete Physical AI workflow with physical robots, from simulation to a robot acting autonomously, right in front of you.
+Bu öğrenme yolu; simülasyondan gözünüzün önünde otonom çalışan gerçek bir robota kadar, fiziksel robotlarla baştan sona bir Fiziksel AI iş akışını öğretir.
 
-## The Task: Centrifuge Vial Pick-and-Place
+## Görev: Santrifüj Tüplerinin Al-Bırak İşlemi
 
-![Vial to rack task performed by SO-101 robot](/img/sim-to-real/01-genel-bakis/so101_vial_to_rack_task.gif)
+![SO-101 robotu tarafından gerçekleştirilen tüpten rafa görevi](/img/sim-to-real/01-genel-bakis/so101_vial_to_rack_task.gif)
 
-_Vial to rack pick-and-place task performed autonomously by an SO-101 robot._
+_SO-101 robotu tarafından otonom gerçekleştirilen tüpten-rafa al-bırak görevi._
 
-The task we'll use today is **unstructured pick-and-place of centrifuge vials**. The vials are scattered on a table and need to be placed into a designated rack.
+Bugün kullanacağımız görev **santrifüj tüplerinin yapılandırılmamış al-bırak işlemi**. Tüpler masa üzerine dağınık halde yerleştirilmiş ve belirli bir rafa yerleştirilmeleri gerekiyor.
 
-We've simplified some of the constraints with a lightbox, and with some of the parameters of the task, to make it more approachable.
+Görevi daha ulaşılabilir kılmak için bazı kısıtları bir ışık kutusu (lightbox) ve bazı görev parametreleriyle basitleştirdik.
 
-But **the tools and techniques you'll learn are applicable to more complex tasks** and production robots. The focus of this learning path is the sim-to-real **workflow**.
+Ancak **öğreneceğiniz araç ve teknikler daha karmaşık görevlere** ve üretim robotlarına da uygulanabilir. Bu öğrenme yolunun odağı sim-to-real **iş akışıdır**.
 
-### Why This Task?
+### Neden Bu Görev?
 
-So why did we pick this task? Let's imagine we are engineers solving a laboratory problem.
+Peki bu görevi neden seçtik? Laboratuvar problemini çözen mühendisler olduğumuzu hayal edelim.
 
-In our fictional problem, these vials are dropped down a chute or otherwise scattered in an unstructured way, but need to be organized into a rack for processing by automated machinery - a line that already exists.
+Kurgusal problemimizde bu tüpler bir olukta aşağıya salınmış ya da başka bir şekilde yapılandırılmamış biçimde dağılmış durumda; fakat zaten mevcut olan bir otomatik makine hattı tarafından işlenmek üzere bir rafa düzenlenmeleri gerekiyor.
 
-- **Real-world relevance**: this is an analogy for workflows where items must be prepared for autonomous analysis machines.
+- **Gerçek dünya karşılığı**: bu, öğelerin otonom analiz makineleri için hazırlanması gereken iş akışlarının bir benzeri.
 
-- **Safety implications**: think of use cases where potentially hazardous samples are handled, so minimizing human exposure is critical, hence the use of robotics. The ability to teach the task in simulation also saves time and reduces exposure.
+- **Güvenlik etkileri**: potansiyel tehlikeli örneklerle çalışılan kullanım senaryolarını düşünün — insan temasının en aza indirilmesi kritik, bu yüzden robotik kullanılıyor. Görevi simülasyonda öğretebilmek ayrıca zamandan tasarruf sağlar ve maruziyeti azaltır.
 
-- **Technical challenge**: adaptation to change, ability for the robot to adapt and retry.
+- **Teknik zorluk**: değişime uyum, robotun adapte olup yeniden denemesi.
 
-- **Approachable**: for learning, this task is simple enough to gather objects for and perform teleoperation.
+- **Ulaşılabilir**: öğrenme için bu görev, nesnelerini toplayıp teleoperasyonla yürütmeye yetecek kadar basit.
 
-## Why Is This Problem Interesting?
+## Bu Problem Neden İlginç?
 
-Our policy will work from 2D camera information, and the placement of the vials in the rack requires re-orienting the vials and placing them fairly precisely.
+Politikamız 2B kamera bilgileriyle çalışacak ve tüplerin rafa yerleştirilmesi, tüplerin yeniden yönlendirilmesini ve oldukça hassas biçimde yerleştirilmesini gerektiriyor.
 
-As you'll likely find from teleoperating the task yourself, it's not easy at first. One major issue is that the robot's gripper camera will become occluded after the robot grasps a vial, so the policy will need to be able to operate without this information.
+Görevi kendiniz teleoperasyonla yapınca muhtemelen göreceksiniz ki başlangıçta kolay değil. Önemli bir sorun şu: robot bir tüpü kavradıktan sonra robotun uç (gripper) kamerası kapanıyor; dolayısıyla politikanın bu bilgi olmadan da çalışabilmesi gerekiyor.
 
-You'll experience this challenge first-hand when you do teleoperation yourself.
+Kendiniz teleoperasyon yaptığınızda bu zorluğu birebir deneyimleyeceksiniz.
 
 :::note
 
-The SO-101 isn't a production robot, but it's a fun, approachable platform for learning these tools before you apply them to production robots. Again, the focus here is a **workflow** that you can apply to other tasks, or to production robots.
+SO-101 bir üretim robotu değil; ancak bu araçları üretim robotlarına uygulamadan önce öğrenmek için eğlenceli ve ulaşılabilir bir platform. Vurgulamak gerekirse, buradaki odak başka görevlere veya üretim robotlarına uygulayabileceğiniz bir **iş akışıdır**.
 
 :::
 
-## Why Simulation Matters
+## Simülasyon Neden Önemli?
 
-![Task wireframe: vials on table, target rack outlined.](/img/sim-to-real/01-genel-bakis/task-wireframe.gif)
+![Görev telkafes: masadaki tüpler, çerçevelenmiş hedef raf.](/img/sim-to-real/01-genel-bakis/task-wireframe.gif)
 
-_Task wireframe: vials are scattered on a table, to be placed into a rack by the robot._
+_Görev telkafesi: tüpler masaya dağıtılmış, robot tarafından bir rafa yerleştirilecek._
 
-Training robots in the real world is expensive, risky, and sometimes dangerous.
+Robotları gerçek dünyada eğitmek pahalı, riskli ve bazen tehlikelidir.
 
-Simulation addresses these fundamental limitations:
+Simülasyon bu temel sınırlamaları ele alır:
 
-1.  **Time**: Real-world data collection is slow—one trajectory takes the same time whether you have one robot or one thousand
+1.  **Zaman**: Gerçek dünya veri toplama yavaştır — bir tek robotunuz da olsa bin robotunuz da olsa bir yörünge aynı süreyi alır
 
-2.  **Cost**: Robot hardware is expensive, and failures during exploration can cause damage
+2.  **Maliyet**: Robot donanımı pahalıdır ve keşif sırasındaki hatalar hasara yol açabilir
 
-3.  **Safety**: Exploring failure modes on real hardware can be dangerous
+3.  **Güvenlik**: Başarısızlık modlarını gerçek donanımda keşfetmek tehlikeli olabilir
 
-4.  **Diversity**: Creating varied training scenarios (different lighting, objects, positions) is labor-intensive
+4.  **Çeşitlilik**: Çeşitli eğitim senaryoları oluşturmak (farklı ışık, nesne, konumlar) emek yoğundur
 
-Simulation addresses all of these:
+Simülasyon bunların hepsini ele alır:
 
-| Challenge           | Real World            | Simulation                   |
-| ------------------- | --------------------- | ---------------------------- |
-| Training speed      | 1x real-time          | 1000x+ parallel environments |
-| Hardware cost       | $10K-$100K+ per robot | Marginal compute cost        |
-| Failure consequence | Damage, downtime      | Reset and continue           |
-| Scenario diversity  | Manual setup          | Procedural generation        |
+| Zorluk              | Gerçek Dünya             | Simülasyon                  |
+| ------------------- | ------------------------ | --------------------------- |
+| Eğitim hızı         | 1x gerçek zamanlı        | 1000x+ paralel ortam        |
+| Donanım maliyeti    | Robot başına 10K$-100K$+ | Marjinal hesaplama maliyeti |
+| Hata sonucu         | Hasar, duruş süresi      | Sıfırla ve devam et         |
+| Senaryo çeşitliliği | Manuel kurulum           | Prosedürel üretim           |
 
-### Privileged Information
+### Ayrıcalıklı Bilgi
 
-Simulation also provides access to information that might be impossible to obtain in the real world:
+Simülasyon ayrıca gerçek dünyada elde edilmesi mümkün olmayan bilgilere erişim sağlar:
 
-- **Exact object poses**: No perception noise or occlusion
+- **Tam nesne pozları**: Algı gürültüsü ya da kapanma yoktur
 
-- **Contact forces**: Precise measurements at every contact point
+- **Temas kuvvetleri**: Her temas noktasında hassas ölçümler
 
-- **Ground truth labels**: Perfect segmentation and object identity
+- **Kesin etiketler**: Mükemmel segmentasyon ve nesne kimliği
 
-- **State derivatives**: Exact velocities and accelerations
+- **Durum türevleri**: Tam hızlar ve ivmeler
 
-This privileged information can accelerate learning, even when the final policy only uses realistic sensor inputs.
+Bu ayrıcalıklı bilgi, nihai politika yalnızca gerçekçi sensör girdileri kullansa bile öğrenmeyi hızlandırabilir.
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- Simulation enables fast, safe, diverse training that can be impossible in the real world
+- Simülasyon, gerçek dünyada imkansız olan hızlı, güvenli ve çeşitli eğitim olanağı sağlar
 
-- The sim-to-real gap is a fundamental challenge that requires systematic approaches
+- Sim-to-real boşluğu, sistematik yaklaşımlar gerektiren temel bir zorluktur
 
-- This learning path provides hands-on experience with multiple gap-closing strategies
+- Bu öğrenme yolu, birden fazla boşluk kapatma stratejisiyle uygulamalı deneyim sunar
 
-- Success comes from iteration and combining approaches
+- Başarı, yineleme ve yaklaşımları birleştirmekten gelir
 
-Using a VLA (Vision Language Action) model called Isaac GR00T, our system will receive a language command like "pick up the vial and place it on the rack", and use joint feedback and camera observations as policy inputs. The policy then outputs motor positions to execute the task.
+Isaac GR00T adlı bir VLA (Vision-Language-Action, Görü-Dil-Eylem) modeli kullanarak sistemimiz "tüpü al ve rafa yerleştir" gibi bir dil komutunu alacak; eklem geri bildirimi ve kamera gözlemlerini politika girdisi olarak kullanacak. Politika daha sonra görevi yürütmek için motor pozisyonları üretecek.
 
-## What's Next?
+## Sırada Ne Var?
 
-This learning path has some flexibility built-in to match your goals and time constraints. Let's cover those options next!
+Bu öğrenme yolu hedeflerinize ve zaman kısıtlarınıza uyum sağlayacak şekilde biraz esneklik barındırıyor. Şimdi bu seçeneklere bakalım!
 
-Continue to [How to Take This Course](/sim-to-real/giris/nasil-calisilir).
+[Bu Kursu Nasıl Takip Edersiniz](/sim-to-real/giris/nasil-calisilir) bölümüne devam edin.

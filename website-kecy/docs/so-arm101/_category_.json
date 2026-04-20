@@ -1,0 +1,9 @@
+{
+  "label": "SO-ARM101",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "SO-ARM101",
+    "description": "SO-ARM101 robot kolunun sıfırdan kurulumu: parça tedariği, montaj, motor yapılandırması ve kalibrasyon (Hugging Face LeRobot dokümantasyonundan Türkçeleştirilmiş uyarlama)."
+  }
+}

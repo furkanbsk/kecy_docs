@@ -2,7 +2,7 @@
 title: 'LeRobot: Arka Plan ve Topluluk'
 sidebar_position: 4
 description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac" dokümantasyonundan Türkçeleştirilmiş içerik: LeRobot: Arka Plan ve Topluluk'
-needsTranslation: true
+needsTranslation: false
 ---
 
 :::info[Kaynak]
@@ -13,219 +13,219 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-### What Do I Need for This Module?
+### Bu Modül İçin Neye İhtiyacım Var?
 
-Nothing — this module is theory-only.
+Hiçbir şeye — bu modül tamamen teoriktir.
 
-In this session, we'll explore the background of the SO-101 robot in front of you, the Hugging Face LeRobot project, and the community resources available to support your work.
+Bu oturumda, önünüzdeki SO-101 robotunun arka planını, Hugging Face LeRobot projesini ve çalışmanızı destekleyecek topluluk kaynaklarını inceleyeceğiz.
 
-This framework is an approachable way to learn robotics, and become familiar with the same practices used on industrial robots, in an affordable way you can even try yourself at home.
+Bu çerçeve (framework) robotik öğrenmenin ulaşılabilir bir yoludur ve endüstriyel robotlarda kullanılan uygulamaların aynılarına — üstelik evde bile deneyebileceğiniz uygun maliyetli bir biçimde — aşinalık kazandırır.
 
-## Learning Objectives
+## Öğrenme Hedefleri
 
-By the end of this session, you'll be able to:
+Bu oturumun sonunda şunları yapabileceksiniz:
 
-- **Describe** the SO-101 robot and its capabilities
+- SO-101 robotunu ve yeteneklerini **tanımlama**
 
-- **Explain** the LeRobot project and its role in the robotics community
+- LeRobot projesini ve robotik topluluğundaki rolünü **açıklama**
 
-- **Identify** community resources for continued learning
+- Sürekli öğrenme için topluluk kaynaklarını **belirleme**
 
-## The SO-101 Robot
+## SO-101 Robotu
 
-The SO-101 is a 6-DOF (degrees of freedom) robot arm designed for research and education in manipulation tasks.
+SO-101, manipülasyon görevlerinde araştırma ve eğitim için tasarlanmış 6-DOF (serbestlik derecesi) bir robot koludur.
 
-While we colloquially refer to the SO-101 as a single robot, it's typically sold or made as a pair:
+Günlük konuşmada SO-101'i tek bir robot gibi ele alsak da genellikle bir çift olarak satılır veya üretilir:
 
-- **Teleop arm** (also called the "leader"): You move this arm by hand to perform demonstrations. The encoder positions can be recorded or used to directly manipulate the robot arm, or both.
+- **Teleop kol** ("leader" olarak da bilinir): Gösterim yapmak için bu kolu elle hareket ettirirsiniz. Enkoder konumları kaydedilebilir, robot kolunu doğrudan sürmek için kullanılabilir ya da ikisi birden yapılabilir.
 
-- **Robot arm** (also called the "follower"): During teleoperation it mirrors the teleop arm; during evaluation it is driven by a policy.
+- **Robot kol** ("follower" olarak da bilinir): Teleoperasyon sırasında teleop kolu taklit eder; değerlendirme sırasında bir politika tarafından sürülür.
 
-![SO-101 Follower Arm](/img/sim-to-real/04-lerobot/SO101_follower.jpg)
+![SO-101 Follower Kolu](/img/sim-to-real/04-lerobot/SO101_follower.jpg)
 
-_SO-101 Robot, also known as the "follower arm"._
+_SO-101 Robot, "follower kol" olarak da bilinir._
 
-The typical kit also includes a teleoperation arm, which is used to control either simulated robots or the "follower" arm.
+Tipik kit ayrıca simüle edilmiş robotları veya "follower" kolu kontrol etmek için kullanılan bir teleoperasyon kolunu da içerir.
 
-![SO-101 Leader Arm](/img/sim-to-real/04-lerobot/SO101_leader.jpg)
+![SO-101 Leader Kolu](/img/sim-to-real/04-lerobot/SO101_leader.jpg)
 
-_SO-101 Teleoperation Arm, also known as the "leader arm" or "teleop arm". Notice the gripper on the end of the arm for your hand to manipulate the robot._
+_SO-101 Teleoperasyon Kolu, "leader kol" veya "teleop kol" olarak da bilinir. Kolun ucunda elinizle robotu manipüle etmeniz için bulunan kavrayıcıya (gripper) dikkat edin._
 
-### Joint Configuration
+### Eklem Yapılandırması
 
-The SO-101 has six joints:
+SO-101'in altı eklemi vardır:
 
-1.  **Base** (J1): Rotation around vertical axis
+1.  **Taban (Base)** (J1): Dikey eksen etrafında dönüş
 
-2.  **Shoulder** (J2): First arm segment elevation
+2.  **Omuz (Shoulder)** (J2): Birinci kol segmentinin eğimi
 
-3.  **Elbow** (J3): Second arm segment elevation
+3.  **Dirsek (Elbow)** (J3): İkinci kol segmentinin eğimi
 
-4.  **Wrist Pitch** (J4): Wrist up/down rotation
+4.  **Bilek Eğimi (Wrist Pitch)** (J4): Bileğin yukarı/aşağı dönüşü
 
-5.  **Wrist Roll** (J5): Wrist rotation around arm axis
+5.  **Bilek Dönüşü (Wrist Roll)** (J5): Bileğin kol ekseni etrafında dönüşü
 
-6.  **Gripper** (J6): Parallel jaw gripper
+6.  **Kavrayıcı (Gripper)** (J6): Paralel çeneli kavrayıcı
 
-### Why SO-101?
+### Neden SO-101?
 
-The SO-101 is ideal for this learning path because:
+SO-101 bu öğrenme yolu için idealdir, çünkü:
 
-- **Accessible**: Affordable for education and research
+- **Ulaşılabilir**: Eğitim ve araştırma için uygun maliyetlidir
 
-- **Well-documented**: Strong community support
+- **İyi belgelenmiş**: Güçlü topluluk desteği vardır
 
-- **LeRobot integration**: First-class support in the LeRobot ecosystem
+- **LeRobot entegrasyonu**: LeRobot ekosisteminde birinci sınıf destek sunar
 
-- **Sim-ready**: Accurate simulation models available
+- **Simülasyona hazır**: Doğru simülasyon modelleri mevcuttur
 
-## The LeRobot Project
+## LeRobot Projesi
 
-LeRobot is an open-source library from Hugging Face which includes tools for data collection, training, robot control, and evaluation of robot policies.
+LeRobot, Hugging Face tarafından geliştirilen açık kaynaklı bir kütüphanedir; veri toplama, eğitim, robot kontrolü ve robot politikalarının değerlendirilmesi için araçlar içerir.
 
-### Community Datasets
+### Topluluk Veri Setleri
 
-LeRobot hosts community-contributed datasets on the Hugging Face Hub with the LeRobot Dataset Format.
+LeRobot, Hugging Face Hub üzerinde topluluk tarafından katkı sağlanan veri setlerini LeRobot Dataset Formatı ile barındırır.
 
-- Thousands of robot demonstrations
+- Binlerce robot gösterimi
 
-- Multiple robot platforms
+- Birden fazla robot platformu
 
-- Various manipulation tasks
+- Çeşitli manipülasyon görevleri
 
-- Standardized formats for interoperability
+- Birlikte çalışabilirlik için standartlaştırılmış formatlar
 
-## Why LeRobot for This Course
+## Bu Kurs İçin Neden LeRobot?
 
-LeRobot is the foundation of this course for several practical reasons:
+LeRobot bu kursun temelidir; bunun birkaç pratik nedeni vardır:
 
-### Seamless Data Flow With Hugging Face Hub
+### Hugging Face Hub ile Kesintisiz Veri Akışı
 
-Getting data into and out of the system is straightforward:
+Veriyi sisteme alıp dışarı vermek kolaydır:
 
 ```bash
-# Example command
+# Örnek komut
 
-# Push your collected dataset to the Hub
+# Topladığınız veri setini Hub'a yükleyin
 hf upload ${HF_USER}/my_robot_dataset ./datasets/my_robot_dataset
 
-# Pull datasets for training or co-training
+# Eğitim veya co-training için veri setlerini çekin
 hf download lerobot/community_dataset
 ```
 
-This Hub integration means you can share datasets with collaborators, version your data, and access community contributions with minimal friction.
+Bu Hub entegrasyonu; veri setlerini iş arkadaşlarınızla paylaşmanızı, verinizi sürümlemenizi ve topluluk katkılarına en az sürtünmeyle erişmenizi sağlar.
 
-### Post-Training Pipeline
+### Post-Training (Eğitim Sonrası) İş Hattı
 
-LeRobot wraps established training pipelines (including NVIDIA Isaac GR00T, SmolVLA, and more):
+LeRobot, yerleşik eğitim iş hatlarını (NVIDIA Isaac GR00T, SmolVLA ve daha fazlası dahil) sarmalar:
 
 ```bash
-# Example command
-# Fine-tune a policy on your data
+# Örnek komut
+# Verinizde bir politikayı ince ayar yapın
 python lerobot/scripts/train.py \
 --policy.type=gr00t \
 --dataset.repo_id=${HF_USER}/my_dataset
 ```
 
-You spend time on your task, not on infrastructure.
+Zamanınızı altyapıyla değil, göreviniz üzerinde harcarsınız.
 
-### Real Robot Evaluation
+### Gerçek Robot Değerlendirmesi
 
-The same framework used for data collection handles policy deployment:
+Veri toplama için kullanılan çerçeve, politika konuşlandırmayı da yapar:
 
 ```bash
-# Example command
-# Evaluate a trained policy on the real robot
+# Örnek komut
+# Eğitilmiş bir politikayı gerçek robot üzerinde değerlendirin
 lerobot-eval \
 --robot.type=so101_follower \
 --robot.port=$ROBOT_PORT \
 --policy_path ${HF_USER}/my_trained_policy
 ```
 
-This closes the loop: collect data → train → deploy → evaluate → iterate. All within one system.
+Bu, döngüyü kapatır: veri topla → eğit → konuşlandır → değerlendir → yineleme yap. Hepsi tek bir sistem içinde.
 
-## Community Resources
+## Topluluk Kaynakları
 
-### Dataset Visualizer
+### Veri Seti Görselleştirici
 
-LeRobot provides an interactive dataset visualizer on Hugging Face Spaces:
+LeRobot, Hugging Face Spaces üzerinde etkileşimli bir veri seti görselleştirici sunar:
 
 - [LeRobot Dataset Visualizer](https://huggingface.co/spaces/lerobot/visualize_dataset)
 
-Use this tool to explore any LeRobot dataset on the Hub. You can scrub through episodes, view camera feeds, and inspect action/state trajectories—useful for debugging data quality issues or understanding what a dataset contains before training.
+Bu aracı Hub'daki herhangi bir LeRobot veri setini keşfetmek için kullanın. Bölümler arasında gezinebilir, kamera akışlarını izleyebilir ve eylem/durum yörüngelerini inceleyebilirsiniz — veri kalitesi sorunlarını ayıklamak veya eğitimden önce bir veri setinin neler içerdiğini anlamak için yararlıdır.
 
-### Documentation
+### Dokümantasyon
 
 - [LeRobot Documentation](https://huggingface.co/docs/lerobot)
 
 - [SO-101 Getting Started Guide](https://huggingface.co/docs/lerobot/en/so101)
 
-### Examples and Tutorials
+### Örnekler ve Öğreticiler
 
 - [GR00T N1.5 SO-101 Tuning](https://huggingface.co/blog/nvidia/gr00t-n1-5-so101-tuning)
 
-- Community notebooks and examples
+- Topluluk notebook'ları ve örnekleri
 
-### Community Channels
+### Topluluk Kanalları
 
 - Hugging Face Discord
 
 - GitHub Discussions
 
-- Community forums
+- Topluluk forumları
 
-## Hugging Face Hub Integration
+## Hugging Face Hub Entegrasyonu
 
-LeRobot leverages the Hugging Face Hub for:
+LeRobot, Hugging Face Hub'dan şunlar için faydalanır:
 
-### Dataset Sharing
+### Veri Seti Paylaşımı
 
 ```bash
-# Example command
-# Download a community dataset
+# Örnek komut
+# Bir topluluk veri seti indir
 hf download lerobot/so101_pickplace
 ```
 
-### Model Sharing
+### Model Paylaşımı
 
 ```bash
-# Example command
-# Download a pre-trained model
+# Örnek komut
+# Önceden eğitilmiş bir modeli indir
 hf download lerobot/groot_so101_vial_pickup
 ```
 
-### Experiment Tracking
+### Deney Takibi
 
-Integration with Weights & Biases and other experiment tracking tools.
+Weights & Biases ve diğer deney takip araçlarıyla entegrasyon.
 
-### How We Used Hugging Face in This Course
+### Bu Kursta Hugging Face'i Nasıl Kullandık
 
-**1\. Dataset format for gathering demonstrations**
+**1\. Gösterim toplamak için veri seti formatı**
 
-We used the LeRobot dataset format for all teleoperation data. Episodes are stored with observations (e.g. camera images), robot state, and actions in a consistent schema. Recording is done with `lerobot_agent` (or `lerobot_record` on real hardware) using `--repo_id` and `--repo_root` so that data lands in the correct structure for training and for upload to the Hub.
+Tüm teleoperasyon verileri için LeRobot veri seti formatını kullandık. Bölümler; gözlemler (ör. kamera görüntüleri), robot durumu ve eylemlerle birlikte tutarlı bir şema içinde saklanır. Kayıt, eğitim için ve Hub'a yüklemek için verinin doğru yapıya düşmesini sağlayacak şekilde `--repo_id` ve `--repo_root` ile `lerobot_agent` (veya gerçek donanımda `lerobot_record`) kullanılarak yapılır.
 
-**2\. Sharing datasets**
+**2\. Veri setlerini paylaşmak**
 
-Datasets were pushed to the Hugging Face Hub so they could be reused for training, shared with others, and versioned. We used `--dataset.repo_id=${HF_USER}/dataset_name` and `--dataset.push_to_hub=true` when recording, or `hf upload` for existing local datasets. The [LeRobot Dataset Visualizer](https://huggingface.co/spaces/lerobot/visualize_dataset) on the Hub was used to inspect episodes and verify quality before training.
+Veri setleri, eğitim için yeniden kullanılabilsin, başkalarıyla paylaşılabilsin ve sürümlenebilsin diye Hugging Face Hub'a yüklendi. Kayıt sırasında `--dataset.repo_id=${HF_USER}/dataset_name` ve `--dataset.push_to_hub=true` kullandık; mevcut yerel veri setleri içinse `hf upload` kullandık. Hub üzerindeki [LeRobot Dataset Visualizer](https://huggingface.co/spaces/lerobot/visualize_dataset), eğitimden önce bölümleri incelemek ve kaliteyi doğrulamak için kullanıldı.
 
-**3\. Merging datasets for co-training (sim + real, sim + Cosmos)**
+**3\. Co-training için veri setlerini birleştirmek (sim + gerçek, sim + Cosmos)**
 
-For co-training we combined multiple data sources into a single training dataset. Sim + real: we merged simulation teleop datasets with real-robot teleop datasets (e.g. `so101_teleop_vials_rack_left` with `so101_teleop_vials_rack_left_real_50`) so the policy could learn from both. Sim + Cosmos: we combined base sim data with Cosmos-augmented synthetic data. Merging was done via the Hub (download multiple repos, merge locally) or by pointing the training script at a single merged repo so that one run could use sim, real, and augmented data together.
+Co-training için birden fazla veri kaynağını tek bir eğitim veri setinde birleştirdik. Sim + gerçek: simülasyon teleop veri setleriyle gerçek robot teleop veri setlerini (ör. `so101_teleop_vials_rack_left` ile `so101_teleop_vials_rack_left_real_50`) birleştirdik; böylece politika her ikisinden de öğrenebildi. Sim + Cosmos: temel sim verisini Cosmos ile zenginleştirilmiş sentetik veriyle birleştirdik. Birleştirme, Hub üzerinden (birden fazla repo indir, yerelde birleştir) ya da eğitim betiğini tek bir birleşik repoya yönlendirerek yapıldı; böylece tek bir koşu sim, gerçek ve zenginleştirilmiş veriyi birlikte kullanabildi.
 
-**4\. Sharing evaluations**
+**4\. Değerlendirmeleri paylaşmak**
 
-Evaluation results and policy checkpoints were shared via the Hub. Trained models were uploaded (e.g. as GR00T checkpoints or LeRobot policy repos) so others could reproduce evaluations or run the same policy in sim and on the real robot. Links to specific datasets and model repos were used in this learning path to align everyone on the same baselines and co-trained models.
+Değerlendirme sonuçları ve politika kontrol noktaları (checkpoint) Hub üzerinden paylaşıldı. Eğitilmiş modeller (ör. GR00T kontrol noktaları veya LeRobot politika repoları olarak) yüklendi; böylece başkaları değerlendirmeleri yeniden üretebildi veya aynı politikayı hem simülasyonda hem de gerçek robotta çalıştırabildi. Bu öğrenme yolunda, herkesi aynı temel çizgiler (baseline) ve co-train edilmiş modeller üzerinde hizalamak için belirli veri seti ve model repolarına verilen bağlantılar kullanıldı.
 
-## Key Takeaways
+## Önemli Çıkarımlar
 
-- SO-101 is an accessible, well-supported robot for learning sim-to-real
+- SO-101, sim-to-real öğrenmek için ulaşılabilir ve iyi desteklenen bir robottur
 
-- LeRobot provides open-source tools, datasets, and models
+- LeRobot, açık kaynaklı araçlar, veri setleri ve modeller sunar
 
-- The Hugging Face community offers ongoing support and resources
+- Hugging Face topluluğu sürekli destek ve kaynaklar sağlar
 
-- You're joining a growing community of robot learners and practitioners
+- Giderek büyüyen bir robot öğrenci ve uygulayıcı topluluğuna katılıyorsunuz
 
-## What's Next?
+## Sırada Ne Var?
 
-Next, [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani) walks through assembling and lighting the physical lightbox and task props. After that, [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon) covers power-on and calibration, and [Operating the SO-101](/sim-to-real/robot-laboratuvari/calistirma) covers teleoperation and camera setup.
+Sırada, [Çalışma Alanını Kurma](/sim-to-real/robot-laboratuvari/calisma-alani) bölümü fiziksel ışık kutusunu (lightbox) ve görev aksesuarlarını montajlama ve aydınlatma adımlarını anlatır. Ardından [SO-101'i Kalibre Etme](/sim-to-real/robot-laboratuvari/kalibrasyon) güç verme ve kalibrasyonu, [SO-101'i Çalıştırma](/sim-to-real/robot-laboratuvari/calistirma) ise teleoperasyon ve kamera kurulumunu kapsar.
