@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Nothing — this module is theory-only.
 
@@ -31,9 +31,9 @@ By the end of this session, you'll be able to:
 
 **Sim-to-real** refers to the process of training a policy in simulation and deploying it on real hardware. The goal is a policy that performs well in the real world despite being trained entirely (or primarily) in simulation.
 
-[![Sim-to-Real](/img/sim-to-real/03-sim-to-real-nedir/sim-and-real.png)](/img/sim-to-real/03-sim-to-real-nedir/sim-and-real.png)
+![Sim-to-Real](/img/sim-to-real/03-sim-to-real-nedir/sim-and-real.png)
 
-Sim-to-Real with Unitree H1
+_Sim-to-Real with Unitree H1_
 
 ## The Sim-to-Real Gap
 
@@ -93,53 +93,15 @@ The sim-to-real gap isn't just about simulation fidelity. Even with perfect simu
 
 ## Summary
 
-| Gap Category
-
-|
-
-Examples
-
-|  |
-|  |
-
-|
-
-Sensing
-
-|
-
-Camera noise, lighting, depth artifacts
-
-| |
-
-Actuation
-
-|
-
-Friction, backlash, thermal effects
-
-| |
-
-Physics
-
-|
-
-Contact dynamics, deformables
-
-| |
-
-Modeling
-
-|
-
-CAD errors, mass/inertia estimates
-
-|
+| Gap Category | Examples                                |
+| ------------ | --------------------------------------- |
+| Sensing      | Camera noise, lighting, depth artifacts |
+| Actuation    | Friction, backlash, thermal effects     |
+| Physics      | Contact dynamics, deformables           |
+| Modeling     | CAD errors, mass/inertia estimates      |
 
 Understanding these gaps is essential—throughout this learning path, you'll learn strategies to address each category.
 
 ## What's Next?
 
 Now that you understand the sim-to-real challenge, let's learn about the tools we'll use. In the next session, [LeRobot: Background and Community](/sim-to-real/giris/lerobot), you'll learn about the Hugging Face ecosystem for robotics.
-
-On this page

@@ -27,7 +27,7 @@ GR00T inference and real-robot evaluation are run inside the `real-robot` contai
 
 Unplug power, and replug the power cable. Do this 2X if the next command doesn't run. If that doesn't solve, proceed to the next steps.
 
-Robot Doesn't Respond
+### Robot Doesn't Respond
 
 1.  **Check** USB connection
 
@@ -37,7 +37,7 @@ Robot Doesn't Respond
 
 4.  Inside the `teleop-docker` container, **run** `lerobot-find-port` to confirm the port is correct.
 
-No Ports Found or Permission Denied on /dev/ttyACM\*
+### No Ports Found or Permission Denied on /dev/ttyACM\*
 
 If `lerobot-find-port` finds no ports, or you see permission denied when accessing the robot:
 
@@ -64,18 +64,18 @@ sudo usermod -a -G tty "$USER"
 sudo usermod -a -G video "$USER"
 ```
 
-Power Not Connected (All Motors Missing)
+### Power Not Connected (All Motors Missing)
 
 If you see this error showing all motors missing:
 
 ```
 Missing motor IDs:
-  - 1 (expected model: 777)
-  - 2 (expected model: 777)
-  - 3 (expected model: 777)
-  - 4 (expected model: 777)
-  - 5 (expected model: 777)
-  - 6 (expected model: 777)
+- 1 (expected model: 777)
+- 2 (expected model: 777)
+- 3 (expected model: 777)
+- 4 (expected model: 777)
+- 5 (expected model: 777)
+- 6 (expected model: 777)
 
 Full expected motor list (id: model_number):
 {1: 777, 2: 777, 3: 777, 4: 777, 5: 777, 6: 777}
@@ -94,7 +94,7 @@ This indicates **power is not connected** to the robot. The USB connection allow
 
 3.  **Retry** the command
 
-Single Motor Disconnected
+### Single Motor Disconnected
 
 If you see an error showing one motor missing:
 
@@ -118,7 +118,7 @@ This indicates motor 1 is disconnected or not communicating. Sometimes this will
 
 4.  The motor chain is daisy-chained—a loose connection can affect motors downstream
 
-Motor Connection Error
+### Motor Connection Error
 
 If you see this error:
 
@@ -138,7 +138,7 @@ This indicates communication failure with a specific motor.
 
 4.  **Check motor ID**: The motor with the specified ID may have a loose connection
 
-Calibration Fails
+### Calibration Fails
 
 1.  **Ensure** the robot port matches the robot.id of the real robot
 
@@ -150,13 +150,13 @@ Calibration Fails
 
 5.  **True end stops only** — Move each joint to its mechanical end stop, not a cable or obstacle. A cable pinched between links (or the robot hitting a cable) creates a false min/max and wrong calibration. Check cable routing so the arm can reach its real limits.
 
-[![SO-101 arm segment showing cable routing near a joint](/img/sim-to-real/referans-sorun-giderme/calibration_cable_snag.gif)](/img/sim-to-real/referans-sorun-giderme/calibration_cable_snag.gif)
+![SO-101 arm segment showing cable routing near a joint](/img/sim-to-real/referans-sorun-giderme/calibration_cable_snag.gif)
 
 6.  **Re-run** calibration from step 1
 
 ## Camera Issues
 
-Dark or No Image
+### Dark or No Image
 
 If the camera feed is very dark or black:
 
@@ -166,7 +166,7 @@ If the camera feed is very dark or black:
 
 3.  Inside the `teleop-docker` container, **run** `lerobot-find-cameras opencv` to confirm the camera is detected
 
-Camera Index Changed
+### Camera Index Changed
 
 Camera indices may change any time cameras are unplugged or replugged into your computer.
 
@@ -178,7 +178,7 @@ Camera indices may change any time cameras are unplugged or replugged into your 
 
 3.  **Verify** by checking the captured test images
 
-Blurry or Out-of-Focus Image
+### Blurry or Out-of-Focus Image
 
 If the camera feed is blurry or the policy has trouble with fine visual detail:
 
@@ -188,7 +188,7 @@ If the camera feed is blurry or the policy has trouble with fine visual detail:
 
 3.  **Verify** the camera is fixed in place and not vibrating
 
-Wrong Camera Feed
+### Wrong Camera Feed
 
 If the policy receives incorrect visual input:
 
@@ -200,7 +200,7 @@ If the policy receives incorrect visual input:
 
 ## Policy Deployment Issues
 
-"It worked once but not consistently"
+### "It worked once but not consistently"
 
 **Likely cause:** Distribution shift
 
@@ -210,7 +210,7 @@ If the policy receives incorrect visual input:
 
 - Ensure cameras are stable and haven't shifted
 
-"Grasp is always off by the same amount"
+### "Grasp is always off by the same amount"
 
 **Likely cause:** Calibration or camera positioning
 
@@ -224,7 +224,7 @@ If the policy receives incorrect visual input:
 
 ## Dataset and Recording Issues
 
-Dataset Already Exists (FileExistsError)
+### Dataset Already Exists (FileExistsError)
 
 If you see this error when recording or evaluating:
 
@@ -246,9 +246,9 @@ This indicates a dataset already exists at that path from a previous run.
 
 2.  **Delete the existing directory** and re-run:
 
-````bash
-    rm -rf ~/.cache/huggingface/lerobot/<repo_id>
-    ```
+```bash
+rm -rf ~/.cache/huggingface/lerobot/<repo_id>
+```
 
 :::warning
 
@@ -267,7 +267,3 @@ If you're stuck:
 3.  **Re-run camera detection** if visual behavior is unexpected
 
 4.  **Re-run** the diagnostic steps above if the issue persists
-
-
-On this page
-````

@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need the calibrated SO-101 robot, teleop arm, both cameras, the assembled workspace, and the `real-robot` container.
 
@@ -39,9 +39,9 @@ In our examples, we'll show the power of combining a small amount of real demons
 
 You'll have a chance to experience policies trained with various mixes of data.
 
-[![Physical demonstration](/img/sim-to-real/13-strateji-2-cotraining/real_demos_vial_rack.gif)](/img/sim-to-real/13-strateji-2-cotraining/real_demos_vial_rack.gif)
+![Physical demonstration](/img/sim-to-real/13-strateji-2-cotraining/real_demos_vial_rack.gif)
 
-Physical demonstration of the task with teleoperation.
+_Physical demonstration of the task with teleoperation._
 
 :::tip
 
@@ -51,56 +51,10 @@ View a dataset of real-only demonstrations using the Hugging Face Dataset Visual
 
 ### The Data Challenge
 
-| Data Source
-
-|
-
-Quantity
-
-|
-
-Quality
-
-|
-
-Reality Match
-
-|  |
-|  |
-
-|
-
-**Simulation**
-
-|
-
-Abundant
-
-|
-
-Consistent
-
-|
-
-Approximate
-
-| |
-
-**Real teleop**
-
-|
-
-Limited
-
-|
-
-Variable
-
-|
-
-Exact
-
-|
+| Data Source     | Quantity | Quality    | Reality Match |
+| --------------- | -------- | ---------- | ------------- |
+| **Simulation**  | Abundant | Consistent | Approximate   |
+| **Real teleop** | Limited  | Variable   | Exact         |
 
 Neither source alone is ideal:
 
@@ -134,33 +88,33 @@ export HF_USER=your-hf-username
 
 ```bash
 lerobot-record \
-  --robot.type=so101_follower \
-  --robot.port=$ROBOT_PORT \
-  --robot.id=$ROBOT_ID \
-  --robot.cameras='{
-    "wrist": {
-      "type": "opencv",
-      "index_or_path": '"$CAMERA_GRIPPER"',
-      "width": 640,
-      "height": 480,
-      "fps": 30
-    },
-    "front": {
-      "type": "opencv",
-      "index_or_path": '"$CAMERA_EXTERNAL"',
-      "width": 640,
-      "height": 480,
-      "fps": 30
-    }
-  }' \
-  --teleop.type=so101_leader \
-  --teleop.port=$TELEOP_PORT \
-  --teleop.id=$TELEOP_ID \
-  --display_data=true \
-  --dataset.repo_id=${HF_USER}/so101-teleop-vials-to-rack-real \
-  --dataset.num_episodes=5 \
-  --dataset.single_task="Pick up the vial and place it in the yellow rack" \
-  --play_sounds=false
+--robot.type=so101_follower \
+--robot.port=$ROBOT_PORT \
+--robot.id=$ROBOT_ID \
+--robot.cameras='{
+"wrist": {
+  "type": "opencv",
+  "index_or_path": '"$CAMERA_GRIPPER"',
+  "width": 640,
+  "height": 480,
+  "fps": 30
+},
+"front": {
+  "type": "opencv",
+  "index_or_path": '"$CAMERA_EXTERNAL"',
+  "width": 640,
+  "height": 480,
+  "fps": 30
+}
+}' \
+--teleop.type=so101_leader \
+--teleop.port=$TELEOP_PORT \
+--teleop.id=$TELEOP_ID \
+--display_data=true \
+--dataset.repo_id=${HF_USER}/so101-teleop-vials-to-rack-real \
+--dataset.num_episodes=5 \
+--dataset.single_task="Pick up the vial and place it in the yellow rack" \
+--play_sounds=false
 ```
 
 5.  Use these controls to control recording:
@@ -195,7 +149,7 @@ We use the **sim-and-real co-trained** checkpoint: trained on both simulation de
 
 ### Workspace Prep
 
-Review the [Safety](/sim-to-real/robot-laboratuvari/calisma-alani#safety) protocol before proceeding.
+Review the [Safety](/sim-to-real/robot-laboratuvari/calisma-alani#set-up-the-light) protocol before proceeding.
 
 1.  **Verify** robot connection: `lerobot-find-port`
 
@@ -203,7 +157,7 @@ Review the [Safety](/sim-to-real/robot-laboratuvari/calisma-alani#safety) protoc
 
 3.  **Ensure** cameras have clear view of workspace and clear any obstacles
 
-4.  **Turn on** the lightbox to suitable brightness (see [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani#lighting-setup) if needed)
+4.  **Turn on** the lightbox to suitable brightness (see [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani#set-up-the-light) if needed)
 
 ### Running Policy Evaluation on the Real Robot
 
@@ -219,24 +173,24 @@ For real robot evaluation, the client is the physical robot.
 
 1.  **Locate** the terminal already running the `real-robot` container.
 
-If you can't find it, click here to see the command to run the container.
+### If you can't find it, click here to see the command to run the container.
 
 If you don't have the `real-robot` container terminal open, **open** a new terminal window (**CTRL+ALT+T**), and run the docker `real-robot` container using:
 
 ```bash
 xhost +
 docker run -it --rm --name real-robot --network host --privileged --gpus all \
-    -e DISPLAY \
-    -v /dev:/dev \
-    -v /run/udev:/run/udev:ro \
-    -v $HOME/.Xauthority:/root/.Xauthority \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
-    -v ~/sim2real/models:/workspace/models \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
-    real-robot \
-    /bin/bash
+-e DISPLAY \
+-v /dev:/dev \
+-v /run/udev:/run/udev:ro \
+-v $HOME/.Xauthority:/root/.Xauthority \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
+-v ~/sim2real/models:/workspace/models \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
+real-robot \
+/bin/bash
 ```
 
 2.  Inside this container, **run** the following. This is where we choose which model to evaluate (co-trained for Strategy 2).
@@ -249,7 +203,7 @@ export MODEL=aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left_
 
 ```bash
 python Isaac-GR00T/gr00t/eval/run_gr00t_server.py \
-    --model-path /workspace/models/$MODEL
+--model-path /workspace/models/$MODEL
 ```
 
 ### Terminal 2 (real-robot container) — Evaluation rollout
@@ -266,17 +220,17 @@ docker exec -it real-robot /bin/bash
 
 ```bash
 python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
-  --robot.type=so101_follower \
-  --robot.port="$ROBOT_PORT" \
-  --robot.id="$ROBOT_ID" \
-  --robot.cameras="{
-      wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
-      front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
-  }" \
-  --policy_host=localhost \
-  --policy_port=5555 \
-  --lang_instruction="Pick up the vial and place it in the yellow rack" \
-  --rerun True
+--robot.type=so101_follower \
+--robot.port="$ROBOT_PORT" \
+--robot.id="$ROBOT_ID" \
+--robot.cameras="{
+  wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
+  front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
+}" \
+--policy_host=localhost \
+--policy_port=5555 \
+--lang_instruction="Pick up the vial and place it in the yellow rack" \
+--rerun True
 ```
 
 :::note
@@ -340,5 +294,3 @@ Keep the policy server running between evaluation attempts. Only restart it if y
 ## What's Next?
 
 Let's try another strategy to address the sim-to-real gap. In the next session, [Sim-to-Real Strategy 3: Augmenting with Cosmos](/sim-to-real/veri-zenginlestirme/strateji-3-cosmos), you'll learn about synthetic data augmentation using Cosmos Transfer 2.5.
-
-On this page

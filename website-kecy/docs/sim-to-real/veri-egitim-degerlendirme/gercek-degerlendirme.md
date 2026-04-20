@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need the calibrated SO-101 robot, both cameras, the assembled workspace, and the `real-robot` container.
 
@@ -49,24 +49,24 @@ For sim, the client is our simulator. For the real robot, our client is the robo
 
 1.  **Locate** the terminal already running the `real-robot` container.
 
-If you can't find it, click here to see the command to run the container.
+### If you can't find it, click here to see the command to run the container.
 
 If you don't have the `real-robot` container terminal open, **open** a new terminal window (**CTRL+ALT+T**), and run the docker `real-robot` container using:
 
 ```bash
 xhost +
 docker run -it --rm --name real-robot --network host --privileged --gpus all \
-    -e DISPLAY \
-    -v /dev:/dev \
-    -v /run/udev:/run/udev:ro \
-    -v $HOME/.Xauthority:/root/.Xauthority \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
-    -v ~/sim2real/models:/workspace/models \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
-    real-robot \
-    /bin/bash
+-e DISPLAY \
+-v /dev:/dev \
+-v /run/udev:/run/udev:ro \
+-v $HOME/.Xauthority:/root/.Xauthority \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
+-v ~/sim2real/models:/workspace/models \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
+real-robot \
+/bin/bash
 ```
 
 2.  Inside this container, **run** the following. This is where we choose which model to evaluate.
@@ -79,7 +79,7 @@ export MODEL=aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left/
 
 ```bash
 python Isaac-GR00T/gr00t/eval/run_gr00t_server.py \
-    --model-path /workspace/models/$MODEL
+--model-path /workspace/models/$MODEL
 ```
 
 ### Terminal 2 (real-robot container) — Evaluation rollout
@@ -96,17 +96,17 @@ docker exec -it real-robot /bin/bash
 
 ```bash
 python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
-  --robot.type=so101_follower \
-  --robot.port="$ROBOT_PORT" \
-  --robot.id="$ROBOT_ID" \
-  --robot.cameras="{
-      wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
-      front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
-  }" \
-  --policy_host=localhost \
-  --policy_port=5555 \
-  --lang_instruction="Pick up the vial and place it in the yellow rack" \
-  --rerun True
+--robot.type=so101_follower \
+--robot.port="$ROBOT_PORT" \
+--robot.id="$ROBOT_ID" \
+--robot.cameras="{
+  wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
+  front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
+}" \
+--policy_host=localhost \
+--policy_port=5555 \
+--lang_instruction="Pick up the vial and place it in the yellow rack" \
+--rerun True
 ```
 
 :::note
@@ -162,5 +162,3 @@ When observing real evaluation runs, notice how perception and actuation differ 
 ## What's Next?
 
 Continue with [Strategy 2: Co-Training With Real Data](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining), where you'll deploy policies trained on mixed simulation and real data to the physical robot.
-
-On this page

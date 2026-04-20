@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need the calibrated SO-101 robot, teleop arm, both cameras, and the Docker container running from [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon).
 
@@ -45,12 +45,12 @@ Now that both arms are calibrated, we're ready to begin teleoperating!
 
 ```bash
 lerobot-teleoperate \
-    --robot.type=so101_follower \
-    --robot.port=$ROBOT_PORT \
-    --robot.id=$ROBOT_ID \
-    --teleop.type=so101_leader \
-    --teleop.port=$TELEOP_PORT \
-    --teleop.id=$TELEOP_ID
+--robot.type=so101_follower \
+--robot.port=$ROBOT_PORT \
+--robot.id=$ROBOT_ID \
+--teleop.type=so101_leader \
+--teleop.port=$TELEOP_PORT \
+--teleop.id=$TELEOP_ID
 ```
 
 2.  **Move** the teleop arm and watch how the robot arm moves to match.
@@ -73,7 +73,7 @@ Each robot workspace today is equipped with **two cameras**:
 
 And because the policy works off of these visual images, camera assignment is critical to policy performance. If they are swapped (gripper cam thinks it's the external cam, or vice versa), the policy will fail.
 
-Why Two Cameras?
+### Why Two Cameras?
 
 The gripper camera becomes occluded after the robot grasps an object like a vial.
 
@@ -100,14 +100,14 @@ Example output:
 ```
 Searching for cameras...
 Found 3 cameras:
-  Camera 0: /dev/video0 (USB 2.0 Camera)
-  Camera 1: /dev/video2 (USB 2.0 Camera)
-  Camera 2: /dev/video4 (Integrated Webcam)
+Camera 0: /dev/video0 (USB 2.0 Camera)
+Camera 1: /dev/video2 (USB 2.0 Camera)
+Camera 2: /dev/video4 (Integrated Webcam)
 
 Capturing test frames...
-  Camera 0: 640x480 @ 30fps - saved to ./camera_test/cam_0.jpg
-  Camera 1: 640x480 @ 30fps - saved to ./camera_test/cam_1.jpg
-  Camera 2: 1280x720 @ 30fps - saved to ./camera_test/cam_2.jpg
+Camera 0: 640x480 @ 30fps - saved to ./camera_test/cam_0.jpg
+Camera 1: 640x480 @ 30fps - saved to ./camera_test/cam_1.jpg
+Camera 2: 1280x720 @ 30fps - saved to ./camera_test/cam_2.jpg
 ```
 
 3.  **Open** a new terminal outside of the docker container.
@@ -173,34 +173,34 @@ Now that we have the camera indices, we can run teleoperation with the real came
 
 ```bash
 lerobot-teleoperate \
-  --robot.type=so101_follower \
-  --robot.port=$ROBOT_PORT \
-  --robot.id=$ROBOT_ID \
-  --teleop.type=so101_leader \
-  --teleop.port=$TELEOP_PORT \
-  --teleop.id=$TELEOP_ID \
-  --display_data=true \
-  --robot.cameras='{
-    "wrist": {
-      "type": "opencv",
-      "index_or_path": '"$CAMERA_GRIPPER"',
-      "width": 640,
-      "height": 480,
-      "fps": 30
-    },
-    "front": {
-      "type": "opencv",
-      "index_or_path": '"$CAMERA_EXTERNAL"',
-      "width": 640,
-      "height": 480,
-      "fps": 30
-    }
-  }'
+--robot.type=so101_follower \
+--robot.port=$ROBOT_PORT \
+--robot.id=$ROBOT_ID \
+--teleop.type=so101_leader \
+--teleop.port=$TELEOP_PORT \
+--teleop.id=$TELEOP_ID \
+--display_data=true \
+--robot.cameras='{
+"wrist": {
+  "type": "opencv",
+  "index_or_path": '"$CAMERA_GRIPPER"',
+  "width": 640,
+  "height": 480,
+  "fps": 30
+},
+"front": {
+  "type": "opencv",
+  "index_or_path": '"$CAMERA_EXTERNAL"',
+  "width": 640,
+  "height": 480,
+  "fps": 30
+}
+}'
 ```
 
-[![Rerun Viewer Teleop Example](/img/sim-to-real/08-calistirma/rerun_viewer_teleop_hq.gif)](/img/sim-to-real/08-calistirma/rerun_viewer_teleop_hq.gif)
+![Rerun Viewer Teleop Example](/img/sim-to-real/08-calistirma/rerun_viewer_teleop_hq.gif)
 
-Rerun Viewer Teleop Example
+_Rerun Viewer Teleop Example_
 
 This will launch the teleoperation interface. You should see two cameras, one on the wrist and one on the front.
 
@@ -231,5 +231,3 @@ We'll spend some time here - try to do several picks. Emphasize smooth, direct m
 ## What's Next?
 
 With your robot ready, apply your first sim-to-real strategy. In the next session, [Sim-to-Real Strategy 1: Domain Randomization With Teleoperation](/sim-to-real/veri-egitim-degerlendirme/strateji-1-domain-randomization), you'll collect demonstrations in simulation with domain randomization.
-
-On this page

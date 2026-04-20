@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 The equipment is listed below - here you will assemble your robot laboratory.
 
@@ -53,7 +53,7 @@ Let's start by building a **white lightbox enclosure** that includes:
 
 ![Vial Rack](/img/sim-to-real/05-calisma-alani/vial_rack.jpg)
 
-Why we use a lightbox
+### Why we use a lightbox
 
 **Limits variables for learning and debugging** A plain, bright enclosure reduces visual noise so the policy can focus on the task-relevant features—gripper, vials, and rack.
 
@@ -73,322 +73,34 @@ We recommend getting the SO-101 pre-assembled, as it comes with a teleop arm and
 
 Approximate cost: $300 USD
 
-| Item
-
-|
-
-Description
-
-|
-
-Model/Specs
-
-|
-
-Quantity
-
-|
-
-Details
-
-|  |
-|  |
-
-|
-
-**SO-101 Robot Arm and Teleop Arm**
-
-|
-
-6-DoF collaborative robot arm (SO-101 or similar)
-
-|
-
-[SO-101](https://shop.wowrobo.com/products/so-arm101-diy-kit-assembled-version-1?variant=46588641706201) package 3, orange
-
-|
-
-1
-
-|
-
-Main robot for pick-and-place task; Teleop arm optional for demonstration recording. We recommend this kit because of the included gripper camera, which will match our datasets. Alternatively, you can [print and build your own SO-101](https://github.com/TheRobotStudio/SO-ARM100)!
-
-|
+| Item | Description | Model/Specs | Quantity | Details |
+| --- | --- | --- | --- | --- |
+| **SO-101 Robot Arm and Teleop Arm** | 6-DoF collaborative robot arm (SO-101 or similar) | [SO-101](https://shop.wowrobo.com/products/so-arm101-diy-kit-assembled-version-1?variant=46588641706201) package 3, orange | 1 | Main robot for pick-and-place task; Teleop arm optional for demonstration recording. We recommend this kit because of the included gripper camera, which will match our datasets. Alternatively, you can [print and build your own SO-101](https://github.com/TheRobotStudio/SO-ARM100)! |
 
 ### Workspace
 
 Approximate cost: $130 USD
 
-| Item
-
-|
-
-Description
-
-|
-
-Model/Specs
-
-|
-
-Quantity
-
-|
-
-Details
-
-|  |
-|  |
-
-|
-
-**Camera (External)**
-
-|
-
-USB webcam, fixed mount, ~78° horizontal FoV
-
-|
-
-[Logitech C920](https://www.amazon.com/Logitech-C920x-Pro-HD-Webcam/dp/B085TFF7M1) or equivalent
-
-|
-
-1
-
-|
-
-Fixed perspective to capture overview of workspace; must be stable and aligned as in simulation.
-
-| |
-
-**Lightbox Enclosure Panels**
-
-|
-
-White foam board box, approx. 30" wide, 20" tall, 20" deep.
-
-|
-
-Assemble from 5 sheets of [20x30" foam board, 3/16" thick](https://www.michaels.com/product/20-x-30-white-foam-board-10110205)
-
-|
-
-5
-
-|
-
-Provides consistent, diffuse lighting and neutral background for images. Other white lightboxes can be substituted. Thicker or thinner foam board works.
-
-| |
-
-**Light Source**
-
-|
-
-LED tube light, diffuse, CRI >90, ~4000K, adjustable
-
-|
-
-[Neewer Dimmable LED Bar](https://www.amazon.com/NEEWER-Inflatable-2700K-5600K-Photography-GC10B/dp/B0DQ7Y8DWX?th=1)
-
-|
-
-1
-
-|
-
-Ensures workspace is brightly and uniformly illuminated.
-
-| |
-
-**Black Work Mat**
-
-|
-
-Foam mat for workspace
-
-|
-
-[Black EVA foam](https://www.michaels.com/product/12-x-18-thick-foam-sheet-by-creatology-10661709)
-
-|
-
-1
-
-|
-
-Non-slip surface for vials and rack; color matches simulation environment.
-
-| |
-
-**Centrifuge Vials**
-
-|
-
-50ml with screw cap, clear plastic
-
-|
-
-[Falcon tube or similar](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1)
-
-|
-
-1-4
-
-|
-
-Props manipulated by robot; clear sides allow for visual consistency with simulation.
-
-| |
-
-**Vial Rack**
-
-|
-
-Yellow, fits 4+ vials, similar to simulation asset
-
-|
-
-3D printed in yellow - models available [here](https://www.printables.com/model/1675961-vial-rack-50ml-centrifuge)
-
-|
-
-1
-
-|
-
-Holds vials upright, target for pick and place. Yellow color to match digital twin is best, as low as 5% infill can work.
-
-| |
-
-**USB-C Charging Block**
-
-|
-
-To power the light
-
-|
-
-[Anker 25W USB-C Charging Block](https://www.amazon.com/gp/product/B0D72DWLZ1/)
-
-|
-
-as needed
-
-|
-
-21W or greater. Sufficient power for all lights and accessories; ensure safety and compliance with device specs.
-
-| |
-
-**USB-C Cable**
-
-|
-
-To power the light
-
-|
-
-[USB-C to USB-C cable, 6ft](https://www.amazon.com/Anker-Charging-MacBook-Galaxy-Charger/dp/B088NRLMPV)
-
-|
-
-1
-
-|
-
-Suggested light above is battery powered, but this will keep it powered
-
-| |
-
-**(optional) Foam board joints**
-
-|
-
-To assemble lightbox
-
-|
-
-3D printed, model [here](https://www.printables.com/model/1652109-foam-board-joints-for-lightbox)
-
-|
-
-8
-
-|
-
-Allows assembly of lightbox without tearing the foam board during disassembly. Alternatively, you can use tape.
-
-|
+| Item | Description | Model/Specs | Quantity | Details |
+| --- | --- | --- | --- | --- |
+| **Camera (External)** | USB webcam, fixed mount, ~78° horizontal FoV | [Logitech C920](https://www.amazon.com/Logitech-C920x-Pro-HD-Webcam/dp/B085TFF7M1) or equivalent | 1 | Fixed perspective to capture overview of workspace; must be stable and aligned as in simulation. |
+| **Lightbox Enclosure Panels** | White foam board box, approx. 30" wide, 20" tall, 20" deep. | Assemble from 5 sheets of [20x30" foam board, 3/16" thick](https://www.michaels.com/product/20-x-30-white-foam-board-10110205) | 5 | Provides consistent, diffuse lighting and neutral background for images. Other white lightboxes can be substituted. Thicker or thinner foam board works. |
+| **Light Source** | LED tube light, diffuse, CRI >90, ~4000K, adjustable | [Neewer Dimmable LED Bar](https://www.amazon.com/NEEWER-Inflatable-2700K-5600K-Photography-GC10B/dp/B0DQ7Y8DWX?th=1) | 1 | Ensures workspace is brightly and uniformly illuminated. |
+| **Black Work Mat** | Foam mat for workspace | [Black EVA foam](https://www.michaels.com/product/12-x-18-thick-foam-sheet-by-creatology-10661709) | 1 | Non-slip surface for vials and rack; color matches simulation environment. |
+| **Centrifuge Vials** | 50ml with screw cap, clear plastic | [Falcon tube or similar](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1) | 1-4 | Props manipulated by robot; clear sides allow for visual consistency with simulation. |
+| **Vial Rack** | Yellow, fits 4+ vials, similar to simulation asset | 3D printed in yellow - models available [here](https://www.printables.com/model/1675961-vial-rack-50ml-centrifuge) | 1 | Holds vials upright, target for pick and place. Yellow color to match digital twin is best, as low as 5% infill can work. |
+| **USB-C Charging Block** | To power the light | [Anker 25W USB-C Charging Block](https://www.amazon.com/gp/product/B0D72DWLZ1/) | as needed | 21W or greater. Sufficient power for all lights and accessories; ensure safety and compliance with device specs. |
+| **USB-C Cable** | To power the light | [USB-C to USB-C cable, 6ft](https://www.amazon.com/Anker-Charging-MacBook-Galaxy-Charger/dp/B088NRLMPV) | 1 | Suggested light above is battery powered, but this will keep it powered |
+| **(optional) Foam board joints** | To assemble lightbox | 3D printed, model [here](https://www.printables.com/model/1652109-foam-board-joints-for-lightbox) | 8 | Allows assembly of lightbox without tearing the foam board during disassembly. Alternatively, you can use tape. |
 
 ### Props
 
 Approximate cost: $20 USD.
 
-| Item
-
-|
-
-Description
-
-|
-
-Model/Specs
-
-|
-
-Quantity
-
-|
-
-Details
-
-|  |
-|  |
-
-|
-
-**Centrifuge Vials**
-
-|
-
-50ml with screw cap, clear plastic
-
-|
-
-[Falcon tube or similar](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1)
-
-|
-
-1-4
-
-|
-
-Props manipulated by robot; clear sides allow for visual consistency with simulation.
-
-| |
-
-**Vial Rack**
-
-|
-
-Yellow, fits 4+ vials, similar to simulation asset
-
-|
-
-3D printed
-
-|
-
-1
-
-|
-
-Holds vials upright; color/shape should closely match digital asset.
-
-|
+| Item | Description | Model/Specs | Quantity | Details |
+| --- | --- | --- | --- | --- |
+| **Centrifuge Vials** | 50ml with screw cap, clear plastic | [Falcon tube or similar](https://www.amazon.com/Kashi-Scientific-Conical-Centrifuge-Graduation/dp/B0C35JV95M?th=1) | 1-4 | Props manipulated by robot; clear sides allow for visual consistency with simulation. |
+| **Vial Rack** | Yellow, fits 4+ vials, similar to simulation asset | 3D printed | 1 | Holds vials upright; color/shape should closely match digital asset. |
 
 ## Build the Workspace
 
@@ -430,48 +142,12 @@ Print the corner assemblies from the BOM link above and snap panels in.
 
 ### Camera Placement Measurements
 
-| Parameter
-
-|
-
-Value
-
-|  |
-|  |
-
-|
-
-**Height**
-
-|
-
-40 cm from base of lightbox
-
-| |
-
-**Distance from back wall**
-
-|
-
-~27 cm from back of robot to center of camera lens
-
-| |
-
-**Lateral offset from back**
-
-|
-
-24 cm from back panel
-
-| |
-
-**Angle**
-
-|
-
-45 deg downward, aimed at the workspace. Make sure the camera has a good view of both the robot, the vials, and the rack.
-
-|
+| Parameter | Value |
+| --- | --- |
+| **Height** | 40 cm from base of lightbox |
+| **Distance from back wall** | ~27 cm from back of robot to center of camera lens |
+| **Lateral offset from back** | 24 cm from back panel |
+| **Angle** | 45 deg downward, aimed at the workspace. Make sure the camera has a good view of both the robot, the vials, and the rack. |
 
 :::tip
 
@@ -497,9 +173,9 @@ Open top — external mount
 
 Clamp or position an external diffuse light above the open top, angled to illuminate the workspace evenly.
 
-[![Turning on and adjusting lightbox lighting](/img/sim-to-real/05-calisma-alani/light-operation.gif)](/img/sim-to-real/05-calisma-alani/light-operation.gif)
+![Turning on and adjusting lightbox lighting](/img/sim-to-real/05-calisma-alani/light-operation.gif)
 
-_Turn on the light and set brightness before teleoperation or policy runs._
+**Turn on the light and set brightness before teleoperation or policy runs.**
 
 1.  **Press** the **power button** on the light.
 
@@ -552,5 +228,3 @@ Re-check this checklist **before** [Real Evaluation](/sim-to-real/veri-egitim-de
 ## What's Next?
 
 With the workspace built and staged, continue to [Get the Code](/sim-to-real/robot-laboratuvari/kod-ve-modeller).
-
-On this page

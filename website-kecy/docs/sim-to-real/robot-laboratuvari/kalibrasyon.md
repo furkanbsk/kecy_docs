@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need the physical SO-101 robot, teleop arm, USB cables, and the assembled workspace from [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani).
 
@@ -37,7 +37,7 @@ By the end of this session, you'll be able to:
 
 ## Safety Guidelines
 
-Review the [Safety](/sim-to-real/robot-laboratuvari/calisma-alani#safety) protocol before powering on the robot.
+Review the [Safety](/sim-to-real/robot-laboratuvari/calisma-alani#set-up-the-light) protocol before powering on the robot.
 
 ## Workspace Setup
 
@@ -80,23 +80,23 @@ Use the LeRobot port finder to find the address assigned to the robot, and to th
 ```bash
 xhost +
 docker run --name teleop -it --privileged --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
-   -e "PRIVACY_CONSENT=Y" \
-   -e DISPLAY \
-   -v /dev:/dev \
-   -v /run/udev:/run/udev:ro \
-   -v $HOME/.Xauthority:/root/.Xauthority \
-   -v ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw \
-   -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
-   -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
-   -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
-   -v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
-   -v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
-   -v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
-   -v ~/docker/isaac-sim/documents:/root/Documents:rw \
-   -v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
-   -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
-   -v ~/sim2real/Sim-to-Real-SO-101-Workshop:/workspace/Sim-to-Real-SO-101-Workshop \
-   teleop-docker:latest
+-e "PRIVACY_CONSENT=Y" \
+-e DISPLAY \
+-v /dev:/dev \
+-v /run/udev:/run/udev:ro \
+-v $HOME/.Xauthority:/root/.Xauthority \
+-v ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw \
+-v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
+-v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
+-v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
+-v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
+-v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
+-v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
+-v ~/docker/isaac-sim/documents:/root/Documents:rw \
+-v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop:/workspace/Sim-to-Real-SO-101-Workshop \
+teleop-docker:latest
 ```
 
 ### Identify the Teleop Arm Port
@@ -183,7 +183,7 @@ The process is the same for both arms, just a slightly different command.
 
 Don't worry, calibrating the SO-101 is a simple process once you've done it a few times.
 
-Why Calibration Matters (expand to read)
+### Why Calibration Matters (expand to read)
 
 Good calibration is essential for sim-to-real transfer. Without it, the policy will not be able to control the robot accurately.
 
@@ -197,18 +197,18 @@ Let's start by calibrating the teleop arm.
 
 ```bash
 lerobot-calibrate \
-    --teleop.type=so101_leader \
-    --teleop.port=$TELEOP_PORT \
-    --teleop.id=$TELEOP_ID
+--teleop.type=so101_leader \
+--teleop.port=$TELEOP_PORT \
+--teleop.id=$TELEOP_ID
 ```
 
 The calibration script output will guide you through the process:
 
 2.  **Move to the middle of the range**: When instructed, manually move each joint to the middle of its range of motion. This is what that looks like:
 
-[![Teleop Arm Calibration Pose Example](/img/sim-to-real/07-kalibrasyon/teleop_arm_neutral_pose.jpg)](/img/sim-to-real/07-kalibrasyon/teleop_arm_neutral_pose.jpg)
+![Teleop Arm Calibration Pose Example](/img/sim-to-real/07-kalibrasyon/teleop_arm_neutral_pose.jpg)
 
-Teleop Arm: Calibration Pose Example
+_Teleop Arm: Calibration Pose Example_
 
 :::info
 
@@ -222,9 +222,9 @@ We added two black dots to the gripper to help you find this position. Otherwise
 
 4.  **Move** each joint through its entire range of motion, moving until the joint stops or hits its end point. You can repeat to make sure you found it.
 
-[![Teleop Arm Calibration Process Animation](/img/sim-to-real/07-kalibrasyon/teleop_calibration.gif)](/img/sim-to-real/07-kalibrasyon/teleop_calibration.gif)
+![Teleop Arm Calibration Process Animation](/img/sim-to-real/07-kalibrasyon/teleop_calibration.gif)
 
-_Animated example: Teleop Arm Calibration process. Move each joint to the center, confirm, then sweep to end stops one by one to complete calibration._
+**Animated example: Teleop Arm Calibration process. Move each joint to the center, confirm, then sweep to end stops one by one to complete calibration.**
 
 5.  **Hit Enter** when done.
 
@@ -246,20 +246,20 @@ This is the same process, the command flags just change to reflect the follower 
 
 ```bash
 lerobot-calibrate \
-    --robot.type=so101_follower \
-    --robot.port=$ROBOT_PORT \
-    --robot.id=$ROBOT_ID
+--robot.type=so101_follower \
+--robot.port=$ROBOT_PORT \
+--robot.id=$ROBOT_ID
 ```
 
 2.  **Move** the robot to the calibration pose. This is what that pose looks like. Each joint is in the middle of its range of motion.
 
 ![](/img/sim-to-real/07-kalibrasyon/calibration_pose.jpg)
 
-Calibration Pose Example
+_Calibration Pose Example_
 
 ![](/img/sim-to-real/07-kalibrasyon/wrist_center.jpg)
 
-Pay particular attention to the wrist axis here. This is what the centered position looks like. This axis uses almost the entire motor rotation, so if it's not properly centered, you may encounter encoder overflow / underflow.
+_Pay particular attention to the wrist axis here. This is what the centered position looks like. This axis uses almost the entire motor rotation, so if it's not properly centered, you may encounter encoder overflow / underflow._
 
 3.  **Press Enter** to begin calibration.
 
@@ -273,9 +273,9 @@ Pay particular attention to the wrist axis here. This is what the centered posit
 
 5.  **Hit Enter** when done.
 
-[![Full SO-101 Calibration Sequence](/img/sim-to-real/07-kalibrasyon/full_so101_calibration.gif)](/img/sim-to-real/07-kalibrasyon/full_so101_calibration.gif)
+![Full SO-101 Calibration Sequence](/img/sim-to-real/07-kalibrasyon/full_so101_calibration.gif)
 
-Full calibration workflow example: moving all joints through their ranges on the SO-101.
+_Full calibration workflow example: moving all joints through their ranges on the SO-101._
 
 The calibration file will then be saved in the `~/.cache/huggingface/lerobot/calibration` directory, using the `type` for the folder name, and the `id` parameter as the filename.
 
@@ -317,35 +317,35 @@ Example output:
 
 ```
 ============================================================================
-  SO101 CALIBRATION CHECK REPORT
-  File:  /root/.cache/huggingface/lerobot/calibration/robots/so101_follower/orange_robot.json
-  Stats: /workspace/Sim-to-Real-SO-101-Workshop/real_robot/calibration_stats.json
+SO101 CALIBRATION CHECK REPORT
+File:  /root/.cache/huggingface/lerobot/calibration/robots/so101_follower/orange_robot.json
+Stats: /workspace/Sim-to-Real-SO-101-Workshop/real_robot/calibration_stats.json
 ============================================================================
 
 [1] Motion Range vs Stats (threshold ±2.0σ)
 
-  Joint               Range     Mean    Std  Deviation    Offset  Status
-  --------------------------------------------------------------------------
-  shoulder_pan         2718     2725     32     -0.23σ      -174  ✓ PASS
-  shoulder_lift        2353     2350     77     +0.04σ       710  ✓ PASS
-  elbow_flex           2230     2222      9     +0.90σ     -1659  ✓ PASS
-  wrist_flex           2331     2329     17     +0.11σ      -330  ✓ PASS
-  wrist_roll           3857     4026    114     -1.48σ      -555  ✓ PASS
-  gripper              1483     1475     33     +0.23σ      -845  ✓ PASS
+Joint               Range     Mean    Std  Deviation    Offset  Status
+--------------------------------------------------------------------------
+shoulder_pan         2718     2725     32     -0.23σ      -174  ✓ PASS
+shoulder_lift        2353     2350     77     +0.04σ       710  ✓ PASS
+elbow_flex           2230     2222      9     +0.90σ     -1659  ✓ PASS
+wrist_flex           2331     2329     17     +0.11σ      -330  ✓ PASS
+wrist_roll           3857     4026    114     -1.48σ      -555  ✓ PASS
+gripper              1483     1475     33     +0.23σ      -845  ✓ PASS
 
 [2] Live Encoder Positions
 
-  Joint               Position    Calibrated Range     In Range
-  --------------------------------------------------------------------------
-  shoulder_pan            2174       857 - 3575       ✓ OK
-  shoulder_lift            888       872 - 3225       ✓ OK
-  elbow_flex              3059       861 - 3091       ✓ OK
-  wrist_flex              1871       838 - 3169       ✓ OK
-  wrist_roll               100       77 - 3934        ✓ OK
-  gripper                 1763      1727 - 3210       ✓ OK
+Joint               Position    Calibrated Range     In Range
+--------------------------------------------------------------------------
+shoulder_pan            2174       857 - 3575       ✓ OK
+shoulder_lift            888       872 - 3225       ✓ OK
+elbow_flex              3059       861 - 3091       ✓ OK
+wrist_flex              1871       838 - 3169       ✓ OK
+wrist_roll               100       77 - 3934        ✓ OK
+gripper                 1763      1727 - 3210       ✓ OK
 
 ============================================================================
-  Overall: ✓ PASS — calibration looks good.
+Overall: ✓ PASS — calibration looks good.
 ============================================================================
 ```
 
@@ -368,5 +368,3 @@ If you need help, see the [Troubleshooting Guide](/sim-to-real/referans/sorun-gi
 ## What's Next?
 
 With both arms calibrated, continue to [Operating the SO-101](/sim-to-real/robot-laboratuvari/calistirma) to teleoperate the robot and configure cameras.
-
-On this page

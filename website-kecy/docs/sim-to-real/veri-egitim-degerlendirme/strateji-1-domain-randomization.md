@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need the `teleop-docker` container, the SO-101 teleop arm, and an NVIDIA GPU for Isaac Lab simulation.
 
@@ -23,9 +23,9 @@ In this module, you'll use the teleop arm to drive a simulated SO-101 robot, all
 
 Because it's simulation, we have control of the world and can manipulate it in interesting ways, like using **domain randomization** to ensure our dataset will be sufficiently varied.
 
-[![Teleoperation in Simulation](/img/sim-to-real/09-strateji-1-domain-randomization/teleop_in_sim.gif)](/img/sim-to-real/09-strateji-1-domain-randomization/teleop_in_sim.gif)
+![Teleoperation in Simulation](/img/sim-to-real/09-strateji-1-domain-randomization/teleop_in_sim.gif)
 
-Teleoperation in Simulation
+_Teleoperation in Simulation_
 
 ## Learning Objectives
 
@@ -45,15 +45,15 @@ Put in simple terms: think about how you might learn to catch a ball.
 
 If you always catch it in the same pose, you might not learn to _reach_ and catch the ball, or hold the glove in different orientations. By varying where the ball is thrown to you when you practice, you will likely learn a better "policy" for catching the ball.
 
-What should we randomize?
+### What should we randomize?
 
 There is no single answer for what to randomize. But a good rule of thumb is to randomize **parameters that are likely to vary in the real world**, or to change in the robot's environment.
 
 Let's analyze what worked well for this case study of the SO-101 with a vial rack.
 
-[![Domain Randomization Example](/img/sim-to-real/09-strateji-1-domain-randomization/teleop-domain-randomization.gif)](/img/sim-to-real/09-strateji-1-domain-randomization/teleop-domain-randomization.gif)
+![Domain Randomization Example](/img/sim-to-real/09-strateji-1-domain-randomization/teleop-domain-randomization.gif)
 
-Domain Randomization Example. Each time the scene is reset, a number of parameters are randomized within given ranges.
+_Domain Randomization Example. Each time the scene is reset, a number of parameters are randomized within given ranges._
 
 **Visual Domain Randomization:**
 
@@ -103,7 +103,7 @@ Strengths and Limitations
 
 In this lesson we'll apply domain randomization during teleoperation. We will use these to perform a kind of robot learning known as _imitation learning_.
 
-Why Imitation Learning? (expand to read)
+### Why Imitation Learning? (expand to read)
 
 Teleoperation enables us to capture human expertise in action, allowing the system to benefit from the natural, intuitive motions people provide when performing tasks.
 
@@ -115,11 +115,9 @@ This process also brings in diversity, as different individuals may approach the
 
 Here is a video of the task:
 
-[![Teleoperation example in the LeRobot Dataset Visualizer](/img/sim-to-real/09-strateji-1-domain-randomization/sim-teleop-example-huggingface.gif)](/img/sim-to-real/09-strateji-1-domain-randomization/sim-teleop-example-huggingface.gif)
+![Teleoperation example in the LeRobot Dataset Visualizer](/img/sim-to-real/09-strateji-1-domain-randomization/sim-teleop-example-huggingface.gif)
 
-Example: Teleoperation of SO-101, being replayed through the LeRobot Dataset Visualizer.
-
-On top are the observations from cameras, and below are the positions of robot joints.
+_Example: Teleoperation of SO-101, being replayed through the LeRobot Dataset Visualizer._
 
 See this dataset on Hugging Face, using the [Dataset Visualizer](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left%2Fepisode_29%3Ft%3D0)
 
@@ -133,28 +131,28 @@ Having trouble with cameras or robot connection? See the [Troubleshooting Guide]
 
 1.  If you still have the `teleop-docker` container's terminal open from the last module, you can skip this step. If not, **expand** the dropdown and **run** the command.
 
-Start the Isaac Sim container used for sim teleop and sim evaluation:
+### Start the Isaac Sim container used for sim teleop and sim evaluation:
 
 ```bash
 xhost +
 docker run --name teleop -it --privileged --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
-   -e "PRIVACY_CONSENT=Y" \
-   -e DISPLAY \
-   -v /dev:/dev \
-   -v /run/udev:/run/udev:ro \
-   -v $HOME/.Xauthority:/root/.Xauthority \
-   -v ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw \
-   -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
-   -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
-   -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
-   -v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
-   -v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
-   -v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
-   -v ~/docker/isaac-sim/documents:/root/Documents:rw \
-   -v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
-   -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
-   -v ~/sim2real/Sim-to-Real-SO-101-Workshop:/workspace/Sim-to-Real-SO-101-Workshop \
-   teleop-docker:latest
+-e "PRIVACY_CONSENT=Y" \
+-e DISPLAY \
+-v /dev:/dev \
+-v /run/udev:/run/udev:ro \
+-v $HOME/.Xauthority:/root/.Xauthority \
+-v ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw \
+-v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
+-v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
+-v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
+-v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
+-v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
+-v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
+-v ~/docker/isaac-sim/documents:/root/Documents:rw \
+-v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop:/workspace/Sim-to-Real-SO-101-Workshop \
+teleop-docker:latest
 ```
 
 ### Practice Teleoperation in Simulation
@@ -171,7 +169,7 @@ echo "Teleop port is ${TELEOP_PORT} with id ${TELEOP_ID}"
 
 If they aren't set, find the ports using `lerobot-find-port` and assign them again:
 
-Example of setting port vars
+### Example of setting port vars
 
 ```bash
 setenv TELEOP_PORT=/dev/ttyACM # !! make sure to update
@@ -225,7 +223,7 @@ By default you'll just see the general perspective camera. Let's fix that.
 
 1.  **Go** to **Window > Viewports**, and **enable** both viewport _Viewport 1_ and _Viewport 2_ so we can see two cameras rendered at once.
 
-![](/img/sim-to-real/09-strateji-1-domain-randomization/enable_second_viewport.png) _\[Görsel kaynakta eksik\]_
+![](/img/sim-to-real/09-strateji-1-domain-randomization/enable_second_viewport.png) _(Görsel kaynakta eksik)_
 
 2.  In one viewport, **go** to the **camera menu**, and **choose** the `gripper_cam`.
 
@@ -305,9 +303,9 @@ For each episode we will:
 
 ```bash
 lerobot_agent --task Lerobot-So101-Teleop-Vials-To-Rack-DR \
-    --repo_id ${HF_USER}/so101_teleop_vials \
-    --repo_root $(pwd)/datasets/so101_teleop_vials \
-    --task_name "Pick up the vial and place it in the rack"
+--repo_id ${HF_USER}/so101_teleop_vials \
+--repo_root $(pwd)/datasets/so101_teleop_vials \
+--task_name "Pick up the vial and place it in the rack"
 ```
 
 2.  **Set up** the window, viewports, and cameras (same as in **Practice Teleoperation**):
@@ -351,9 +349,9 @@ Example terminal output:
 
 ```bash
 lerobot-dataset-viz \
-    --repo-id ${HF_USER}/so101_teleop_vials \
-    --root $(pwd)/datasets/so101_teleop_vials \
-    --episode-index 0
+--repo-id ${HF_USER}/so101_teleop_vials \
+--root $(pwd)/datasets/so101_teleop_vials \
+--episode-index 0
 ```
 
 Change `--episode-index` to view different episodes.
@@ -377,15 +375,15 @@ _File: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
 Randomizes the environment's dome light on each reset—exposure, color temperature, and HDRI texture:
 
 ```python
- 1def randomize_sky_light(
- 2    env,
- 3    env_ids: torch.Tensor | None,
- 4    exposure_range: tuple[float, float],
- 5    temperature_range: tuple[float, float],
- 6    textures_root: str,
- 7    asset_cfg: SceneEntityCfg = None,
- 8):
- 9    # Sample random exposure and color temperature
+1def randomize_sky_light(
+2    env,
+3    env_ids: torch.Tensor | None,
+4    exposure_range: tuple[float, float],
+5    temperature_range: tuple[float, float],
+6    textures_root: str,
+7    asset_cfg: SceneEntityCfg = None,
+8):
+9    # Sample random exposure and color temperature
 10    exposure = math_utils.sample_uniform(*exposure_range, (1,), device="cpu").item()
 11    temperature = math_utils.sample_uniform(*temperature_range, (1,), device="cpu").item()
 12
@@ -406,15 +404,15 @@ _File: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
 Adds small position and rotation offsets to the external camera:
 
 ```python
- 1def randomize_camera_pose(
- 2    env,
- 3    env_ids: torch.Tensor | None,
- 4    prim_path_pattern: str,
- 5    pos_range: dict[str, tuple[float, float]] = None,  # e.g., {"x": (-0.02, 0.02)}
- 6    rot_range: dict[str, tuple[float, float]] = None,  # e.g., {"pitch": (-0.05, 0.05)}
- 7):
- 8    # Sample random offsets relative to USD default pose
- 9    x = base_pos[0] + math_utils.sample_uniform(*pos_range.get("x", (0, 0)), (1,)).item()
+1def randomize_camera_pose(
+2    env,
+3    env_ids: torch.Tensor | None,
+4    prim_path_pattern: str,
+5    pos_range: dict[str, tuple[float, float]] = None,  # e.g., {"x": (-0.02, 0.02)}
+6    rot_range: dict[str, tuple[float, float]] = None,  # e.g., {"pitch": (-0.05, 0.05)}
+7):
+8    # Sample random offsets relative to USD default pose
+9    x = base_pos[0] + math_utils.sample_uniform(*pos_range.get("x", (0, 0)), (1,)).item()
 10    y = base_pos[1] + math_utils.sample_uniform(*pos_range.get("y", (0, 0)), (1,)).item()
 11    z = base_pos[2] + math_utils.sample_uniform(*pos_range.get("z", (0, 0)), (1,)).item()
 12
@@ -430,15 +428,15 @@ _File: `sim_to_real_so101/source/sim_to_real_so101/mdp/resets.py`_
 Randomizes vial and rack positions, with probability of pre-placing vials in slots:
 
 ```python
- 1def reset_vials_rack(
- 2    env,
- 3    env_ids: torch.Tensor,
- 4    vials: list[str],
- 5    rack: str,
- 6    rack_pose_range: dict[str, tuple[float, float]],
- 7    pose_range: dict[str, tuple[float, float]],
- 8    rack_placement_prob: float = 0.33,
- 9):
+1def reset_vials_rack(
+2    env,
+3    env_ids: torch.Tensor,
+4    vials: list[str],
+5    rack: str,
+6    rack_pose_range: dict[str, tuple[float, float]],
+7    pose_range: dict[str, tuple[float, float]],
+8    rack_placement_prob: float = 0.33,
+9):
 10    # Randomize rack position and orientation
 11    new_rack_positions, new_rack_orientations = random_asset_pose(
 12        env, env_ids, rack, rack_pose_range, {}
@@ -463,15 +461,15 @@ _File: `sim_to_real_so101/source/sim_to_real_so101/tasks/task_env_cfg.py`_
 These randomization functions are registered as reset events in the environment config:
 
 ```python
- 1@configclass
- 2class TaskEventCfg(EventCfg):
- 3
- 4    reset_sky_light = EventTerm(
- 5        func=randomize_sky_light,
- 6        mode="reset",
- 7        params={
- 8            "exposure_range": (-4.0, 3.0),
- 9            "temperature_range": (2500.0, 9500.0),
+1@configclass
+2class TaskEventCfg(EventCfg):
+3
+4    reset_sky_light = EventTerm(
+5        func=randomize_sky_light,
+6        mode="reset",
+7        params={
+8            "exposure_range": (-4.0, 3.0),
+9            "temperature_range": (2500.0, 9500.0),
 10            "textures_root": f"{assets_path}/hdri",
 11            "asset_cfg": SceneEntityCfg("sky_light"),
 12        },
@@ -514,80 +512,13 @@ This strategy is useful when we start policy inference, because we can automatic
 
 ### Sim vs. Real Teleoperation Comparison
 
-| Aspect
-
-|
-
-Simulation
-
-|
-
-Real Robot
-
-|  |
-|  |
-
-|
-
-Domain randomization
-
-|
-
-Automatic
-
-|
-
-Manual, limited to what you can physically change in the environment
-
-| |
-
-Data collection speed
-
-|
-
-Faster reset, parallel envs possible
-
-|
-
-Real-time only
-
-| |
-
-Hardware wear
-
-|
-
-None
-
-|
-
-Accumulates over time
-
-| |
-
-Visual diversity
-
-|
-
-Procedural generation
-
-|
-
-Requires manual variation
-
-| |
-
-Physics accuracy
-
-|
-
-Approximated
-
-|
-
-Ground truth
-
-|
+| Aspect | Simulation | Real Robot |
+| --- | --- | --- |
+| Domain randomization | Automatic | Manual, limited to what you can physically change in the environment |
+| Data collection speed | Faster reset, parallel envs possible | Real-time only |
+| Hardware wear | None | Accumulates over time |
+| Visual diversity | Procedural generation | Requires manual variation |
+| Physics accuracy | Approximated | Ground truth |
 
 ### When to Use Each
 
@@ -624,5 +555,3 @@ Ground truth
 ## What's Next?
 
 With augmented demonstrations collected, learn how policies are trained and served. In the next session, [Isaac GR00T: Vision-Language-Action Models](/sim-to-real/veri-egitim-degerlendirme/isaac-groot), you'll study VLAs and the GR00T architecture before running evaluations.
-
-On this page

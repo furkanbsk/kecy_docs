@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need the `teleop-docker` and `real-robot` containers and an NVIDIA GPU for Isaac Lab simulation.
 
@@ -41,9 +41,9 @@ To use GR00T with LeRobot, follow the official [LeRobot GR00T documentation](htt
 
 We used this [dataset of 75 sim demonstrations](https://huggingface.co/datasets/sreetz-nv/so101_teleop_vials_rack_left). View it on Hugging Face with the [dataset visualizer](https://huggingface.co/datasets/sreetz-nv/so101_teleop_vials_rack_left). This is a _sim only_ dataset, meaning it was trained entirely in simulation, without any real-world data. Our first strategy is to rely solely on simulation and domain randomization.
 
-[![Visualization of the SO-101 sim teleop vials-to-rack-left dataset](/img/sim-to-real/11-sim-degerlendirme/lerobot_dataset_visualize_teleop_vials_rack_left.png)](/img/sim-to-real/11-sim-degerlendirme/lerobot_dataset_visualize_teleop_vials_rack_left.png)
+![Visualization of the SO-101 sim teleop vials-to-rack-left dataset](/img/sim-to-real/11-sim-degerlendirme/lerobot_dataset_visualize_teleop_vials_rack_left.png)
 
-_Sample episodes visualized from the sim-only demonstration dataset used for training evaluation policies._
+**Sample episodes visualized from the sim-only demonstration dataset used for training evaluation policies.**
 
 ## Running Policy Evaluation in Simulation
 
@@ -64,17 +64,17 @@ For sim, the client is our simulator. For the real robot, our client is the robo
 ```bash
 xhost +
 docker run -it --rm --name real-robot --network host --privileged --gpus all \
-    -e DISPLAY \
-    -v /dev:/dev \
-    -v /run/udev:/run/udev:ro \
-    -v $HOME/.Xauthority:/root/.Xauthority \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
-    -v ~/sim2real/models:/workspace/models \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
-    real-robot \
-    /bin/bash
+-e DISPLAY \
+-v /dev:/dev \
+-v /run/udev:/run/udev:ro \
+-v $HOME/.Xauthority:/root/.Xauthority \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
+-v ~/sim2real/models:/workspace/models \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
+real-robot \
+/bin/bash
 ```
 
 3.  Inside this container, **run** the following to set which model to evaluate.
@@ -87,7 +87,7 @@ export MODEL=aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left/
 
 ```bash
 python Isaac-GR00T/gr00t/eval/run_gr00t_server.py \
-    --model-path /workspace/models/$MODEL
+--model-path /workspace/models/$MODEL
 ```
 
 5.  When you see `Server is ready and listening on tcp://0.0.0.0:5555` the policy server is ready to accept connections.
@@ -96,39 +96,39 @@ python Isaac-GR00T/gr00t/eval/run_gr00t_server.py \
 
 1.  If you still have the `teleop-docker` container's terminal open from the last module, you can skip this step. If not, **expand** the dropdown and **run** the command.
 
-Start the Isaac Sim container used for sim teleop and sim evaluation:
+### Start the Isaac Sim container used for sim teleop and sim evaluation:
 
 ```bash
 xhost +
 docker run --name teleop -it --privileged --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
-   -e "PRIVACY_CONSENT=Y" \
-   -e DISPLAY \
-   -v /dev:/dev \
-   -v /run/udev:/run/udev:ro \
-   -v $HOME/.Xauthority:/root/.Xauthority \
-   -v ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw \
-   -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
-   -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
-   -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
-   -v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
-   -v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
-   -v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
-   -v ~/docker/isaac-sim/documents:/root/Documents:rw \
-   -v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
-   -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
-   -v ~/sim2real/Sim-to-Real-SO-101-Workshop:/workspace/Sim-to-Real-SO-101-Workshop \
-   teleop-docker:latest
+-e "PRIVACY_CONSENT=Y" \
+-e DISPLAY \
+-v /dev:/dev \
+-v /run/udev:/run/udev:ro \
+-v $HOME/.Xauthority:/root/.Xauthority \
+-v ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw \
+-v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
+-v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
+-v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
+-v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
+-v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
+-v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
+-v ~/docker/isaac-sim/documents:/root/Documents:rw \
+-v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop:/workspace/Sim-to-Real-SO-101-Workshop \
+teleop-docker:latest
 ```
 
 2.  This command will begin moving the robot in simulation, using an environment with less lighting variation to start.
 
 ```bash
 lerobot_eval \
-    --task Lerobot-So101-Teleop-Vials-To-Rack-Eval \
-    --rename_map '{"external_D455": "front", "ego": "wrist"}' \
-    --action_horizon 16 \
-    --lang_instruction "Pick up the vial and place it in the yellow rack" \
-    --rerun
+--task Lerobot-So101-Teleop-Vials-To-Rack-Eval \
+--rename_map '{"external_D455": "front", "ego": "wrist"}' \
+--action_horizon 16 \
+--lang_instruction "Pick up the vial and place it in the yellow rack" \
+--rerun
 ```
 
 This will launch both Isaac Sim, and Rerun.
@@ -145,11 +145,11 @@ It adds Rerun into the loop for debugging, so you can see joint actions and the 
 
 ```bash
 lerobot_eval \
-    --task Lerobot-So101-Teleop-Vials-To-Rack-Eval \
-    --rename_map '{"external_D455": "front", "ego": "wrist"}' \
-    --action_horizon 16 \
-    --lang_instruction "Pick up the vial and place it in the yellow rack" \
-    --headless
+--task Lerobot-So101-Teleop-Vials-To-Rack-Eval \
+--rename_map '{"external_D455": "front", "ego": "wrist"}' \
+--action_horizon 16 \
+--lang_instruction "Pick up the vial and place it in the yellow rack" \
+--headless
 ```
 
 ### Watching the Evaluation
@@ -160,7 +160,7 @@ Depending on how much the vials roll around, and how dark the lighting is, expec
 
 Remember this dataset has a fairly low number of demonstrations (75 pick and place demos), so the policy may not be able to generalize as much as we'd ultimately need.
 
-[![Visualization of the Evaluation rollout](/img/sim-to-real/11-sim-degerlendirme/sim-eval-rollout.gif)](/img/sim-to-real/11-sim-degerlendirme/sim-eval-rollout.gif)
+![Visualization of the Evaluation rollout](/img/sim-to-real/11-sim-degerlendirme/sim-eval-rollout.gif)
 
 Example output:
 
@@ -179,10 +179,10 @@ You can use that evaluation environment by running this command instead:
 
 ```bash
 lerobot_eval \
-    --task Lerobot-So101-Teleop-Vials-To-Rack-DR-Eval \
-    --rename_map '{"external_D455": "front", "ego": "wrist"}' \
-    --action_horizon 16 \
-    --lang_instruction "Pick up the vial and place it in the yellow rack"
+--task Lerobot-So101-Teleop-Vials-To-Rack-DR-Eval \
+--rename_map '{"external_D455": "front", "ego": "wrist"}' \
+--action_horizon 16 \
+--lang_instruction "Pick up the vial and place it in the yellow rack"
 ```
 
 ### Cleanup
@@ -218,5 +218,3 @@ When observing evaluation runs, notice the failure modes. Remember that this pol
 ## What's Next?
 
 Confirm your physical setup still matches [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani), then continue with [Real Evaluation](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme) to run the same policy on the physical SO-101 and observe the sim-to-real gap.
-
-On this page

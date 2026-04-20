@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Mostly theory with code examples. No additional hardware is required beyond a computer with the `real-robot` container built.
 
@@ -59,68 +59,12 @@ GR00T N1.6 represents a significant upgrade over N1.5, with improvements in both
 
 **Architectural Changes:**
 
-| Component
-
-|
-
-N1.5
-
-|
-
-N1.6
-
-|  |
-|  |
-
-|
-
-Base VLM
-
-|
-
-Standard
-
-|
-
-Cosmos-Reason-2B variant with flexible resolution
-
-| |
-
-DiT layers
-
-|
-
-16
-
-|
-
-32 (2x larger)
-
-| |
-
-Post-VLM adapter
-
-|
-
-4-layer transformer
-
-|
-
-Removed; unfreezes top 4 VLM layers
-
-| |
-
-Action format
-
-|
-
-Absolute joint angles/EEF
-
-|
-
-State-relative action chunks
-
-|
+| Component | N1.5 | N1.6 |
+| --- | --- | --- |
+| Base VLM | Standard | Cosmos-Reason-2B variant with flexible resolution |
+| DiT layers | 16 | 32 (2x larger) |
+| Post-VLM adapter | 4-layer transformer | Removed; unfreezes top 4 VLM layers |
+| Action format | Absolute joint angles/EEF | State-relative action chunks |
 
 ### Case Study: Zero-Shot Transfer Improvement
 
@@ -128,9 +72,7 @@ GR00T has already released several iterations, each with significant improvement
 
 **Task**: Pick vials from a mat and place them on a rack (sim-only training data)
 
-_\[Görsel (kaynakta eksik): N1.5 vs N1.6 zero-shot transfer comparison\]_
-
-\[Placeholder: Side-by-side comparison of N1.5 and N1.6 attempting the mat-to-rack task\]
+_\[Placeholder: Side-by-side comparison of N1.5 and N1.6 attempting the mat-to-rack task\]_
 
 This demonstrates how foundation model improvements can reduce the sim-to-real gap even without task-specific real data.
 
@@ -265,56 +207,11 @@ The `action_horizon` parameter controls how many future actions the model predic
 
 **Trade-offs:**
 
-| Horizon
-
-|
-
-Pros
-
-|
-
-Cons
-
-|  |
-|  |
-
-|
-
-Short (4-8)
-
-|
-
-More reactive, corrects quickly
-
-|
-
-Choppy motion, frequent replanning
-
-| |
-
-Medium (16)
-
-|
-
-Balanced smoothness and reactivity
-
-|
-
-Good default for most tasks
-
-| |
-
-Long (32+)
-
-|
-
-Very smooth trajectories
-
-|
-
-Slow to correct errors, may overshoot
-
-|
+| Horizon | Pros | Cons |
+| --- | --- | --- |
+| Short (4-8) | More reactive, corrects quickly | Choppy motion, frequent replanning |
+| Medium (16) | Balanced smoothness and reactivity | Good default for most tasks |
+| Long (32+) | Very smooth trajectories | Slow to correct errors, may overshoot |
 
 :::tip
 
@@ -335,23 +232,23 @@ DATASET_PATH= #set path to your model
 
 # torchrun --nproc_per_node=$NUM_GPUS --master_port=29500 \
 CUDA_VISIBLE_DEVICES=0 python \
-    gr00t/experiment/launch_finetune.py \
-    --base_model_path nvidia/GR00T-N1.6-3B \
-    --dataset_path $DATASET_PATH \
-    --modality_config_path examples/SO100/so100_config.py \
-    --embodiment_tag NEW_EMBODIMENT \
-    --num_gpus $NUM_GPUS \
-    --output_dir /tmp/so100_finetune \
-    --save_steps 1000 \
-    --save_total_limit 5 \
-    --max_steps 10000 \
-    --warmup_ratio 0.05 \
-    --weight_decay 1e-5 \
-    --learning_rate 1e-4 \
-    --use_wandb \
-    --global_batch_size 32 \
-    --color_jitter_params brightness 0.3 contrast 0.4 saturation 0.5 hue 0.08 \
-    --dataloader_num_workers 4
+gr00t/experiment/launch_finetune.py \
+--base_model_path nvidia/GR00T-N1.6-3B \
+--dataset_path $DATASET_PATH \
+--modality_config_path examples/SO100/so100_config.py \
+--embodiment_tag NEW_EMBODIMENT \
+--num_gpus $NUM_GPUS \
+--output_dir /tmp/so100_finetune \
+--save_steps 1000 \
+--save_total_limit 5 \
+--max_steps 10000 \
+--warmup_ratio 0.05 \
+--weight_decay 1e-5 \
+--learning_rate 1e-4 \
+--use_wandb \
+--global_batch_size 32 \
+--color_jitter_params brightness 0.3 contrast 0.4 saturation 0.5 hue 0.08 \
+--dataloader_num_workers 4
 ```
 
 ## Practical Considerations
@@ -403,5 +300,3 @@ GR00T training benefits from:
 ## What's Next?
 
 Now that you understand VLAs conceptually, run policy evaluation in simulation. In the next session, [Sim Evaluation](/sim-to-real/veri-egitim-degerlendirme/sim-degerlendirme), you'll compare policies in sim using open-loop and closed-loop evaluation.
-
-On this page

@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need the calibrated SO-101 robot, both cameras, the assembled workspace, and the `real-robot` container.
 
@@ -55,10 +55,10 @@ Cosmos is NVIDIA's world foundation model for physical AI. It can:
 
 ```
 Input: Robot demonstration video + prompt
-       "Same task, different lighting, different vial positions"
+   "Same task, different lighting, different vial positions"
 
 Cosmos generates: Multiple variations of the scenario
-                  with consistent physics and new visual appearance
+              with consistent physics and new visual appearance
 
 Output: Augmented training data with diverse conditions
 ```
@@ -68,30 +68,30 @@ Prompt:
 ```
 prompt: Photorealistic first-person view from a robotic arm's orange claw-like gripper. The prongs are visible at the bottom edge, hovering over a heavily corroded, textured rusty steel plate showing oxidation and wear mat. To the left is a yellow rectangular vial rack; to the right, two white opaque centrifuge tubes with blue caps, filled with a white substance, lie horizontally. Plain white wall background with {bright, diffused clinical LED lighting. Sharp macro focus, realistic plastic finishes, and fluid mechanical motion.
 {
-  "name": "so101",
-  "prompt_path": "prompt_test2.txt",
-  "video_path": "ego_rgb_001.mp4",
-  "guidance": 3,
-  "depth": {
-    "control_weight": 0.2,
-    "control_path": "ego_depth_001.mp4"
-  },
-  "edge": {
-    "control_weight": 1.0
-  },
-  "seg": {
-    "control_weight": 0.3,
-    "control_path": "ego_instance_id_segmentation_001.mp4"
-  },
-  "vis": {
-    "control_weight": 0.1
-  }
+"name": "so101",
+"prompt_path": "prompt_test2.txt",
+"video_path": "ego_rgb_001.mp4",
+"guidance": 3,
+"depth": {
+"control_weight": 0.2,
+"control_path": "ego_depth_001.mp4"
+},
+"edge": {
+"control_weight": 1.0
+},
+"seg": {
+"control_weight": 0.3,
+"control_path": "ego_instance_id_segmentation_001.mp4"
+},
+"vis": {
+"control_weight": 0.1
+}
 }
 ```
 
-[![Cosmos Augmentation Example 1](/img/sim-to-real/14-strateji-3-cosmos/cosmos-augment-1.gif)](/img/sim-to-real/14-strateji-3-cosmos/cosmos-augment-1.gif)
+![Cosmos Augmentation Example 1](/img/sim-to-real/14-strateji-3-cosmos/cosmos-augment-1.gif)
 
-Cosmos Augmentation Example 1
+_Cosmos Augmentation Example 1_
 
 ### Key Capabilities
 
@@ -145,48 +145,14 @@ See the [Troubleshooting Guide](/sim-to-real/referans/sorun-giderme) for help wi
 
 We have two Cosmos-augmented policies to test. Set `MODEL` in Terminal 1 to the checkpoint you want to evaluate:
 
-| Training Data Mix
-
-|
-
-Visualize Dataset
-
-|
-
-Model Checkpoint
-
-|  |
-|  |
-
-|
-
-75 sim episodes + 7 Cosmos-augmented episodes
-
-|
-
-[visualize on Hugging Face](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_augment_02%2Fepisode_75)
-
-|
-
-[aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02/](https://huggingface.co/aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02)
-
-| |
-
-75 sim episodes + 70 Cosmos-augmented episodes
-
-|
-
-[visualize on Hugging Face](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_cosmos_70%2Fepisode_75)
-
-|
-
-[aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70](https://huggingface.co/aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70)
-
-|
+| Training Data Mix | Visualize Dataset | Model Checkpoint |
+| --- | --- | --- |
+| 75 sim episodes + 7 Cosmos-augmented episodes | [visualize on Hugging Face](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_augment_02%2Fepisode_75) | [aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02/](https://huggingface.co/aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02) |
+| 75 sim episodes + 70 Cosmos-augmented episodes | [visualize on Hugging Face](https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fsreetz-nv%2Fso101_teleop_vials_rack_left_cosmos_70%2Fepisode_75) | [aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70](https://huggingface.co/aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70) |
 
 ### Workspace Prep
 
-Same as Strategy 2: verify robot connection, place vials and rack, ensure cameras have a clear view, turn on the lightbox. See [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani), [Strategy 2: Workspace prep](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining#workspace-prep), and [Real Evaluation: Workspace prep](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme#workspace-prep).
+Same as Strategy 2: verify robot connection, place vials and rack, ensure cameras have a clear view, turn on the lightbox. See [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani), [Strategy 2: Workspace prep](/sim-to-real/veri-zenginlestirme/strateji-2-cotraining#workspace-prep), and [Real Evaluation: Workspace prep](/sim-to-real/veri-egitim-degerlendirme/gercek-degerlendirme).
 
 ### Running Policy Evaluation on the Real Robot
 
@@ -202,24 +168,24 @@ For real robot evaluation, the client is the physical robot.
 
 1.  **Locate** the terminal already running the `real-robot` container.
 
-If you can't find it, click here to see the command to run the container.
+### If you can't find it, click here to see the command to run the container.
 
 If you don't have the `real-robot` container terminal open, **open** a new terminal window (**CTRL+ALT+T**), and run the docker `real-robot` container using:
 
 ```bash
 xhost +
 docker run -it --rm --name real-robot --network host --privileged --gpus all \
-    -e DISPLAY \
-    -v /dev:/dev \
-    -v /run/udev:/run/udev:ro \
-    -v $HOME/.Xauthority:/root/.Xauthority \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
-    -v ~/sim2real/models:/workspace/models \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
-    -v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
-    real-robot \
-    /bin/bash
+-e DISPLAY \
+-v /dev:/dev \
+-v /run/udev:/run/udev:ro \
+-v $HOME/.Xauthority:/root/.Xauthority \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v ~/.cache/huggingface/lerobot/calibration:/root/.cache/huggingface/lerobot/calibration \
+-v ~/sim2real/models:/workspace/models \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/env:/root/env \
+-v ~/sim2real/Sim-to-Real-SO-101-Workshop/docker/real/scripts:/Isaac-GR00T/gr00t/eval/real_robot/SO100 \
+real-robot \
+/bin/bash
 ```
 
 2.  Inside this container, **run** the following. Set `MODEL` to the Cosmos-augmented checkpoint you want to test (e.g. 75+70 Cosmos).
@@ -232,7 +198,7 @@ export MODEL=aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70
 
 ```bash
 python Isaac-GR00T/gr00t/eval/run_gr00t_server.py \
-    --model-path /workspace/models/$MODEL
+--model-path /workspace/models/$MODEL
 ```
 
 ### Terminal 2 (real-robot container) — Evaluation rollout
@@ -249,17 +215,17 @@ docker exec -it real-robot /bin/bash
 
 ```bash
 python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
-  --robot.type=so101_follower \
-  --robot.port="$ROBOT_PORT" \
-  --robot.id="$ROBOT_ID" \
-  --robot.cameras="{
-      wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
-      front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
-  }" \
-  --policy_host=localhost \
-  --policy_port=5555 \
-  --lang_instruction="Pick up the vial and place it in the yellow rack" \
-  --rerun True
+--robot.type=so101_follower \
+--robot.port="$ROBOT_PORT" \
+--robot.id="$ROBOT_ID" \
+--robot.cameras="{
+  wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
+  front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
+}" \
+--policy_host=localhost \
+--policy_port=5555 \
+--lang_instruction="Pick up the vial and place it in the yellow rack" \
+--rerun True
 ```
 
 :::note
@@ -308,17 +274,17 @@ python Isaac-GR00T/gr00t/eval/run_gr00t_server.py --model-path /workspace/models
 
 ```bash
 python Isaac-GR00T/gr00t/eval/real_robot/SO100/so101_eval.py \
-  --robot.type=so101_follower \
-  --robot.port="$ROBOT_PORT" \
-  --robot.id="$ROBOT_ID" \
-  --robot.cameras="{
-      wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
-      front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
-  }" \
-  --policy_host=localhost \
-  --policy_port=5555 \
-  --lang_instruction="Pick up the vial and place it in the yellow rack" \
-  --rerun True
+--robot.type=so101_follower \
+--robot.port="$ROBOT_PORT" \
+--robot.id="$ROBOT_ID" \
+--robot.cameras="{
+  wrist:  {type: opencv, index_or_path: $CAMERA_GRIPPER, width: 640, height: 480, fps: 30},
+  front:  {type: opencv, index_or_path: $CAMERA_EXTERNAL, width: 640, height: 480, fps: 30}
+}" \
+--policy_host=localhost \
+--policy_port=5555 \
+--lang_instruction="Pick up the vial and place it in the yellow rack" \
+--rerun True
 ```
 
 :::note
@@ -358,5 +324,3 @@ After running the Cosmos-augmented policy, compare with your notes from Strategy
 ## What's Next?
 
 We have not measured or addressed the actuation gap. In the next session, [Sim-to-Real Strategy 4: SAGE + GapONet](/sim-to-real/aktuator-bosluk/strateji-4-sage), you'll learn to systematically measure and close the actuation gap.
-
-On this page

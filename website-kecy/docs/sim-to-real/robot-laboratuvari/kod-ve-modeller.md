@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Hands-on. You'll need a computer with Docker and an NVIDIA GPU (Ada or Blackwell architecture).
 
@@ -74,16 +74,16 @@ mkdir -p models
 
 ```bash
 hf download aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left \
-  --local-dir ./models/aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left
+--local-dir ./models/aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left
 
 hf download aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left_sim_and_real \
-  --local-dir ./models/aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left_sim_and_real
+--local-dir ./models/aravindhs-NV/grootn16-finetune_sreetz-so101_teleop_vials_rack_left_sim_and_real
 
 hf download aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02 \
-  --local-dir ./models/aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02
+--local-dir ./models/aravindhs-NV/sreetz-so101_teleop_vials_rack_left_augment_02
 
 hf download aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70 \
-  --local-dir ./models/aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70
+--local-dir ./models/aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70
 ```
 
 ## What's Next?
@@ -91,5 +91,3 @@ hf download aravindhs-NV/so100-orig-groot-vials-rack-left-cosmos-70 \
 Next we'll calibrate and start running our robot!
 
 Continue to [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon).
-
-On this page

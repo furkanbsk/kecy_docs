@@ -39,68 +39,12 @@ This session provides time for remaining questions, continued experimentation, a
 
 ### The Four Strategies We Covered
 
-| Strategy
-
-|
-
-Approach
-
-|
-
-Key Benefit
-
-|  |
-|  |
-
-|
-
-**1\. Domain Randomization**
-
-|
-
-Vary simulation parameters
-
-|
-
-Robust to physics variations
-
-| |
-
-**2\. Co-training**
-
-|
-
-Mix sim and real data
-
-|
-
-Better real-world distribution
-
-| |
-
-**3\. Cosmos Augmentation**
-
-|
-
-Synthetic visual diversity
-
-|
-
-Robust to visual variations
-
-| |
-
-**4\. SAGE + GapONet**
-
-|
-
-Measure and model the gap
-
-|
-
-Targeted actuation fixes
-
-|
+| Strategy | Approach | Key Benefit |
+| --- | --- | --- |
+| **1\. Domain Randomization** | Vary simulation parameters | Robust to physics variations |
+| **2\. Co-training** | Mix sim and real data | Better real-world distribution |
+| **3\. Cosmos Augmentation** | Synthetic visual diversity | Robust to visual variations |
+| **4\. SAGE + GapONet** | Measure and model the gap | Targeted actuation fixes |
 
 ### Key Lessons
 
@@ -155,5 +99,3 @@ We hope this will enable and inspire you to keep learning and practicing your sk
 Taking a few minutes to fill out our survey gives us valuable feedback to improve the course for future participants.
 
 If you have any feedback, suggestions, or ran into issues, please visit this [survey](https://surveys.hotjar.com/98510484-7ad7-4ddc-bfc4-1b7663827216?utm_source=%5BSim-to-Real-SO-101-Workshop%5D).
-
-On this page

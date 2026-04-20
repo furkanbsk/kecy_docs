@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Nothing — this module is theory-only.
 
@@ -41,15 +41,15 @@ While we colloquially refer to the SO-101 as a single robot, it's typically sold
 
 - **Robot arm** (also called the "follower"): During teleoperation it mirrors the teleop arm; during evaluation it is driven by a policy.
 
-[![SO-101 Follower Arm](/img/sim-to-real/04-lerobot/SO101_follower.jpg)](/img/sim-to-real/04-lerobot/SO101_follower.jpg)
+![SO-101 Follower Arm](/img/sim-to-real/04-lerobot/SO101_follower.jpg)
 
-SO-101 Robot, also known as the "follower arm".
+_SO-101 Robot, also known as the "follower arm"._
 
 The typical kit also includes a teleoperation arm, which is used to control either simulated robots or the "follower" arm.
 
-[![SO-101 Leader Arm](/img/sim-to-real/04-lerobot/SO101_leader.jpg)](/img/sim-to-real/04-lerobot/SO101_leader.jpg)
+![SO-101 Leader Arm](/img/sim-to-real/04-lerobot/SO101_leader.jpg)
 
-SO-101 Teleoperation Arm, also known as the "leader arm" or "teleop arm". Notice the gripper on the end of the arm for your hand to manipulate the robot.
+_SO-101 Teleoperation Arm, also known as the "leader arm" or "teleop arm". Notice the gripper on the end of the arm for your hand to manipulate the robot._
 
 ### Joint Configuration
 
@@ -123,8 +123,8 @@ LeRobot wraps established training pipelines (including NVIDIA Isaac GR00T, Smol
 # Example command
 # Fine-tune a policy on your data
 python lerobot/scripts/train.py \
-    --policy.type=gr00t \
-    --dataset.repo_id=${HF_USER}/my_dataset
+--policy.type=gr00t \
+--dataset.repo_id=${HF_USER}/my_dataset
 ```
 
 You spend time on your task, not on infrastructure.
@@ -137,9 +137,9 @@ The same framework used for data collection handles policy deployment:
 # Example command
 # Evaluate a trained policy on the real robot
 lerobot-eval \
-    --robot.type=so101_follower \
-    --robot.port=$ROBOT_PORT \
-    --policy_path ${HF_USER}/my_trained_policy
+--robot.type=so101_follower \
+--robot.port=$ROBOT_PORT \
+--policy_path ${HF_USER}/my_trained_policy
 ```
 
 This closes the loop: collect data → train → deploy → evaluate → iterate. All within one system.
@@ -229,5 +229,3 @@ Evaluation results and policy checkpoints were shared via the Hub. Trained model
 ## What's Next?
 
 Next, [Building the Workspace](/sim-to-real/robot-laboratuvari/calisma-alani) walks through assembling and lighting the physical lightbox and task props. After that, [Calibrating the SO-101](/sim-to-real/robot-laboratuvari/kalibrasyon) covers power-on and calibration, and [Operating the SO-101](/sim-to-real/robot-laboratuvari/calistirma) covers teleoperation and camera setup.
-
-On this page

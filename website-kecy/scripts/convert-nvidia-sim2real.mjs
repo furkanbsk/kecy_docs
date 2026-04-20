@@ -65,6 +65,21 @@ function rewriteAssetHref(ref, pageUrl, assetMap) {
 
 // Rewrite internal links like "10-groot.html" → "/sim-to-real/veri-egitim-.../isaac-groot"
 // Keeps URL fragment (#foo). Returns null if target not in manifest.
+//
+// NVIDIA's source has a handful of cross-page anchors that point at IDs
+// that don't exist in the target page (bug on their side). Map those to
+// the nearest valid section, or drop the fragment, to keep the build
+// `onBrokenAnchors: 'throw'` clean.
+const BAD_ANCHOR_REMAP = {
+  // 05-building-workspace.html has no "#safety" or "#lighting-setup".
+  '05-building-workspace.html#safety':
+    '05-building-workspace.html#set-up-the-light',
+  '05-building-workspace.html#lighting-setup':
+    '05-building-workspace.html#set-up-the-light',
+  // 12-real-evaluation.html has no "#workspace-prep".
+  '12-real-evaluation.html#workspace-prep': '12-real-evaluation.html',
+};
+
 function rewriteInternalLink(href) {
   if (!href) return null;
   if (/^(https?:|mailto:|data:)/i.test(href)) return null;
@@ -77,9 +92,21 @@ function rewriteInternalLink(href) {
   // Strip leading "./" or any path prefix — we only match on basename
   const basename = pathPart.split('/').pop();
   if (!basename.endsWith('.html')) return null;
-  const slug = SLUG_BY_SOURCE_PATH.get(basename);
+
+  // Check the bad-anchor remap first (keyed by basename#frag)
+  const key = frag ? `${basename}#${frag}` : basename;
+  const remapped = BAD_ANCHOR_REMAP[key];
+  let effectiveBase = basename;
+  let effectiveFrag = frag;
+  if (remapped) {
+    const [rbase, rfrag] = remapped.split('#');
+    effectiveBase = rbase;
+    effectiveFrag = rfrag || null;
+  }
+
+  const slug = SLUG_BY_SOURCE_PATH.get(effectiveBase);
   if (!slug) return null;
-  return frag ? `${slug}#${frag}` : slug;
+  return effectiveFrag ? `${slug}#${effectiveFrag}` : slug;
 }
 
 // ---------- admonition map ----------
@@ -100,7 +127,10 @@ const ADMONITION_TYPE = {
 
 function preprocess(html, page, assetMap) {
   const $ = cheerio.load(html, {decodeEntities: true});
-  const article = $('article, [role="main"]').first();
+  // Prefer <article> specifically. `<main role="main">` includes the
+  // right-hand "On this page" TOC sidebar and we don't want that leaking.
+  let article = $('article').first();
+  if (!article.length) article = $('[role="main"]').first();
   if (!article.length) {
     throw new Error(`No <article> found for ${page.sourceId}`);
   }
@@ -149,10 +179,11 @@ function preprocess(html, page, assetMap) {
       $img.removeAttr('data-src');
     } else {
       // Unresolved relative asset — emit a visible note instead of a broken <img>.
+      // Avoid square brackets: Turndown escapes them as `\[ \]` which is ugly.
       const note = alt
-        ? `[Görsel (kaynakta eksik): ${alt}]`
-        : `[Görsel kaynakta eksik]`;
-      $img.replaceWith(`<em>${escapeHtml(note)}</em>`);
+        ? `Görsel kaynakta eksik — ${alt}`
+        : `Görsel kaynakta eksik`;
+      $img.replaceWith(`<em>(${escapeHtml(note)})</em>`);
     }
   });
 
@@ -183,6 +214,76 @@ function preprocess(html, page, assetMap) {
     if (slug) {
       $a.attr('href', slug);
     }
+  });
+
+  // ------------------------------------------------------------------
+  // Sphinx-design <details class="sd-dropdown">: flatten to H3 + body.
+  // Docusaurus can render raw <details> but the content then lives behind
+  // a click; since this is an educational site we want it visible inline.
+  // ------------------------------------------------------------------
+  $root
+    .find('details.sd-dropdown, details.sd-sphinx-override')
+    .each((_, el) => {
+      const $det = $(el);
+      const $sum = $det.find('> summary, > .sd-summary-title').first();
+      const titleText =
+        $sum.find('.sd-summary-text').first().text().trim() ||
+        $sum
+          .clone()
+          .find('svg, .sd-summary-state-marker')
+          .remove()
+          .end()
+          .text()
+          .trim();
+      $sum.remove();
+      // Body may be wrapped in .sd-summary-content — unwrap to root.
+      const $body = $det.find('> .sd-summary-content').first();
+      const bodyHtml = $body.length ? $body.html() || '' : $det.html() || '';
+      const safeTitle = titleText ? `<h3>${escapeHtml(titleText)}</h3>` : '';
+      $det.replaceWith(`${safeTitle}\n${bodyHtml}`);
+    });
+
+  // ------------------------------------------------------------------
+  // Sphinx-design cards (<div class="sd-card">): flatten to img + caption.
+  // ------------------------------------------------------------------
+  $root.find('.sd-card').each((_, el) => {
+    const $card = $(el);
+    const $img = $card.find('img.sd-card-img-top, img').first();
+    const $txt = $card.find('.sd-card-text, .sd-card-body p').first();
+    const parts = [];
+    if ($img.length) parts.push($.html($img));
+    if ($txt.length) parts.push(`<p><em>${$txt.html() || ''}</em></p>`);
+    $card.replaceWith(parts.join('\n'));
+  });
+
+  // ------------------------------------------------------------------
+  // <figure> / <figcaption>: flatten to image + italic caption.
+  // ------------------------------------------------------------------
+  $root.find('figure').each((_, el) => {
+    const $fig = $(el);
+    const $img = $fig.find('img').first();
+    const $cap = $fig.find('figcaption').first();
+    const capHtml = $cap.length
+      ? $cap.find('.caption-text').html() || $cap.html() || ''
+      : '';
+    const parts = [];
+    if ($img.length) parts.push($.html($img));
+    if (capHtml) parts.push(`<p><em>${capHtml}</em></p>`);
+    $fig.replaceWith(parts.join('\n'));
+  });
+
+  // ------------------------------------------------------------------
+  // Tables: unwrap <p> inside <td>/<th> so GFM tables render properly.
+  // Sphinx wraps every cell in <p>, and turndown-plugin-gfm can't cope.
+  // ------------------------------------------------------------------
+  $root.find('table td, table th').each((_, el) => {
+    const $cell = $(el);
+    $cell.find('p').each((__, p) => {
+      const $p = $(p);
+      // Replace <p>X</p> with just X (inline) — if there are multiple <p>,
+      // join them with <br> to preserve paragraph separation within a cell.
+      $p.replaceWith($p.html() || '');
+    });
   });
 
   // Wrap admonitions with sentinels that Turndown preserves (custom tags
@@ -316,6 +417,46 @@ function normalizeWhitespace(md) {
   return out.trim() + '\n';
 }
 
+// Fix code fences that Turndown produced inside list items: our custom rule
+// emits a flush-left `\`\`\`` opener, but Turndown then walks the resulting
+// text back through its list processor and indents everything by 4 spaces —
+// which indents the closing fence but leaves the opener alone. Normalize
+// any mismatched pair to a flush-left block and dedent the enclosed content.
+function normalizeCodeFences(md) {
+  const lines = md.split('\n');
+  const out = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const open = line.match(/^(\s*)(```[^\n]*)$/);
+    if (!open) {
+      out.push(line);
+      i++;
+      continue;
+    }
+    // Collect lines until we find a matching closing fence
+    const openIndent = open[1];
+    out.push(open[2]); // force flush-left opener
+    i++;
+    while (i < lines.length) {
+      const l = lines[i];
+      const close = l.match(/^(\s*)```\s*$/);
+      if (close) {
+        out.push('```');
+        i++;
+        break;
+      }
+      // Dedent content by min(openIndent.length, leading spaces).
+      // If the fence was indented (list context) every line may carry
+      // the same indentation; strip up to 4 leading spaces.
+      const dedent = openIndent.length || 4;
+      out.push(l.replace(new RegExp(`^ {0,${dedent}}`), ''));
+      i++;
+    }
+  }
+  return out.join('\n');
+}
+
 // Replace unicode weirdness that Sphinx sometimes emits
 function tidyText(md) {
   return md
@@ -374,6 +515,7 @@ function convertPage(page) {
   let md = td.turndown(processedHtml);
   md = applyAdmonitions(md);
   md = tidyText(md);
+  md = normalizeCodeFences(md);
   md = normalizeWhitespace(md);
 
   // Drop the very first H1 — Docusaurus renders it from frontmatter.title.

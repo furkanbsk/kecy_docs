@@ -17,11 +17,11 @@ This learning path will teach you how to train and deploy a physical AI model to
 
 ![](/img/sim-to-real/01-genel-bakis/sim-teleop-example-huggingface.gif)
 
-Teleoperation example in simulation.
+_Teleoperation example in simulation._
 
 ![](/img/sim-to-real/01-genel-bakis/so101_vial_to_rack_task.gif)
 
-Autonomous execution based on model trained with teleoperation data.
+_Autonomous execution based on model trained with teleoperation data._
 
 ## What Is Physical AI?
 
@@ -39,9 +39,9 @@ This learning path teaches a complete Physical AI workflow with physical robots,
 
 ## The Task: Centrifuge Vial Pick-and-Place
 
-[![Vial to rack task performed by SO-101 robot](/img/sim-to-real/01-genel-bakis/so101_vial_to_rack_task.gif)](/img/sim-to-real/01-genel-bakis/so101_vial_to_rack_task.gif)
+![Vial to rack task performed by SO-101 robot](/img/sim-to-real/01-genel-bakis/so101_vial_to_rack_task.gif)
 
-Vial to rack pick-and-place task performed autonomously by an SO-101 robot.
+_Vial to rack pick-and-place task performed autonomously by an SO-101 robot._
 
 The task we'll use today is **unstructured pick-and-place of centrifuge vials**. The vials are scattered on a table and need to be placed into a designated rack.
 
@@ -79,9 +79,9 @@ The SO-101 isn't a production robot, but it's a fun, approachable platform for l
 
 ## Why Simulation Matters
 
-[![Task wireframe: vials on table, target rack outlined.](/img/sim-to-real/01-genel-bakis/task-wireframe.gif)](/img/sim-to-real/01-genel-bakis/task-wireframe.gif)
+![Task wireframe: vials on table, target rack outlined.](/img/sim-to-real/01-genel-bakis/task-wireframe.gif)
 
-Task wireframe: vials are scattered on a table, to be placed into a rack by the robot.
+_Task wireframe: vials are scattered on a table, to be placed into a rack by the robot._
 
 Training robots in the real world is expensive, risky, and sometimes dangerous.
 
@@ -97,68 +97,12 @@ Simulation addresses these fundamental limitations:
 
 Simulation addresses all of these:
 
-| Challenge
-
-|
-
-Real World
-
-|
-
-Simulation
-
-|  |
-|  |
-
-|
-
-Training speed
-
-|
-
-1x real-time
-
-|
-
-1000x+ parallel environments
-
-| |
-
-Hardware cost
-
-|
-
-$10K-$100K+ per robot
-
-|
-
-Marginal compute cost
-
-| |
-
-Failure consequence
-
-|
-
-Damage, downtime
-
-|
-
-Reset and continue
-
-| |
-
-Scenario diversity
-
-|
-
-Manual setup
-
-|
-
-Procedural generation
-
-|
+| Challenge           | Real World            | Simulation                   |
+| ------------------- | --------------------- | ---------------------------- |
+| Training speed      | 1x real-time          | 1000x+ parallel environments |
+| Hardware cost       | $10K-$100K+ per robot | Marginal compute cost        |
+| Failure consequence | Damage, downtime      | Reset and continue           |
+| Scenario diversity  | Manual setup          | Procedural generation        |
 
 ### Privileged Information
 
@@ -191,5 +135,3 @@ Using a VLA (Vision Language Action) model called Isaac GR00T, our system will r
 This learning path has some flexibility built-in to match your goals and time constraints. Let's cover those options next!
 
 Continue to [How to Take This Course](/sim-to-real/giris/nasil-calisilir).
-
-On this page

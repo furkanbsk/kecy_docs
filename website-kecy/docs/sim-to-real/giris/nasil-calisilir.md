@@ -13,7 +13,7 @@ Orijinal içerik NVIDIA Corporation'a aittir; burada eğitim amaçlı olarak Tü
 
 :::
 
-What Do I Need for This Module?
+### What Do I Need for This Module?
 
 Nothing — this module is theory-only.
 
@@ -72,5 +72,3 @@ Details on the robot and workspace requirements can be found in [Building the Wo
 ## What's Next?
 
 Continue to [What is Sim-to-Real?](/sim-to-real/giris/sim-to-real-nedir).
-
-On this page
