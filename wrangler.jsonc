@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kecy-docs",
+  "compatibility_date": "2024-12-01",
+  "assets": {
+    "directory": "./website-kecy/build",
+    "not_found_handling": "404-page"
+  }
+}
