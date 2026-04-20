@@ -1,0 +1,211 @@
+{
+  "baseUrl": "https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/",
+  "sourceLabel": "Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac",
+  "categoryRoot": "sim-to-real",
+  "categoryPosition": 3,
+  "categoryLabel": "Sim-to-Real",
+  "pages": [
+    {
+      "sourceId": "01-overview",
+      "sourcePath": "01-overview.html",
+      "section": "giris",
+      "sectionLabel": "Giriş",
+      "sectionPosition": 1,
+      "slug": "genel-bakis",
+      "target": "giris/genel-bakis.md",
+      "title": "Genel Bakış",
+      "position": 1,
+      "assetDir": "01-genel-bakis"
+    },
+    {
+      "sourceId": "02-how-to-take-this-course",
+      "sourcePath": "02-how-to-take-this-course.html",
+      "section": "giris",
+      "slug": "nasil-calisilir",
+      "target": "giris/nasil-calisilir.md",
+      "title": "Bu Kursu Nasıl Takip Edersiniz",
+      "position": 2,
+      "assetDir": "02-nasil-calisilir"
+    },
+    {
+      "sourceId": "03-sim-to-real",
+      "sourcePath": "03-sim-to-real.html",
+      "section": "giris",
+      "slug": "sim-to-real-nedir",
+      "target": "giris/sim-to-real-nedir.md",
+      "title": "Sim-to-Real Nedir?",
+      "position": 3,
+      "assetDir": "03-sim-to-real-nedir"
+    },
+    {
+      "sourceId": "04-lerobot",
+      "sourcePath": "04-lerobot.html",
+      "section": "giris",
+      "slug": "lerobot",
+      "target": "giris/lerobot.md",
+      "title": "LeRobot: Arka Plan ve Topluluk",
+      "position": 4,
+      "assetDir": "04-lerobot"
+    },
+    {
+      "sourceId": "05-building-workspace",
+      "sourcePath": "05-building-workspace.html",
+      "section": "robot-laboratuvari",
+      "sectionLabel": "Robot Laboratuvarı",
+      "sectionPosition": 2,
+      "slug": "calisma-alani",
+      "target": "robot-laboratuvari/calisma-alani.md",
+      "title": "Çalışma Alanını Kurma",
+      "position": 1,
+      "assetDir": "05-calisma-alani"
+    },
+    {
+      "sourceId": "06-get-the-code",
+      "sourcePath": "06-get-the-code.html",
+      "section": "robot-laboratuvari",
+      "slug": "kod-ve-modeller",
+      "target": "robot-laboratuvari/kod-ve-modeller.md",
+      "title": "Kod ve Modelleri İndirme",
+      "position": 2,
+      "assetDir": "06-kod-ve-modeller"
+    },
+    {
+      "sourceId": "07-calibrating-so101",
+      "sourcePath": "07-calibrating-so101.html",
+      "section": "robot-laboratuvari",
+      "slug": "kalibrasyon",
+      "target": "robot-laboratuvari/kalibrasyon.md",
+      "title": "SO-101 Kalibrasyonu",
+      "position": 3,
+      "assetDir": "07-kalibrasyon"
+    },
+    {
+      "sourceId": "08-operating-so101",
+      "sourcePath": "08-operating-so101.html",
+      "section": "robot-laboratuvari",
+      "slug": "calistirma",
+      "target": "robot-laboratuvari/calistirma.md",
+      "title": "SO-101'i Çalıştırma",
+      "position": 4,
+      "assetDir": "08-calistirma"
+    },
+    {
+      "sourceId": "09-strategy1-dr-teleop",
+      "sourcePath": "09-strategy1-dr-teleop.html",
+      "section": "veri-egitim-degerlendirme",
+      "sectionLabel": "Veri, Eğitim, Değerlendirme",
+      "sectionPosition": 3,
+      "slug": "strateji-1-domain-randomization",
+      "target": "veri-egitim-degerlendirme/strateji-1-domain-randomization.md",
+      "title": "Strateji 1: Domain Randomization",
+      "position": 1,
+      "assetDir": "09-strateji-1-domain-randomization"
+    },
+    {
+      "sourceId": "10-groot",
+      "sourcePath": "10-groot.html",
+      "section": "veri-egitim-degerlendirme",
+      "slug": "isaac-groot",
+      "target": "veri-egitim-degerlendirme/isaac-groot.md",
+      "title": "Isaac GR00T: Görü-Dil-Eylem Modelleri",
+      "position": 2,
+      "assetDir": "10-isaac-groot"
+    },
+    {
+      "sourceId": "11-sim-evaluation",
+      "sourcePath": "11-sim-evaluation.html",
+      "section": "veri-egitim-degerlendirme",
+      "slug": "sim-degerlendirme",
+      "target": "veri-egitim-degerlendirme/sim-degerlendirme.md",
+      "title": "Simülasyonda Değerlendirme",
+      "position": 3,
+      "assetDir": "11-sim-degerlendirme"
+    },
+    {
+      "sourceId": "12-real-evaluation",
+      "sourcePath": "12-real-evaluation.html",
+      "section": "veri-egitim-degerlendirme",
+      "slug": "gercek-degerlendirme",
+      "target": "veri-egitim-degerlendirme/gercek-degerlendirme.md",
+      "title": "Gerçek Robotta Değerlendirme",
+      "position": 4,
+      "assetDir": "12-gercek-degerlendirme"
+    },
+    {
+      "sourceId": "13-strategy2-cotraining",
+      "sourcePath": "13-strategy2-cotraining.html",
+      "section": "veri-zenginlestirme",
+      "sectionLabel": "Veri Setlerini Zenginleştirme",
+      "sectionPosition": 4,
+      "slug": "strateji-2-cotraining",
+      "target": "veri-zenginlestirme/strateji-2-cotraining.md",
+      "title": "Strateji 2: Gerçek Veriyle Ortak Eğitim",
+      "position": 1,
+      "assetDir": "13-strateji-2-cotraining"
+    },
+    {
+      "sourceId": "14-strategy3-cosmos",
+      "sourcePath": "14-strategy3-cosmos.html",
+      "section": "veri-zenginlestirme",
+      "slug": "strateji-3-cosmos",
+      "target": "veri-zenginlestirme/strateji-3-cosmos.md",
+      "title": "Strateji 3: Cosmos ile Veri Seti Zenginleştirme",
+      "position": 2,
+      "assetDir": "14-strateji-3-cosmos"
+    },
+    {
+      "sourceId": "15-strategy4-sage",
+      "sourcePath": "15-strategy4-sage.html",
+      "section": "aktuator-bosluk",
+      "sectionLabel": "Aktüatör Boşluğunu Ölçme",
+      "sectionPosition": 5,
+      "slug": "strateji-4-sage",
+      "target": "aktuator-bosluk/strateji-4-sage.md",
+      "title": "Strateji 4: SAGE + GapONet ile Aktüatör Boşluğunu Ölçme",
+      "position": 1,
+      "assetDir": "15-strateji-4-sage"
+    },
+    {
+      "sourceId": "16-conclusion",
+      "sourcePath": "16-conclusion.html",
+      "section": "aktuator-bosluk",
+      "slug": "sonuc",
+      "target": "aktuator-bosluk/sonuc.md",
+      "title": "Sonuç",
+      "position": 2,
+      "assetDir": "16-sonuc"
+    },
+    {
+      "sourceId": "quick_reference",
+      "sourcePath": "quick_reference.html",
+      "section": "referans",
+      "sectionLabel": "Referans",
+      "sectionPosition": 6,
+      "slug": "hizli-referans",
+      "target": "referans/hizli-referans.md",
+      "title": "Hızlı Referans",
+      "position": 1,
+      "assetDir": "referans-hizli-referans"
+    },
+    {
+      "sourceId": "datasets-and-models",
+      "sourcePath": "datasets-and-models.html",
+      "section": "referans",
+      "slug": "veri-setleri-ve-modeller",
+      "target": "referans/veri-setleri-ve-modeller.md",
+      "title": "Veri Setleri ve Modeller",
+      "position": 2,
+      "assetDir": "referans-veri-setleri"
+    },
+    {
+      "sourceId": "troubleshooting",
+      "sourcePath": "troubleshooting.html",
+      "section": "referans",
+      "slug": "sorun-giderme",
+      "target": "referans/sorun-giderme.md",
+      "title": "Sorun Giderme",
+      "position": 3,
+      "assetDir": "referans-sorun-giderme"
+    }
+  ]
+}

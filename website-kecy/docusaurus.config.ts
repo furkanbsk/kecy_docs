@@ -21,6 +21,16 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
 
+  markdown: {
+    hooks: {
+      // NVIDIA kaynağında bazı eski `images/...` yolları 404 — build'i
+      // kırmak yerine uyarıya indirelim. Ayrıca converter bu durumları
+      // loglayıp bozuk img etiketlerini düşürüyor.
+      onBrokenMarkdownImages: 'warn',
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
+
   i18n: {
     defaultLocale: 'tr',
     locales: ['tr'],
