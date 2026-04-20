@@ -347,7 +347,7 @@ function buildFrontmatter(page) {
 function buildAttribution(page) {
   const pageUrl = MANIFEST.baseUrl + page.sourcePath;
   return [
-    ':::info Kaynak',
+    ':::info[Kaynak]',
     '',
     `Bu sayfa NVIDIA'nın resmi **"${MANIFEST.sourceLabel}"** kursundaki [${page.sourcePath}](${pageUrl}) sayfasından uyarlanmıştır.`,
     '',

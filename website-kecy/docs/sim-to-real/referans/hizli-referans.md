@@ -5,7 +5,7 @@ description: 'NVIDIA''nın "Train an SO-101 Robot From Sim-to-Real With NVIDIA I
 needsTranslation: true
 ---
 
-:::info Kaynak
+:::info[Kaynak]
 
 Bu sayfa NVIDIA'nın resmi **"Train an SO-101 Robot From Sim-to-Real With NVIDIA Isaac"** kursundaki [quick_reference.html](https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/quick_reference.html) sayfasından uyarlanmıştır.
 
